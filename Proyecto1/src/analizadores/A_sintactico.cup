@@ -1,0 +1,28 @@
+package analizadores;
+import java_cup.runtime.Symbol;
+
+
+//definicion de terminales
+terminal id;
+terminal coma;
+terminal cruz;
+terminal guion;
+terminal asterisco;
+terminal diagonal;
+terminal prInicio;
+terminal prFin;
+
+//definicion de no terminales
+non terminal INICIO, E;
+
+
+
+//gramaticas
+start with INICIO;
+
+INICIO::= prInicio E prFin;
+
+
+E::= E coma id   
+    | id  
+;

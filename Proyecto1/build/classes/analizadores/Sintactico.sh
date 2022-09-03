@@ -1,0 +1,1 @@
+java -jar /Users/andreramirez/NetBeansProjects/OLC1_Proyecto1/src/analizadores/java-cup-11b.jar -parser Analizador_sintactico -symbols Simbolos A_sintactico.cup

@@ -5,6 +5,7 @@ import java_cup.runtime.Symbol;
 //definicion de terminales
 terminal id;
 terminal coma;
+terminal numero;
 terminal cruz;
 terminal guion;
 terminal asterisco;
@@ -24,5 +25,20 @@ INICIO::= prInicio E prFin;
 
 
 E::= E coma id   
-    | id  
+    | id
+;
+
+E::= E numero
+;
+
+E::= E cruz
+;
+
+E::= E guion
+;
+
+E::= E asterisco
+;
+
+E::= E diagonal
 ;

@@ -10,19 +10,21 @@ public class Simbolos {
   /* terminals */
   public static final int id = 2;
   public static final int coma = 3;
-  public static final int diagonal = 7;
-  public static final int prFin = 9;
-  public static final int prInicio = 8;
+  public static final int diagonal = 8;
+  public static final int prFin = 10;
+  public static final int prInicio = 9;
   public static final int EOF = 0;
+  public static final int numero = 4;
   public static final int error = 1;
-  public static final int asterisco = 6;
-  public static final int cruz = 4;
-  public static final int guion = 5;
+  public static final int asterisco = 7;
+  public static final int cruz = 5;
+  public static final int guion = 6;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "id",
   "coma",
+  "numero",
   "cruz",
   "guion",
   "asterisco",

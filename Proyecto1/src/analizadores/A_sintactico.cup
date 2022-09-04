@@ -5,12 +5,51 @@ import java_cup.runtime.Symbol;
 //definicion de terminales
 terminal id;
 terminal coma;
+terminal puntoycoma;
 terminal numero;
+terminal Cadena;
 terminal cruz;
 terminal guion;
 terminal asterisco;
 terminal diagonal;
+terminal parA;
+terminal parC;
+terminal guionBajo;
+terminal flecha;
+terminal interrogaciona;
+terminal interrogacionc;
+terminal igual;
 terminal prInicio;
+terminal prPotencia;
+terminal prMod;
+terminal prIngresar;
+terminal prComo;
+terminal prConValor;
+terminal prSi;
+terminal prEntonces;
+terminal prFinSi;
+terminal prOSi;
+terminal prDeloContrario;
+terminal prSegun;
+terminal prHacer;
+terminal prFinSegun;
+terminal prPara;
+terminal prHasta;
+terminal prFinPara;
+terminal prIncremental;
+terminal prMientras;
+terminal prFinMientras;
+terminal prRepetir;
+terminal prHastaQue;
+terminal prRetornar;
+terminal prMetodo;
+terminal prConParametros;
+terminal prFinMetodo;
+terminal prFuncion;
+terminal prFinFuncion;
+terminal prEjecutar;
+terminal prImprimir;
+terminal prImprimirNl;
 terminal prFin;
 
 //definicion de no terminales
@@ -23,12 +62,17 @@ start with INICIO;
 
 INICIO::= prInicio E prFin;
 
-
 E::= E coma id   
     | id
 ;
 
+E::= E puntoycoma
+;
+
 E::= E numero
+;
+
+E::= E Cadena
 ;
 
 E::= E cruz
@@ -41,4 +85,115 @@ E::= E asterisco
 ;
 
 E::= E diagonal
+;
+
+E::= E parA
+;
+
+E::= E parC
+;
+
+E::= E guionBajo
+;
+
+E::= E flecha
+;
+
+E::= E interrogaciona
+;
+
+E::= E interrogacionc
+;
+
+E::= E igual
+;
+
+E::= E prPotencia
+;
+
+E::= E prMod
+;
+
+E::= E prIngresar
+;
+
+E::= E prComo
+;
+
+E::= E prConValor
+;
+
+E::= E prSi
+;
+
+E::= E prEntonces
+;
+
+E::= E prFinSi
+;
+
+E::= E prOSi
+;
+
+E::= E prDeloContrario
+;
+
+E::= E prSegun
+;
+
+E::= E prHacer
+;
+
+E::= E prFinSegun
+;
+
+E::= E prPara
+;
+
+E::= E prHasta
+;
+
+E::= E prFinPara
+;
+
+E::= E prIncremental
+;
+
+E::= E prMientras
+;
+
+E::= E prFinMientras
+;
+
+E::= E prRepetir
+;
+
+E::= E prHastaQue
+;
+
+E::= E prRetornar
+;
+
+E::= E prMetodo
+;
+
+E::= E prConParametros
+;
+
+E::= E prFinMetodo
+;
+
+E::= E prFuncion
+;
+
+E::= E prFinFuncion
+;
+
+E::= E prEjecutar
+;
+
+E::= E prImprimir
+;
+
+E::= E prImprimirNl
 ;

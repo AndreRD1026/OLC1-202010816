@@ -1,16 +1,52 @@
 inicio 
 
 
-adolfo , 
-enrique, alvertt, anderson, andre, andy
+adolfo, 
+enrique
+
+->
+
+segun 100 hacer ()
+
+"otra" = "nuevo" 
+300
+
+"prueba cadena"
 
 4
-****
-66
-& /
-- +
-//
 
+8*9
+****/
+66
+&  
+
+mientras 50 -> 40 hacer
+
+
+
+fin_mientras
+
+mod potencia
+ingresar
+como
+si 0 entonces
+
+/* comentario
+de muchas
+lineas
+*/
+
+///* otro error lexico************/
+
+
+
+///////////pruebaaaaa
+
+de_lo_contrario
+
+o_si
+
+fin_si
 
 fin   
 

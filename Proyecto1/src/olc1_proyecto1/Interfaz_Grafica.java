@@ -4,16 +4,23 @@
  */
 package olc1_proyecto1;
 
+import analizadores.Analizador_Lexico;
+import analizadores.Analizador_sintactico;
+import analizadores.TError;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -26,13 +33,19 @@ FileReader fr;
 BufferedReader br;
 File archivo;
 String contenido = " ";
+Analizador_Lexico lexico;
+Analizador_sintactico sintactico;
+ArrayList ExpRegex = new ArrayList();
+//String contenido = "", NombreArchivo;
+public static LinkedList<TError> ErroresLex;
+public static LinkedList<TError> ErroresSintact;
+boolean Errores = true;
 String path="";//creamos una variable global para guardar el path
     /**
      * Creates new form Interfaz_Grafica
      */
     public Interfaz_Grafica() {
         initComponents();
-       // setTitle(“Project 1 OLC1);
         setTitle("Project 1 OLC1");
         setLocationRelativeTo(null);
     }
@@ -104,6 +117,11 @@ String path="";//creamos una variable global para guardar el path
         btn_run.setBackground(new java.awt.Color(0, 0, 0));
         btn_run.setForeground(new java.awt.Color(0, 153, 0));
         btn_run.setText("Run");
+        btn_run.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_runActionPerformed(evt);
+            }
+        });
 
         cajatexto.setColumns(20);
         cajatexto.setRows(5);
@@ -181,6 +199,11 @@ String path="";//creamos una variable global para guardar el path
         jMenu2.add(r_flowchart);
 
         r_errors.setText("Errors");
+        r_errors.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                r_errorsActionPerformed(evt);
+            }
+        });
         jMenu2.add(r_errors);
 
         jMenuBar1.add(jMenu2);
@@ -235,6 +258,50 @@ String path="";//creamos una variable global para guardar el path
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         guardar();
     }//GEN-LAST:event_saveActionPerformed
+
+    private void btn_runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_runActionPerformed
+        // TODO add your handling code here:
+        String contenido = cajatexto.getText();
+        if (contenido != "") {
+            try {
+            lexico = new Analizador_Lexico(new BufferedReader(new FileReader(archivo)));
+            sintactico = new Analizador_sintactico(lexico);
+            sintactico.parse();
+
+            if (sintactico.errores.size() > 0) {
+                contenido = "";
+                JOptionPane.showMessageDialog(this, "GENERANDO REPORTE DE ERRORES", "ERROR ENCONTRADO", WARNING_MESSAGE);
+                ReporteErrores();
+                Errores = true;
+            } else {
+                ReporteErrores();
+                Errores = false;
+                ErroresLex = lexico.errores;
+                ErroresSintact = sintactico.errores;
+                //CONJUNTOS = sintactico.CONJUNTOS;
+                //EXPRESIONES = sintactico.EXPRESIONES;
+                //PRUEBAS = sintactico.PRUEBAS;
+                //GuardarPolaca(); */
+
+                JOptionPane.showMessageDialog(this, "ANALISIS COMPLETADO", "SIN ERRORES ENCONTRADOS", WARNING_MESSAGE);
+                //GenAutomata.setEnabled(true);
+            }
+        } catch (Exception e) {
+        }
+            } else {
+                JOptionPane.showMessageDialog(this, "INGRESE ARCHIVO EXP", "ADVERTENCIA", WARNING_MESSAGE);
+            }
+        
+        
+        
+        
+    }//GEN-LAST:event_btn_runActionPerformed
+
+    private void r_errorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_r_errorsActionPerformed
+        // TODO add your handling code here:
+        ReporteErrores();
+        
+    }//GEN-LAST:event_r_errorsActionPerformed
 
     public void leerArchivos() {
         try {
@@ -302,6 +369,78 @@ public void guardar(){
             }
         } 
 }
+
+
+public void ReporteErrores() {
+        FileWriter Reporte = null;
+        PrintWriter pw = null;
+        try {
+            Reporte = new FileWriter("REPORTE DE ERRORES.html");
+            pw = new PrintWriter(Reporte);
+            pw.println("<html>");
+            pw.println("<head>");
+            pw.println("<meta charset=\"UTF-8\">");
+            pw.println("<link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3\" crossorigin=\"anonymous\">");
+            pw.println("<title> REPORTE DE ERRORES </title>");
+            pw.println("</head>");
+            pw.println("<body>");
+            pw.println("<center>");
+            pw.println("<h1>  REPORTE ERRORES </h1>");
+            pw.println("<table class=\"table table-dark table-hover\">");
+            pw.println("<tbody>");
+
+            pw.println("<td>Num</td>");
+            pw.println("<td>Lexema</td>");
+            pw.println("<td>Fila</td>");
+            pw.println("<td>Columna</td>");
+            pw.println("<td>Descripcion</td>");
+            pw.println("<td>Tipo</td>");
+            int c = 0;
+            for (int i = 0; i < lexico.errores.size(); i++) {
+                pw.println("<tr>");
+
+                pw.println("<td>" + i + "</td>");
+                pw.println("<td>" + lexico.errores.get(i).getLexema() + "</td>");
+                pw.println("<td>" + lexico.errores.get(i).getLine() + "</td>");
+                pw.println("<td>" + lexico.errores.get(i).getColumn() + "</td>");
+                pw.println("<td>" + lexico.errores.get(i).getDescripcion() + "</td>");
+                pw.println("<td>LEXICO</td>");
+                pw.println("</tr>");
+                c = i;
+            }
+            for (int i = 0; i < lexico.errores.size(); i++) {
+                System.out.println(lexico.errores.get(i).show());
+            }
+            for (int i = 0; i < sintactico.errores.size(); i++) {
+                c++;
+                pw.println("<tr>");
+                pw.println("<td>" + c + "</td>");
+                pw.println("<td>" + sintactico.errores.get(i).getLexema() + "</td>");
+                pw.println("<td>" + sintactico.errores.get(i).getLine() + "</td>");
+                pw.println("<td>" + sintactico.errores.get(i).getColumn() + "</td>");
+                pw.println("<td>" + sintactico.errores.get(i).getDescripcion() + "</td>");
+                pw.println("<td>SINTACTICO</td>");
+                pw.println("</tr>");
+            }
+
+            pw.println("</tbody>");
+            pw.println("</table>");
+            pw.println("</center>");
+            pw.println("</body>");
+            pw.println("</HTML>");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != Reporte) {
+                    Reporte.close();
+                    System.out.println("REPORTE ERRORES GENERADOS");
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
   
     /**
      * @param args the command line arguments

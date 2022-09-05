@@ -1,54 +1,8 @@
-inicio 
-
-
-adolfo, 
-enrique
-
-->
-
-segun 100 hacer ()
-
-"otra" = "nuevo" 
-300
-
-"prueba cadena"
-
-4
-
-8*9
-****/
-66
-&  
-
-mientras 50 -> 40 hacer
-
-
-
-fin_mientras
-
-mod potencia
-ingresar
-como
-si 0 entonces
-
-/* comentario
-de muchas
-lineas
-*/
-
-///* otro error lexico************/
-
-
-
-///////////pruebaaaaa
-
-de_lo_contrario
-
-o_si
-
-fin_si
-
-fin   
-
-
-@
+inicio
+//la cadena no lleva punto y coma
+"prueba"
+->;
+                _variable1_
+3;
+//ingresar _pi1_  con_valor 3;
+fin

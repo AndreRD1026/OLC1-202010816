@@ -5,6 +5,9 @@ import java_cup.runtime.*;
 %%
 
 
+%{
+    public static LinkedList<TError> errores = new LinkedList<TError>(); 
+%}
 
 //directrices
 
@@ -23,6 +26,8 @@ import java_cup.runtime.*;
 
 letra  = [a-zA-Z]
 id     = {letra}+
+//var = {letra}+
+var = ([\_][^\n\_]* [\_])
 cadena = ([\"][^\n\"]* [\"])
 //caracter = ([\'][^\n\']* [\'])
 numero = [0-9]+
@@ -110,11 +115,50 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                     System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
                     return new Symbol(Simbolos.prInicio, yycolumn, yyline, yytext());
                   }
+
+<YYINITIAL>"int"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prInt, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"float"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prInt, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"boolean"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prBoolean, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"verdadero"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prVerdadero, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"falso"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prFalso, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"numero"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prNumero, yycolumn, yyline, yytext());
+                  }
+
 <YYINITIAL>"potencia"   {
                     //codigo en java
                     System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
                     return new Symbol(Simbolos.prPotencia, yycolumn, yyline, yytext());
                   }
+
+
 <YYINITIAL>"mod"   {
                     //codigo en java
                     System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
@@ -125,6 +169,7 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                     System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
                     return new Symbol(Simbolos.prIngresar, yycolumn, yyline, yytext());
                   }
+
 <YYINITIAL>"como"   {
                     //codigo en java
                     System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
@@ -296,6 +341,11 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                     return new Symbol(Simbolos.id, yycolumn, yyline, yytext()); 
                     }
 
+<YYINITIAL>{var}  {
+                    System.out.println("Reconocio token: <variable> lexema: "+yytext());
+                    return new Symbol(Simbolos.var, yycolumn, yyline, yytext()); 
+                    }
+
 <YYINITIAL>{cadena} {
                     System.out.println("Reconocio token: <cadena> lexema: "+ yytext());
                     return new Symbol(Simbolos.Cadena, yycolumn, yyline, yytext());
@@ -319,10 +369,10 @@ comentarioMulti = "/*"[^"*/"]*"*/"
 [\t \n \f \r ] { /* Espacios en blanco se ignoran */}
 
 
-.                   {
-                        System.out.println("Error Lexico : "+yytext()+
-                        " Linea "+(yyline+1)+" Columna "+yycolumn);    
-
+.       {
+            System.out.println("Error Lexico : "+yytext()+ " Linea "+(yyline+1)+" Columna "+yycolumn);    
+            TError tmp= new TError("Lexico", yytext(),"NO PERTENECE AL LENGUAJE", yyline, yycolumn );
+            errores.add(tmp);
 }
 
 

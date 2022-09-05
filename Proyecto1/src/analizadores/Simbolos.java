@@ -8,60 +8,66 @@ package analizadores;
 /** CUP generated class containing symbol constants. */
 public class Simbolos {
   /* terminals */
-  public static final int prPotencia = 19;
-  public static final int prHasta = 33;
-  public static final int prFinMientras = 37;
-  public static final int prIngresar = 21;
-  public static final int prMetodo = 41;
-  public static final int prFinSi = 26;
-  public static final int flecha = 14;
-  public static final int prConParametros = 42;
-  public static final int prFuncion = 44;
-  public static final int prRetornar = 40;
-  public static final int coma = 3;
-  public static final int igual = 17;
-  public static final int prEjecutar = 46;
-  public static final int prFinPara = 34;
-  public static final int guion = 8;
-  public static final int prDeloContrario = 28;
-  public static final int puntoycoma = 4;
-  public static final int prImprimir = 47;
-  public static final int numero = 5;
-  public static final int prImprimirNl = 48;
-  public static final int Cadena = 6;
-  public static final int prConValor = 23;
-  public static final int prHastaQue = 39;
+  public static final int prPotencia = 24;
+  public static final int prHasta = 38;
+  public static final int prFinMientras = 42;
+  public static final int prIngresar = 26;
+  public static final int prMetodo = 46;
+  public static final int prFinSi = 31;
+  public static final int flecha = 15;
+  public static final int prConParametros = 47;
+  public static final int prFuncion = 49;
+  public static final int prRetornar = 45;
+  public static final int coma = 4;
+  public static final int igual = 18;
+  public static final int prEjecutar = 51;
+  public static final int prFinPara = 39;
+  public static final int guion = 9;
+  public static final int prDeloContrario = 33;
+  public static final int puntoycoma = 5;
+  public static final int prImprimir = 52;
+  public static final int numero = 6;
+  public static final int prImprimirNl = 53;
+  public static final int Cadena = 7;
+  public static final int prVerdadero = 21;
+  public static final int prConValor = 28;
+  public static final int var = 3;
+  public static final int prHastaQue = 44;
   public static final int EOF = 0;
-  public static final int prEntonces = 25;
-  public static final int prComo = 22;
-  public static final int prIncremental = 35;
+  public static final int prEntonces = 30;
+  public static final int prComo = 27;
+  public static final int prIncremental = 40;
   public static final int error = 1;
-  public static final int prFinFuncion = 45;
-  public static final int prSi = 24;
-  public static final int prSegun = 29;
-  public static final int guionBajo = 13;
-  public static final int prHacer = 30;
-  public static final int prFin = 49;
+  public static final int prBoolean = 20;
+  public static final int prFinFuncion = 50;
+  public static final int prFalso = 22;
+  public static final int prSi = 29;
+  public static final int prSegun = 34;
+  public static final int prHacer = 35;
+  public static final int guionBajo = 14;
+  public static final int prFin = 54;
   public static final int id = 2;
-  public static final int prMientras = 36;
-  public static final int interrogacionc = 16;
-  public static final int interrogaciona = 15;
-  public static final int prOSi = 27;
-  public static final int prFinSegun = 31;
-  public static final int prInicio = 18;
-  public static final int parC = 12;
-  public static final int parA = 11;
-  public static final int asterisco = 9;
-  public static final int prRepetir = 38;
-  public static final int prFinMetodo = 43;
-  public static final int prMod = 20;
-  public static final int cruz = 7;
-  public static final int diagonal = 10;
-  public static final int prPara = 32;
+  public static final int prMientras = 41;
+  public static final int interrogacionc = 17;
+  public static final int interrogaciona = 16;
+  public static final int prOSi = 32;
+  public static final int prFinSegun = 36;
+  public static final int prInicio = 19;
+  public static final int parC = 13;
+  public static final int parA = 12;
+  public static final int asterisco = 10;
+  public static final int prRepetir = 43;
+  public static final int prFinMetodo = 48;
+  public static final int prMod = 25;
+  public static final int prNumero = 23;
+  public static final int cruz = 8;
+  public static final int prPara = 37;
+  public static final int diagonal = 11;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "id",
+  "var",
   "coma",
   "puntoycoma",
   "numero",
@@ -78,6 +84,10 @@ public class Simbolos {
   "interrogacionc",
   "igual",
   "prInicio",
+  "prBoolean",
+  "prVerdadero",
+  "prFalso",
+  "prNumero",
   "prPotencia",
   "prMod",
   "prIngresar",

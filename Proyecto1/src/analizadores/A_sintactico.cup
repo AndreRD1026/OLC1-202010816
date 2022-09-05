@@ -2,8 +2,54 @@ package analizadores;
 import java_cup.runtime.Symbol;
 
 
+
+parser code
+{:
+    public static LinkedList<TError> errores = new LinkedList<TError>(); 
+
+    public static String Conjunto="";
+    public static String tipo="Lista";
+
+
+    //Metodo al que se llama automaticamente ante algun error sintactico
+    public void syntax_error(Symbol s)
+    {        
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+      
+        System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
+        TError tmp = new TError("Sintactico",lexema,"Caracter no esperado",fila,columna);
+        errores.add(tmp);
+        
+    }
+
+    //Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {        
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+        
+        System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!! ");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+        
+        TError tmp = new TError("Sintactico",lexema, "TOKEN NO ERA EL ESPERADO",fila,columna);
+        errores.add(tmp);
+     
+    }
+:}
+
+
 //definicion de terminales
 terminal id;
+terminal var;
 terminal coma;
 terminal puntoycoma;
 terminal numero;
@@ -20,6 +66,10 @@ terminal interrogaciona;
 terminal interrogacionc;
 terminal igual;
 terminal prInicio;
+terminal prBoolean;
+terminal prVerdadero;
+terminal prFalso;
+terminal prNumero;
 terminal prPotencia;
 terminal prMod;
 terminal prIngresar;
@@ -53,147 +103,76 @@ terminal prImprimirNl;
 terminal prFin;
 
 //definicion de no terminales
-non terminal INICIO, E;
+non terminal INICIO, E, INSTRUCCION, SIMBOLOS, PALABRASR, VARIABLE;
 
 
 
 //gramaticas
 start with INICIO;
 
-INICIO::= prInicio E prFin;
+INICIO::= prInicio INSTRUCCION {:System.out.println("FIN DE ANALISIS");:};
 
-E::= E coma id   
-    | id
+
+
+INSTRUCCION::= SIMBOLOS INSTRUCCION
+            | PALABRASR INSTRUCCION
+            | prFin
 ;
 
-E::= E puntoycoma
+SIMBOLOS::= flecha SIMBOLOS
+            | var SIMBOLOS
+            | numero SIMBOLOS
+            | Cadena SIMBOLOS
+            | cruz SIMBOLOS
+            | guion SIMBOLOS
+            | asterisco SIMBOLOS
+            | diagonal SIMBOLOS
+            | parA SIMBOLOS
+            | parC SIMBOLOS
+            | guionBajo SIMBOLOS
+            | interrogaciona SIMBOLOS
+            | interrogacionc SIMBOLOS
+            | igual SIMBOLOS
+            | puntoycoma
 ;
 
-E::= E numero
+PALABRASR::= prBoolean
+            | prVerdadero
+            | prFalso
+            | prNumero
+            | prPotencia
+            | prMod
+            | prIngresar
+            | prComo
+            | prConValor
+            | prSi
+            | prEntonces
+            | prFinSi
+            | prOSi
+            | prDeloContrario
+            | prSegun
+            | prHacer
+            | prFinSegun
+            | prPara
+            | prHasta
+            | prFinPara
+            | prIncremental
+            | prMientras
+            | prFinMientras
+            | prRepetir
+            | prHastaQue
+            | prRetornar
+            | prMetodo
+            | prConParametros
+            | prFinMetodo
+            | prFuncion
+            | prFinFuncion
+            | prEjecutar
+            | prImprimir
+            | prImprimirNl
 ;
 
-E::= E Cadena
-;
 
-E::= E cruz
-;
-
-E::= E guion
-;
-
-E::= E asterisco
-;
-
-E::= E diagonal
-;
-
-E::= E parA
-;
-
-E::= E parC
-;
-
-E::= E guionBajo
-;
-
-E::= E flecha
-;
-
-E::= E interrogaciona
-;
-
-E::= E interrogacionc
-;
-
-E::= E igual
-;
-
-E::= E prPotencia
-;
-
-E::= E prMod
-;
-
-E::= E prIngresar
-;
-
-E::= E prComo
-;
-
-E::= E prConValor
-;
-
-E::= E prSi
-;
-
-E::= E prEntonces
-;
-
-E::= E prFinSi
-;
-
-E::= E prOSi
-;
-
-E::= E prDeloContrario
-;
-
-E::= E prSegun
-;
-
-E::= E prHacer
-;
-
-E::= E prFinSegun
-;
-
-E::= E prPara
-;
-
-E::= E prHasta
-;
-
-E::= E prFinPara
-;
-
-E::= E prIncremental
-;
-
-E::= E prMientras
-;
-
-E::= E prFinMientras
-;
-
-E::= E prRepetir
-;
-
-E::= E prHastaQue
-;
-
-E::= E prRetornar
-;
-
-E::= E prMetodo
-;
-
-E::= E prConParametros
-;
-
-E::= E prFinMetodo
-;
-
-E::= E prFuncion
-;
-
-E::= E prFinFuncion
-;
-
-E::= E prEjecutar
-;
-
-E::= E prImprimir
-;
-
-E::= E prImprimirNl
+VARIABLE::= var SIMBOLOS
+            | PALABRASR
 ;

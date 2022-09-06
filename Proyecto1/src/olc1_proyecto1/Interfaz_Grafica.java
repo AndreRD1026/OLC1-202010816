@@ -32,7 +32,7 @@ public class Interfaz_Grafica extends javax.swing.JFrame {
 FileReader fr;
 BufferedReader br;
 File archivo;
-String contenido = " ";
+String contenido = "";
 Analizador_Lexico lexico;
 Analizador_sintactico sintactico;
 ArrayList ExpRegex = new ArrayList();
@@ -261,10 +261,22 @@ String path="";//creamos una variable global para guardar el path
 
     private void btn_runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_runActionPerformed
         // TODO add your handling code here:
-        String contenido = cajatexto.getText();
+       String texto = cajatexto.getText();
+        
+        
+        /* ****try {
+
+            Analizador_Lexico lexico = new Analizador_Lexico(new BufferedReader(new FileReader(texto)));
+            Analizador_sintactico sintactico = new Analizador_sintactico(lexico);
+            sintactico.parse();
+
+        } catch (Exception e) {
+        } */
+        
         if (contenido != "") {
             try {
             lexico = new Analizador_Lexico(new BufferedReader(new FileReader(archivo)));
+            //lexico = new Analizador_Lexico(new BufferedReader(new FileReader(cajatexto.getText())));
             sintactico = new Analizador_sintactico(lexico);
             sintactico.parse();
 
@@ -278,19 +290,15 @@ String path="";//creamos una variable global para guardar el path
                 Errores = false;
                 ErroresLex = lexico.errores;
                 ErroresSintact = sintactico.errores;
-                //CONJUNTOS = sintactico.CONJUNTOS;
-                //EXPRESIONES = sintactico.EXPRESIONES;
-                //PRUEBAS = sintactico.PRUEBAS;
-                //GuardarPolaca(); */
 
                 JOptionPane.showMessageDialog(this, "ANALISIS COMPLETADO", "SIN ERRORES ENCONTRADOS", WARNING_MESSAGE);
-                //GenAutomata.setEnabled(true);
             }
         } catch (Exception e) {
         }
             } else {
                 JOptionPane.showMessageDialog(this, "INGRESE ARCHIVO EXP", "ADVERTENCIA", WARNING_MESSAGE);
-            }
+            } 
+               
         
         
         

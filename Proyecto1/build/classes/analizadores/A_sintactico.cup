@@ -7,8 +7,8 @@ parser code
 {:
     public static LinkedList<TError> errores = new LinkedList<TError>(); 
 
-    public static String Conjunto="";
     public static String tipo="Lista";
+    public String codigoTraducido="";
 
 
     //Metodo al que se llama automaticamente ante algun error sintactico
@@ -48,28 +48,29 @@ parser code
 
 
 //definicion de terminales
-terminal id;
 terminal var;
-terminal coma;
-terminal puntoycoma;
+terminal tpunto;
+terminal tcoma;
+terminal tpuntoycoma;
 terminal numero;
 terminal Cadena;
-terminal cruz;
-terminal guion;
-terminal asterisco;
-terminal diagonal;
-terminal parA;
-terminal parC;
-terminal guionBajo;
-terminal flecha;
-terminal interrogaciona;
-terminal interrogacionc;
-terminal igual;
+terminal tcruz;
+terminal tguion;
+terminal tasterisco;
+terminal tdiagonal;
+terminal tparA;
+terminal tparC;
+terminal tguionBajo;
+terminal tflecha;
+terminal tinterrogaciona;
+terminal tinterrogacionc;
+terminal tigual;
 terminal prInicio;
 terminal prBoolean;
 terminal prVerdadero;
 terminal prFalso;
 terminal prNumero;
+terminal prCadena;
 terminal prPotencia;
 terminal prMod;
 terminal prIngresar;
@@ -103,76 +104,35 @@ terminal prImprimirNl;
 terminal prFin;
 
 //definicion de no terminales
-non terminal INICIO, E, INSTRUCCION, SIMBOLOS, PALABRASR, VARIABLE;
+non terminal INICIO, E, INSTRUCCION, ASIGNACIONNUM, INGRESARNUM, INGRESARCADENA, INGRESARBOOLEANO,CONDICION;
 
 
 
 //gramaticas
 start with INICIO;
 
-INICIO::= prInicio INSTRUCCION {:System.out.println("FIN DE ANALISIS");:};
+//INICIO::= prInicio ASIGNACIONNUM prFin {:System.out.println("FIN DE ANALISIS");:};
+INICIO::= prInicio INSTRUCCION prFin {:System.out.println(codigoTraducido);:};
 
-
-
-INSTRUCCION::= SIMBOLOS INSTRUCCION
-            | PALABRASR INSTRUCCION
-            | prFin
+INSTRUCCION::= ASIGNACIONNUM INSTRUCCION
+            | ASIGNACIONNUM
 ;
 
-SIMBOLOS::= flecha SIMBOLOS
-            | var SIMBOLOS
-            | numero SIMBOLOS
-            | Cadena SIMBOLOS
-            | cruz SIMBOLOS
-            | guion SIMBOLOS
-            | asterisco SIMBOLOS
-            | diagonal SIMBOLOS
-            | parA SIMBOLOS
-            | parC SIMBOLOS
-            | guionBajo SIMBOLOS
-            | interrogaciona SIMBOLOS
-            | interrogacionc SIMBOLOS
-            | igual SIMBOLOS
-            | puntoycoma
+ASIGNACIONNUM::= INGRESARNUM
+            | INGRESARCADENA
+            | INGRESARBOOLEANO
+{:  
+        
+        codigoTraducido+="prueba";
+:}
 ;
 
-PALABRASR::= prBoolean
-            | prVerdadero
-            | prFalso
-            | prNumero
-            | prPotencia
-            | prMod
-            | prIngresar
-            | prComo
-            | prConValor
-            | prSi
-            | prEntonces
-            | prFinSi
-            | prOSi
-            | prDeloContrario
-            | prSegun
-            | prHacer
-            | prFinSegun
-            | prPara
-            | prHasta
-            | prFinPara
-            | prIncremental
-            | prMientras
-            | prFinMientras
-            | prRepetir
-            | prHastaQue
-            | prRetornar
-            | prMetodo
-            | prConParametros
-            | prFinMetodo
-            | prFuncion
-            | prFinFuncion
-            | prEjecutar
-            | prImprimir
-            | prImprimirNl
+INGRESARNUM::= prIngresar var prComo prNumero prConValor numero tpuntoycoma
 ;
 
+INGRESARCADENA::= prIngresar var prComo prCadena prConValor Cadena tpuntoycoma
+;
 
-VARIABLE::= var SIMBOLOS
-            | PALABRASR
+INGRESARBOOLEANO::= prIngresar var prComo prBoolean prConValor prVerdadero tpuntoycoma
+                |  prIngresar var prComo prBoolean prConValor prFalso tpuntoycoma
 ;

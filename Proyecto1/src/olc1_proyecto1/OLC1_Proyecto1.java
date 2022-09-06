@@ -22,7 +22,7 @@ public class OLC1_Proyecto1 {
         // TODO code application logic here
         //Interfaz_Grafica prueba = new Interfaz_Grafica();
         //prueba.setVisible(true);
-        try {
+         try {
 
             Analizador_Lexico lexico = new Analizador_Lexico(
                     new BufferedReader(new FileReader("./entrada.olc"))
@@ -31,7 +31,7 @@ public class OLC1_Proyecto1 {
             sintactico.parse();
 
         } catch (Exception e) {
-        }
+        } 
         
     }
     

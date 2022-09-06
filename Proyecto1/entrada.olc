@@ -1,8 +1,27 @@
 inicio
-//la cadena no lleva punto y coma
-"prueba"
-->;
-                _variable1_
-3;
-//ingresar _pi1_  con_valor 3;
+//comentario
+
+Ingresar _variable1_ coMo NumEro cOn_valor 5.4;
+Ingresar _variable2_ coMo NumEro cOn_valor 2;
+
+/* prueba
+comentarios
+                multi
+        lineas
+        */
+
+ingresaR _curso1_         cOmo cadena con_vAlor "olc";
+ingresaR _curso2_         cOmo cadena con_vAlor "olc";
+ingresaR _curso3_         cOmo cadena con_vAlor "olc";
+ingresar _pi1_            como numero con_valor 3.66;
+ingresar _flag1_          como boolean  con_valor verdadero;
+ingresar _flag3_          como boolean  con_valor verdadero;
+
+// otro comentario
+
+ingresar _flag2_          como boolean  con_valor falso;
+
+
+/*otro error lexico*/
+
 fin

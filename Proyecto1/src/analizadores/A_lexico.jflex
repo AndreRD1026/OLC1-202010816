@@ -1,5 +1,8 @@
 package analizadores;
 import java_cup.runtime.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.LinkedList;
 
 
 %%
@@ -25,13 +28,11 @@ import java_cup.runtime.*;
 
 
 letra  = [a-zA-Z]
-//var = {letra}+
-var = ([\_][^\n\_]* [\_])
+variable = ([\_][^\n\_]* [\_])
 cadena = ([\"][^\n\"]* [\"])
-//caracter = ([\'][^\n\']* [\'])
-//numero_int = [0-9]+
-//numero_float = [0-9]+([.][0-9]+)?
-numero = [0-9]+([.][0-9]+)?
+caracter = ([\'][^\n\']* [\'])
+numero_int = [0-9]+
+numero_float = [0-9]+([.][0-9]+)?
 comentario = ("//" [^"\n"]+)
 comentarioMulti = "/*"[^"*/"]*"*/"
 
@@ -106,13 +107,13 @@ comentarioMulti = "/*"[^"*/"]*"*/"
 
 <YYINITIAL>"¿"   {
                     //codigo en java
-                    System.out.println("Reconocio token: <flecha> lexema: "+yytext());
+                    System.out.println("Reconocio token: <interrogaciona> lexema: "+yytext());
                     return new Symbol(Simbolos.tinterrogaciona, yycolumn, yyline, yytext());
                   }
 
 <YYINITIAL>"?"   {
                     //codigo en java
-                    System.out.println("Reconocio token: <interrogacion> lexema: "+yytext());
+                    System.out.println("Reconocio token: <interrogacionc> lexema: "+yytext());
                     return new Symbol(Simbolos.tinterrogacionc, yycolumn, yyline, yytext());
                   }
 
@@ -144,6 +145,12 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                     //codigo en java
                     System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
                     return new Symbol(Simbolos.prFalso, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"caracter"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prCaracter, yycolumn, yyline, yytext());
                   }
 
 <YYINITIAL>"numero"   {
@@ -192,6 +199,18 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                     //codigo en java
                     System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
                     return new Symbol(Simbolos.prSi, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"mayor_o_igual"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prMayorIgual, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"menor_o_igual"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prMenorIgual, yycolumn, yyline, yytext());
                   }
 
 <YYINITIAL>"es_igual"   {
@@ -348,28 +367,40 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                     return new Symbol(Simbolos.prImprimirNl, yycolumn, yyline, yytext());
                   }
 
-<YYINITIAL>{var}  {
+<YYINITIAL>{variable}  {
                     System.out.println("Reconocio token: <variable> lexema: "+yytext());
-                    return new Symbol(Simbolos.var, yycolumn, yyline, yytext()); 
+                    return new Symbol(Simbolos.tvariable, yycolumn, yyline, yytext()); 
                     }
 
 <YYINITIAL>{cadena} {
                     System.out.println("Reconocio token: <cadena> lexema: "+ yytext());
-                    return new Symbol(Simbolos.Cadena, yycolumn, yyline, yytext());
+                    return new Symbol(Simbolos.tcadena, yycolumn, yyline, yytext());
+                }
+
+<YYINITIAL>{caracter} {
+                    System.out.println("Reconocio token: <caracter> lexema: "+ yytext());
+                    return new Symbol(Simbolos.tcaracter, yycolumn, yyline, yytext());
                 }
 
 <YYINITIAL>{comentario}  {
                     System.out.println("Reconocio token: <comentario> lexema: "+yytext());
+                    return new Symbol(Simbolos.tcomentario, yycolumn, yyline, yytext());
                     }
 
 <YYINITIAL>{comentarioMulti} {
                     System.out.println("Reconocio token: <comentarioMulti> lexema: "+ yytext());
+                    return new Symbol(Simbolos.tcomentarioMulti, yycolumn, yyline, yytext());
                     
                 } 
 
-<YYINITIAL> {numero} {
-                    System.out.println("Reconocio token: <numero> lexema: "+ yytext());
-                    return new Symbol(Simbolos.numero, yycolumn, yyline, yytext());
+<YYINITIAL> {numero_int} {
+                    System.out.println("Reconocio token: <numero_int> lexema: "+ yytext());
+                    return new Symbol(Simbolos.tnumero_int, yycolumn, yyline, yytext());
+                }
+
+<YYINITIAL> {numero_float} {
+                    System.out.println("Reconocio token: <numero_float> lexema: "+ yytext());
+                    return new Symbol(Simbolos.tnumero_float, yycolumn, yyline, yytext());
                 }
 
 

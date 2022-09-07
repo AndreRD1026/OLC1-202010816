@@ -136,6 +136,8 @@
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                           <Component id="lbl_errors" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="cont_errors" min="-2" pref="26" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="golang_code" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -180,6 +182,7 @@
                       <Component id="lbl_errors" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="golang_code" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="python_code" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cont_errors" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
               </Group>
@@ -194,7 +197,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lbl_errors">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0 Errors"/>
+            <Property name="text" type="java.lang.String" value="Errors"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JToggleButton" name="golang_code">
@@ -250,6 +253,11 @@
             </Component>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JLabel" name="cont_errors">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="0"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

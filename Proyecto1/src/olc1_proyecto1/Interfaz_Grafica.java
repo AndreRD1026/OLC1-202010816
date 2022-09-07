@@ -72,6 +72,7 @@ String path="";//creamos una variable global para guardar el path
         btn_run = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         cajatexto = new javax.swing.JTextArea();
+        cont_errors = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         openfile = new javax.swing.JMenuItem();
@@ -95,7 +96,7 @@ String path="";//creamos una variable global para guardar el path
 
         lbl_name.setText("OLC1_2S_2022 202010816");
 
-        lbl_errors.setText("0 Errors");
+        lbl_errors.setText("Errors");
 
         golang_code.setText("View Code Golang");
         golang_code.addActionListener(new java.awt.event.ActionListener() {
@@ -127,6 +128,8 @@ String path="";//creamos una variable global para guardar el path
         cajatexto.setRows(5);
         jScrollPane1.setViewportView(cajatexto);
 
+        cont_errors.setText("0");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -136,6 +139,8 @@ String path="";//creamos una variable global para guardar el path
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
                         .addComponent(lbl_errors)
+                        .addGap(18, 18, 18)
+                        .addComponent(cont_errors, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(golang_code)
                         .addGap(18, 18, 18)
@@ -169,7 +174,8 @@ String path="";//creamos una variable global para guardar el path
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_errors)
                     .addComponent(golang_code)
-                    .addComponent(python_code))
+                    .addComponent(python_code)
+                    .addComponent(cont_errors))
                 .addGap(16, 16, 16))
         );
 
@@ -245,7 +251,7 @@ String path="";//creamos una variable global para guardar el path
 
     private void golang_codeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_golang_codeActionPerformed
         // TODO add your handling code here:
-         System.out.println(sintactico.codigoTraducido);
+         System.out.println(sintactico.codigoTraducidoPython);
          JOptionPane.showMessageDialog(null,"File Created!", "Generating File!", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_golang_codeActionPerformed
 
@@ -265,6 +271,8 @@ String path="";//creamos una variable global para guardar el path
         // TODO add your handling code here:
        
        String texto = cajatexto.getText();
+       String prueba;
+       int conta_errors = 0;
         
         
         /*try {
@@ -288,6 +296,9 @@ String path="";//creamos una variable global para guardar el path
                 JOptionPane.showMessageDialog(this, "GENERANDO REPORTE DE ERRORES", "ERROR ENCONTRADO", WARNING_MESSAGE);
                 ReporteErrores();
                 Errores = true;
+                conta_errors ++;
+                prueba = String.valueOf(conta_errors);
+                cont_errors.setText(prueba);
             } else {
                 ReporteErrores();
                 Errores = false;
@@ -492,6 +503,7 @@ public void ReporteErrores() {
     private javax.swing.JToggleButton btn_clean;
     private javax.swing.JToggleButton btn_run;
     private javax.swing.JTextArea cajatexto;
+    private javax.swing.JLabel cont_errors;
     private javax.swing.JToggleButton golang_code;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

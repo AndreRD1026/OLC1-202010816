@@ -1,22 +1,32 @@
 package analizadores;
 import java_cup.runtime.Symbol;
-
+import java.util.LinkedList;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 parser code 
 {:
 
-     public static LinkedList<TError> errores = new LinkedList<TError>(); 
+
+    public static LinkedList<TError> errores = new LinkedList<TError>(); 
 
     public static String tipo="Lista";
-    public String codigoTraducido="";
+    public String codigoTraducidoPython="";
+    public String errorm="";
 
     
     /**
      * Método al que se llama automáticamente ante algún error sintactico.
      **/ 
     public void syntax_error(Symbol s){ 
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+
         System.out.println("Error Sintáctico en la Línea " + (s.left) +
-        " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
+        " Columna "+s.right + errorm); 
+        TError tmp = new TError("Sintactico",lexema,"Caracter no esperado",fila,columna);
+        errores.add(tmp);
     } 
 
     /**
@@ -24,20 +34,31 @@ parser code
      * en el que ya no es posible una recuperación de errores.
      **/ 
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+
         System.out.println("Error síntactico irrecuperable en la Línea " + 
         (s.left)+ " Columna "+s.right+". Componente " + s.value + 
         " no reconocido."); 
+
+        TError tmp = new TError("Sintactico",lexema, "TOKEN NO ERA EL ESPERADO",fila,columna);
+        errores.add(tmp);
     }  
 :}
 
 
 //definicion de terminales
-terminal String var;
+terminal String tvariable;
+terminal String tcaracter;
 terminal String tpunto;
 terminal String tcoma;
 terminal String tpuntoycoma;
-terminal String numero;
-terminal String Cadena;
+terminal String tnumero_int;
+terminal String tnumero_float;
+terminal String tcadena;
+terminal String tcomentario;
+terminal String tcomentarioMulti;
 terminal String tsuma;
 terminal String tresta;
 terminal String tmultiplicacion;
@@ -54,6 +75,7 @@ terminal String prInicio;
 terminal String prBoolean;
 terminal String prVerdadero;
 terminal String prFalso;
+terminal String prCaracter;
 terminal String prNumero;
 terminal String prCadena;
 terminal String prPotencia;
@@ -62,6 +84,8 @@ terminal String prIngresar;
 terminal String prComo;
 terminal String prConValor;
 terminal String prSi;
+terminal String prMayorIgual;
+terminal String prMenorIgual;
 terminal String prEsIGUAL;
 terminal String prEntonces;
 terminal String prFinSi;
@@ -92,21 +116,37 @@ terminal String prFin;
 
 //precedencia de los operadores
 
-precedence left tsuma,tresta, tmultiplicacion,tdivision, tmodulo;
+//precedence left tsuma,tresta, tmultiplicacion,tdivision, tmodulo;
 
 
 //definicion de no terminales
-non terminal INICIO, E,INSTRUCCIONES,INSTRUCCION,DECLARACIONES,ASIGNACIONES, INGRESARNUM;
-non terminal INGRESARCADENA,VARIABLES, INGRESARBOOLEANO,CONDICION,ERROR_INSTRUCCIONES;
-non terminal FUNCIONES, PROCEDIMIENTOS, IF, IMPRIMIR;
+non terminal INICIO,INSTRUCCIONES,INSTRUCCION, ERROR;
+non terminal E,DECLARACIONES,ASIGNACIONES,COMENTARIOS,COMENTARIO_MULTI,IF,SELECCION_MULTIPLE,CICLO_FOR, CICLO_WHILE; 
+non terminal CICLO_DOWHILE,RETORNO,METODO,FUNCIONES,PARAMETROS,IMPRIMIR,IMPRIMIRNL;
+non terminal DECLARARNUM,DECLARARCADENA,DECLARARCADENAL,DECLARARBOOLEANO,DECLARARCARACTER,LISTAVARIABLES,LISTAVARIABLES2,CONDICION,ERROR_INSTRUCCIONES;
+non terminal ASIGNARNUM,ASIGNARCADENA,ASIGNARBOOLEANO,ASIGNARCARACTER;
+non terminal EXPRESIONARITMETICA,PROCEDIMIENTOS;
 
 
 
 //gramaticas
 start with INICIO;
 
-INICIO::= prInicio INSTRUCCIONES prFin {:System.out.println("FIN DE ANALISIS");:};
-//INICIO::= prInicio INSTRUCCION prFin {:System.out.println(codigoTraducido);:};
+//INICIO::= prInicio INSTRUCCIONES prFin {:System.out.println("FIN DE ANALISIS");:};
+INICIO::= prInicio INSTRUCCIONES prFin {:
+
+    String fileName = "prueba.py";
+    try{
+    PrintWriter writer = new PrintWriter(fileName);
+    writer.println(codigoTraducidoPython);
+    writer.close();
+    }
+    catch (IOException e){
+      System.out.println("An error occurred.");
+      e.printStackTrace();
+      }
+:}
+;
 
 
 
@@ -115,31 +155,54 @@ INSTRUCCIONES::= INSTRUCCION INSTRUCCIONES
 ;
 
 
-INSTRUCCION::= DECLARACIONES
+INSTRUCCION::= COMENTARIOS
+            | COMENTARIO_MULTI
+            | DECLARACIONES
             | ASIGNACIONES
             | IF
+            | SELECCION_MULTIPLE
+            | CICLO_FOR
+            | CICLO_WHILE
+            | CICLO_DOWHILE
+            | RETORNO
+            | METODO
+            | FUNCIONES
+            | PARAMETROS
             | IMPRIMIR
+            | IMPRIMIRNL
+;
+
+
+//gramatica para comentarios
+
+COMENTARIOS::= tcomentario
+;
+
+COMENTARIO_MULTI::= tcomentarioMulti
 ;
 
 //gramatica para las declaraciones
 
-DECLARACIONES::= INGRESARNUM
-            | INGRESARCADENA
-            | INGRESARBOOLEANO
+DECLARACIONES::= DECLARARNUM
+            | DECLARARCADENA
+            | DECLARARCADENAL
+            | DECLARARBOOLEANO
+            | DECLARARCARACTER
 ;
 
 
 //declaracion de numeros
 
-INGRESARNUM::= prIngresar var:a prComo prNumero prConValor numero:n tpuntoycoma
-{: codigoTraducido+= a + " = " + n + "\n";:}
+DECLARARNUM::= prIngresar tvariable:a prComo prNumero prConValor tnumero_int:in tpuntoycoma
+            | prIngresar tvariable:a prComo prNumero prConValor tnumero_float:fl tpuntoycoma
+            | error tpuntoycoma {: errorm += " Falta un ;"; :}
+//{: codigoTraducidoPython+= a + " = " + n + "\n";:}
 /*{: 
- codigoTraducido+= a + " = " + n + "\n";
+ codigoTraducidoPython+= a + " = " + n + "\n";
  String fileName = "prueba.py";
     try{
     PrintWriter writer = new PrintWriter(fileName, encoding);
-    writer.println(codigoTraducido);
-    //writer.println("println(The second line)");
+    writer.println(codigoTraducidoPython);
     writer.close();
     }
     catch (IOException e){
@@ -152,20 +215,30 @@ INGRESARNUM::= prIngresar var:a prComo prNumero prConValor numero:n tpuntoycoma
 
 //declaracion de cadenas
 
-INGRESARCADENA::= prIngresar var prComo prCadena prConValor Cadena tpuntoycoma
-                | prIngresar VARIABLES prComo prCadena prConValor Cadena tpuntoycoma
+DECLARARCADENA::= prIngresar tvariable prComo prCadena prConValor tcadena tpuntoycoma
 ;
 
-VARIABLES::= var tcoma VARIABLES
-            | var prComo 
+DECLARARCADENAL::= prIngresar LISTAVARIABLES prComo prCadena prConValor tcadena tpuntoycoma
 ;
 
+LISTAVARIABLES::= tvariable LISTAVARIABLES2
+            |
+;
+
+LISTAVARIABLES2::= tcoma tvariable LISTAVARIABLES2
+            | tcoma tvariable
+;
 
 //declaracion de booleanos
 
-INGRESARBOOLEANO::= prIngresar var prComo prBoolean prConValor prVerdadero tpuntoycoma
-                |  prIngresar var prComo prBoolean prConValor prFalso tpuntoycoma
+DECLARARBOOLEANO::= prIngresar tvariable prComo prBoolean prConValor prVerdadero tpuntoycoma
+                |  prIngresar tvariable prComo prBoolean prConValor prFalso tpuntoycoma
 ;
+
+
+DECLARARCARACTER::= prIngresar tvariable prComo prCaracter prConValor tcaracter tpuntoycoma
+;
+
 
 //declaracion de operaciones
 
@@ -174,21 +247,96 @@ INGRESARBOOLEANO::= prIngresar var prComo prBoolean prConValor prVerdadero tpunt
 
 // gramatica para las asignaciones
 
-ASIGNACIONES::= var tflecha Cadena tpuntoycoma
+
+ASIGNACIONES::= ASIGNARNUM
+            | ASIGNARCADENA
+            | ASIGNARBOOLEANO
+            | ASIGNARCARACTER
 ;
 
+//asignando numeros
 
+ASIGNARNUM::= tvariable tflecha tnumero_int tpuntoycoma
+            | tvariable tflecha tnumero_float tpuntoycoma
+;
+
+//asignando cadena
+
+ASIGNARCADENA::= tvariable tflecha tcadena tpuntoycoma
+;
+
+//asignando booleano
+
+ASIGNARBOOLEANO::= tvariable tflecha prVerdadero tpuntoycoma
+                | tvariable tflecha prFalso tpuntoycoma
+;
+
+//asignando caracter
+
+ASIGNARCARACTER::= tvariable tflecha tcaracter tpuntoycoma
+;
+
+//Sentencias
 // IF
 
 IF::= prSi CONDICION prEntonces INSTRUCCION prFinSi
+    | prSi CONDICION prEntonces INSTRUCCION prDeloContrario INSTRUCCION prFinSi
 ;
 
-CONDICION::= var prEsIGUAL var
+CONDICION::= tvariable prEsIGUAL tvariable
+            | tvariable prEsIGUAL tnumero_int
+            | tvariable prMayorIgual tvariable
+            | tvariable
+            | tvariable prMenorIgual tvariable
+            | tvariable prMayorIgual tnumero_int
+            | tvariable prMayorIgual tnumero_float
+            | tvariable prMenorIgual tnumero_int
+            | tvariable prMenorIgual tnumero_float
+;
+
+
+// SEGUN
+
+
+
+// MIENTRAS
+
+CICLO_WHILE::= prMientras CONDICION prHacer INSTRUCCION prFinMientras
+            | prMientras CONDICION prHacer prFinMientras
+;
+
+//REPETIR HASTA
+
+CICLO_DOWHILE::= prRepetir INSTRUCCION prHastaQue CONDICION
+                | prRepetir prHastaQue CONDICION
+;
+
+//RETORNO
+
+RETORNO::= prRetornar CONDICION
+        | prRetornar tnumero_int
+        | prRetornar tnumero_float
+        | prRetornar EXPRESIONARITMETICA
+;
+
+//METODO
+
+METODO::= prMetodo tvariable INSTRUCCION prFinMetodo
 ;
 
 
 // impresiones
 
-IMPRIMIR::= prImprimir Cadena tpuntoycoma
-            | prImprimir var tpuntoycoma
+IMPRIMIR::= prImprimir tcadena:a tpuntoycoma {: codigoTraducidoPython += "print" + "(" + a + ")" + "\n" ;:}
+            | prImprimir tvariable:b tpuntoycoma {: codigoTraducidoPython+= "print" + "(" +  b + ")" + "\n"; :}
+            | prImprimir tparA tvariable:c tparC tpuntoycoma {: codigoTraducidoPython+= "print" + "(" +  c + ")" + "\n"; :}
+            | prImprimir tparA tcadena:d tparC tpuntoycoma {: codigoTraducidoPython+= "print" + "(" +  d + ")" + "\n"; :}
+
+;
+
+
+IMPRIMIRNL::= prImprimirNl tcadena tpuntoycoma
+            | prImprimirNl tvariable tpuntoycoma
+            | prImprimirNl tparA tvariable tparC tpuntoycoma
+            | prImprimirNl tparA tcadena tparC tpuntoycoma
 ;

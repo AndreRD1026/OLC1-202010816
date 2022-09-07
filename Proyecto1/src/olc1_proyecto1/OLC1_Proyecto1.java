@@ -31,7 +31,7 @@ public class OLC1_Proyecto1 {
             sintactico.parse();
 
         } catch (Exception e) {
-        } 
+        }
         
     }
     

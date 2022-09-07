@@ -1,12 +1,7 @@
 inicio
 /////inicio de la traduccion
-imprimir _var1_;
-_v1_                           -> "esta es la cadena numero 1";
-ingresaR _curso1_         cOmo cadena con_vAlor "olc";
-ingresar _flag2_          como boolean  con_valor falso;
 
-
-imprimir "no tiene que imprimir este mensaje";
+ingresaR _v1_, _v2_, _v3_ cOmo CadenA con_vAlor "esta es una cadena";
 
 /*
         Primer archivo de entrada para proyecto organizacion de lenguajes y compiladores 1
@@ -16,9 +11,9 @@ imprimir "no tiene que imprimir este mensaje";
 
 //seccion de declraciones de funciones de variables
 Ingresar _variable1_      coMo NumEro cOn_valor 5;
-Ingresar _variable2_      coMo NumEro cOn_valor 50;   //ERROR sintactico, reportar que falta un punto y coma, recuperarse del error
-//ingresaR _v1_, _v2_, _v3_ cOmo CadenA con_vAlor "esta es una cadena";
+Ingresar _variable2_      coMo NumEro cOn_valor fin   //ERROR sintactico, reportar que falta un punto y coma, recuperarse del error
 
+ingresaR _curso1_         cOmo cadena con_vAlor "olc";
 ingresaR _curso2_         cOmo cadena con_vAlor "olc";
 ingresaR _curso3_         cOmo cadena con_vAlor "olc";
 ingresar _pi1_            como numero con_valor 3;
@@ -31,14 +26,63 @@ ingresar _anio3_          como numero con_valor 4;
 ingresar _anio4_          como numero con_valor 5;
 //ingresar _variableNeg_    como numero con_valor -5.0;
 ingresar _encabezado1_    como cadena con_valor "Universidad San Carlos de Guatemala...;";
-
+/* ingresar _encabezado2_    como cadena con_valor "Escuela de Ciencias y Sistemas
+Segundo semestre
+"; */
 ingresar _flag1_          como boolean  con_valor verdadero;
-
-si _v1_ es_igual _v2_ entonces
 ingresar _flag2_          como boolean  con_valor falso;
+ingresar _name1_          como caracter con_valor 'f';
+ingresar _name2_          como caracter con_valor 'e';
+ingresar _name3_          como caracter con_valor 'r';
+//ingresar _name4_, _name6_ como caracter con_valor 'n';
+ingresar _name5_          como caracter con_valor 'a';
+ingresar _name7_          como caracter con_valor '${100}';
+ingresar _name8_          como caracter con_valor '${111}';
+
+
+@ /*otro error lexico*/
+
+//seccion de asignaciones
+_v1_                           -> "esta es la cadena numero 1";
+_v2_ -> verdadero;
+_v4_ -> 'o';
+//_v2_, _v3_                     -> "estas cadenas deben ser diferentes";
+//_curso1_ , _curso2_ ,_curso3_  -> "Organizacion de lenguajes y compiladores 1";
+//_curso1_ , _curso2_ ,_curso3_  "Organizacion de lenguajes y compiladores 1" ;   /******error sintactico, le falta la flecha*/
+
+
+$ //otro error lexico
+
+//imprimir_nl _encabezado1_;
+//imprimir_nl _encabezado2_;
+imprimir  "...";
+imprimir _anio1_ ;
+imprimir _anio2_ ;
+imprimir _anio3_ ;
+imprimir _anio4_ ;
+//imprimir_nl ".";
+imprimir (_v3_);
+
+// IF
+
+si _v1_ es_igual 14 entonces
+        imprimir_nl "no tiene que imprimir este mensaje";
+        de_lo_contrario
+            imprimir "este print es un ejemplo";
 fin_si
 
 
+mientras _var1_ es_igual _var3_ hacer 
+        imprimir _v2_;
+fin_mientras
 
+mientras _var4_ es_igual _var3_ hacer 
+fin_mientras
+
+
+
+metodo _metodo1_
+        imprimir_nl "estamos entrando al metodo 1"; 
+fin_metodo
 
 fin

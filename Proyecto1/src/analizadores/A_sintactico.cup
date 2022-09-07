@@ -2,137 +2,193 @@ package analizadores;
 import java_cup.runtime.Symbol;
 
 
-
-parser code
+parser code 
 {:
-    public static LinkedList<TError> errores = new LinkedList<TError>(); 
+
+     public static LinkedList<TError> errores = new LinkedList<TError>(); 
 
     public static String tipo="Lista";
     public String codigoTraducido="";
 
+    
+    /**
+     * Método al que se llama automáticamente ante algún error sintactico.
+     **/ 
+    public void syntax_error(Symbol s){ 
+        System.out.println("Error Sintáctico en la Línea " + (s.left) +
+        " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
+    } 
 
-    //Metodo al que se llama automaticamente ante algun error sintactico
-    public void syntax_error(Symbol s)
-    {        
-        String lexema = s.value.toString();
-        int fila = s.right;
-        int columna = s.left;
-      
-        System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
-        System.out.println("\t\tLexema: "+lexema);
-        System.out.println("\t\tFila: "+fila);
-        System.out.println("\t\tColumna: "+columna);
-
-        TError tmp = new TError("Sintactico",lexema,"Caracter no esperado",fila,columna);
-        errores.add(tmp);
-        
-    }
-
-    //Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
-    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
-    {        
-        String lexema = s.value.toString();
-        int fila = s.right;
-        int columna = s.left;
-        
-        System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!! ");
-        System.out.println("\t\tLexema: "+lexema);
-        System.out.println("\t\tFila: "+fila);
-        System.out.println("\t\tColumna: "+columna);
-        
-        TError tmp = new TError("Sintactico",lexema, "TOKEN NO ERA EL ESPERADO",fila,columna);
-        errores.add(tmp);
-     
-    }
+    /**
+     * Método al que se llama automáticamente ante algún error sintáctico 
+     * en el que ya no es posible una recuperación de errores.
+     **/ 
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        System.out.println("Error síntactico irrecuperable en la Línea " + 
+        (s.left)+ " Columna "+s.right+". Componente " + s.value + 
+        " no reconocido."); 
+    }  
 :}
 
 
 //definicion de terminales
-terminal var;
-terminal tpunto;
-terminal tcoma;
-terminal tpuntoycoma;
-terminal numero;
-terminal Cadena;
-terminal tcruz;
-terminal tguion;
-terminal tasterisco;
-terminal tdiagonal;
-terminal tparA;
-terminal tparC;
-terminal tguionBajo;
-terminal tflecha;
-terminal tinterrogaciona;
-terminal tinterrogacionc;
-terminal tigual;
-terminal prInicio;
-terminal prBoolean;
-terminal prVerdadero;
-terminal prFalso;
-terminal prNumero;
-terminal prCadena;
-terminal prPotencia;
-terminal prMod;
-terminal prIngresar;
-terminal prComo;
-terminal prConValor;
-terminal prSi;
-terminal prEntonces;
-terminal prFinSi;
-terminal prOSi;
-terminal prDeloContrario;
-terminal prSegun;
-terminal prHacer;
-terminal prFinSegun;
-terminal prPara;
-terminal prHasta;
-terminal prFinPara;
-terminal prIncremental;
-terminal prMientras;
-terminal prFinMientras;
-terminal prRepetir;
-terminal prHastaQue;
-terminal prRetornar;
-terminal prMetodo;
-terminal prConParametros;
-terminal prFinMetodo;
-terminal prFuncion;
-terminal prFinFuncion;
-terminal prEjecutar;
-terminal prImprimir;
-terminal prImprimirNl;
-terminal prFin;
+terminal String var;
+terminal String tpunto;
+terminal String tcoma;
+terminal String tpuntoycoma;
+terminal String numero;
+terminal String Cadena;
+terminal String tsuma;
+terminal String tresta;
+terminal String tmultiplicacion;
+terminal String tdivision;
+terminal String tmodulo;
+terminal String tparA;
+terminal String tparC;
+terminal String tguionBajo;
+terminal String tflecha;
+terminal String tinterrogaciona;
+terminal String tinterrogacionc;
+terminal String tigual;
+terminal String prInicio;
+terminal String prBoolean;
+terminal String prVerdadero;
+terminal String prFalso;
+terminal String prNumero;
+terminal String prCadena;
+terminal String prPotencia;
+terminal String prMod;
+terminal String prIngresar;
+terminal String prComo;
+terminal String prConValor;
+terminal String prSi;
+terminal String prEsIGUAL;
+terminal String prEntonces;
+terminal String prFinSi;
+terminal String prOSi;
+terminal String prDeloContrario;
+terminal String prSegun;
+terminal String prHacer;
+terminal String prFinSegun;
+terminal String prPara;
+terminal String prHasta;
+terminal String prFinPara;
+terminal String prIncremental;
+terminal String prMientras;
+terminal String prFinMientras;
+terminal String prRepetir;
+terminal String prHastaQue;
+terminal String prRetornar;
+terminal String prMetodo;
+terminal String prConParametros;
+terminal String prFinMetodo;
+terminal String prFuncion;
+terminal String prFinFuncion;
+terminal String prEjecutar;
+terminal String prImprimir;
+terminal String prImprimirNl;
+terminal String prFin;
+
+
+//precedencia de los operadores
+
+precedence left tsuma,tresta, tmultiplicacion,tdivision, tmodulo;
+
 
 //definicion de no terminales
-non terminal INICIO, E, INSTRUCCION, ASIGNACIONNUM, INGRESARNUM, INGRESARCADENA, INGRESARBOOLEANO,CONDICION;
+non terminal INICIO, E,INSTRUCCIONES,INSTRUCCION,DECLARACIONES,ASIGNACIONES, INGRESARNUM;
+non terminal INGRESARCADENA,VARIABLES, INGRESARBOOLEANO,CONDICION,ERROR_INSTRUCCIONES;
+non terminal FUNCIONES, PROCEDIMIENTOS, IF, IMPRIMIR;
 
 
 
 //gramaticas
 start with INICIO;
 
-//INICIO::= prInicio ASIGNACIONNUM prFin {:System.out.println("FIN DE ANALISIS");:};
-INICIO::= prInicio INSTRUCCION prFin {:System.out.println(codigoTraducido);:};
+INICIO::= prInicio INSTRUCCIONES prFin {:System.out.println("FIN DE ANALISIS");:};
+//INICIO::= prInicio INSTRUCCION prFin {:System.out.println(codigoTraducido);:};
 
-INSTRUCCION::= ASIGNACIONNUM INSTRUCCION
-            | ASIGNACIONNUM
+
+
+INSTRUCCIONES::= INSTRUCCION INSTRUCCIONES
+                | INSTRUCCION
 ;
 
-ASIGNACIONNUM::= INGRESARNUM
+
+INSTRUCCION::= DECLARACIONES
+            | ASIGNACIONES
+            | IF
+            | IMPRIMIR
+;
+
+//gramatica para las declaraciones
+
+DECLARACIONES::= INGRESARNUM
             | INGRESARCADENA
             | INGRESARBOOLEANO
-{:  
-        
-        codigoTraducido+="prueba";
-:}
 ;
 
-INGRESARNUM::= prIngresar var prComo prNumero prConValor numero tpuntoycoma
+
+//declaracion de numeros
+
+INGRESARNUM::= prIngresar var:a prComo prNumero prConValor numero:n tpuntoycoma
+{: codigoTraducido+= a + " = " + n + "\n";:}
+/*{: 
+ codigoTraducido+= a + " = " + n + "\n";
+ String fileName = "prueba.py";
+    try{
+    PrintWriter writer = new PrintWriter(fileName, encoding);
+    writer.println(codigoTraducido);
+    //writer.println("println(The second line)");
+    writer.close();
+    }
+    catch (IOException e){
+      System.out.println("An error occurred.");
+      e.printStackTrace();
+    }
+ :} */
+            
 ;
+
+//declaracion de cadenas
 
 INGRESARCADENA::= prIngresar var prComo prCadena prConValor Cadena tpuntoycoma
+                | prIngresar VARIABLES prComo prCadena prConValor Cadena tpuntoycoma
 ;
+
+VARIABLES::= var tcoma VARIABLES
+            | var prComo 
+;
+
+
+//declaracion de booleanos
 
 INGRESARBOOLEANO::= prIngresar var prComo prBoolean prConValor prVerdadero tpuntoycoma
                 |  prIngresar var prComo prBoolean prConValor prFalso tpuntoycoma
+;
+
+//declaracion de operaciones
+
+
+
+
+// gramatica para las asignaciones
+
+ASIGNACIONES::= var tflecha Cadena tpuntoycoma
+;
+
+
+// IF
+
+IF::= prSi CONDICION prEntonces INSTRUCCION prFinSi
+;
+
+CONDICION::= var prEsIGUAL var
+;
+
+
+// impresiones
+
+IMPRIMIR::= prImprimir Cadena tpuntoycoma
+            | prImprimir var tpuntoycoma
 ;

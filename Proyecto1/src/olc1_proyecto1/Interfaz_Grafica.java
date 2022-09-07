@@ -245,6 +245,8 @@ String path="";//creamos una variable global para guardar el path
 
     private void golang_codeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_golang_codeActionPerformed
         // TODO add your handling code here:
+         System.out.println(sintactico.codigoTraducido);
+         JOptionPane.showMessageDialog(null,"File Created!", "Generating File!", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_golang_codeActionPerformed
 
     private void openfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openfileActionPerformed
@@ -261,10 +263,11 @@ String path="";//creamos una variable global para guardar el path
 
     private void btn_runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_runActionPerformed
         // TODO add your handling code here:
+       
        String texto = cajatexto.getText();
         
         
-        /* ****try {
+        /*try {
 
             Analizador_Lexico lexico = new Analizador_Lexico(new BufferedReader(new FileReader(texto)));
             Analizador_sintactico sintactico = new Analizador_sintactico(lexico);

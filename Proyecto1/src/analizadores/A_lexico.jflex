@@ -57,23 +57,30 @@ comentarioMulti = "/*"[^"*/"]*"*/"
 <YYINITIAL>"+"   {
                     //codigo en java
                     System.out.println("Reconocio token: <cruz> lexema: "+yytext());
-                    return new Symbol(Simbolos.tcruz, yycolumn, yyline, yytext());
+                    return new Symbol(Simbolos.tsuma, yycolumn, yyline, yytext());
                   }
 <YYINITIAL>"-"   {
                     //codigo en java
                     System.out.println("Reconocio token: <guion> lexema: "+yytext());
-                    return new Symbol(Simbolos.tguion, yycolumn, yyline, yytext());
+                    return new Symbol(Simbolos.tresta, yycolumn, yyline, yytext());
                   }
 <YYINITIAL>"*"   {
                     //codigo en java
                     System.out.println("Reconocio token: <asterisco> lexema: "+yytext());
-                    return new Symbol(Simbolos.tasterisco, yycolumn, yyline, yytext());
+                    return new Symbol(Simbolos.tmultiplicacion, yycolumn, yyline, yytext());
                   }
 <YYINITIAL>"/"   {
                     //codigo en java
                     System.out.println("Reconocio token: <diagonal> lexema: "+yytext());
-                    return new Symbol(Simbolos.tdiagonal, yycolumn, yyline, yytext());
+                    return new Symbol(Simbolos.tdivision, yycolumn, yyline, yytext());
                   }
+
+<YYINITIAL>"%"   {
+                    //codigo en java
+                    System.out.println("Reconocio token: <modulo> lexema: "+yytext());
+                    return new Symbol(Simbolos.tmodulo, yycolumn, yyline, yytext());
+                  }
+
 <YYINITIAL>"("   {
                     //codigo en java
                     System.out.println("Reconocio token: <parentesisAbre> lexema: "+yytext());
@@ -185,6 +192,12 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                     //codigo en java
                     System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
                     return new Symbol(Simbolos.prSi, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"es_igual"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prEsIGUAL, yycolumn, yyline, yytext());
                   }
 
 <YYINITIAL>"entonces"   {
@@ -364,7 +377,7 @@ comentarioMulti = "/*"[^"*/"]*"*/"
 
 
 .       {
-            System.out.println("Error Lexico : "+yytext()+ " Linea "+(yyline+1)+" Columna "+yycolumn);    
+            System.out.println("Error Lexico : "+yytext()+ " Linea "+(yyline+1)+" Columna "+(yycolumn+1));    
             TError tmp= new TError("Lexico", yytext(),"NO PERTENECE AL LENGUAJE", yyline, yycolumn );
             errores.add(tmp);
 }

@@ -1,27 +1,44 @@
 inicio
-//comentario
-
-Ingresar _variable1_ coMo NumEro cOn_valor 5.4;
-Ingresar _variable2_ coMo NumEro cOn_valor 2;
-
-/* prueba
-comentarios
-                multi
-        lineas
-        */
-
+/////inicio de la traduccion
+imprimir _var1_;
+_v1_                           -> "esta es la cadena numero 1";
 ingresaR _curso1_         cOmo cadena con_vAlor "olc";
-ingresaR _curso2_         cOmo cadena con_vAlor "olc";
-ingresaR _curso3_         cOmo cadena con_vAlor "olc";
-ingresar _pi1_            como numero con_valor 3.66;
-ingresar _flag1_          como boolean  con_valor verdadero;
-ingresar _flag3_          como boolean  con_valor verdadero;
-
-// otro comentario
-
 ingresar _flag2_          como boolean  con_valor falso;
 
 
-/*otro error lexico*/
+imprimir "no tiene que imprimir este mensaje";
+
+/*
+        Primer archivo de entrada para proyecto organizacion de lenguajes y compiladores 1
+*/
+
+@$& //errores lexicos, se tienen que recuperar!
+
+//seccion de declraciones de funciones de variables
+Ingresar _variable1_      coMo NumEro cOn_valor 5;
+Ingresar _variable2_      coMo NumEro cOn_valor 50;   //ERROR sintactico, reportar que falta un punto y coma, recuperarse del error
+//ingresaR _v1_, _v2_, _v3_ cOmo CadenA con_vAlor "esta es una cadena";
+
+ingresaR _curso2_         cOmo cadena con_vAlor "olc";
+ingresaR _curso3_         cOmo cadena con_vAlor "olc";
+ingresar _pi1_            como numero con_valor 3;
+ingresar _pi2_            como numero con_valor 3.1;
+ingresar _pi3_            como numero con_valor 3.14;
+ingresar _pi4_            como numero con_valor 3.141;
+ingresar _anio1_          como numero con_valor 1;
+ingresar _anio2_          como numero con_valor 9;
+ingresar _anio3_          como numero con_valor 4;
+ingresar _anio4_          como numero con_valor 5;
+//ingresar _variableNeg_    como numero con_valor -5.0;
+ingresar _encabezado1_    como cadena con_valor "Universidad San Carlos de Guatemala...;";
+
+ingresar _flag1_          como boolean  con_valor verdadero;
+
+si _v1_ es_igual _v2_ entonces
+ingresar _flag2_          como boolean  con_valor falso;
+fin_si
+
+
+
 
 fin

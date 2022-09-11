@@ -106,6 +106,11 @@ String path="";//creamos una variable global para guardar el path
         });
 
         python_code.setText("View Code Python");
+        python_code.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                python_codeActionPerformed(evt);
+            }
+        });
 
         btn_clean.setForeground(new java.awt.Color(0, 0, 0));
         btn_clean.setText("Clean");
@@ -251,8 +256,7 @@ String path="";//creamos una variable global para guardar el path
 
     private void golang_codeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_golang_codeActionPerformed
         // TODO add your handling code here:
-         System.out.println(sintactico.codigoTraducidoPython);
-         JOptionPane.showMessageDialog(null,"File Created!", "Generating File!", JOptionPane.INFORMATION_MESSAGE);
+         
     }//GEN-LAST:event_golang_codeActionPerformed
 
     private void openfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openfileActionPerformed
@@ -324,6 +328,12 @@ String path="";//creamos una variable global para guardar el path
         ReporteErrores();
         
     }//GEN-LAST:event_r_errorsActionPerformed
+
+    private void python_codeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_python_codeActionPerformed
+        // TODO add your handling code here:
+        System.out.println(sintactico.codigoTraducidoPython);
+        JOptionPane.showMessageDialog(null,"File Created!", "Generating File!", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_python_codeActionPerformed
 
     public void leerArchivos() {
         try {

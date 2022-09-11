@@ -23,8 +23,12 @@ parser code
         int fila = s.right;
         int columna = s.left;
 
-        System.out.println("Error Sintáctico en la Línea " + (s.left) +
-        " Columna "+s.right + errorm); 
+        System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
+        System.out.println("\t\t" + errorm);
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
         TError tmp = new TError("Sintactico",lexema,"Caracter no esperado",fila,columna);
         errores.add(tmp);
     } 
@@ -39,7 +43,7 @@ parser code
         int columna = s.left;
 
         System.out.println("Error síntactico irrecuperable en la Línea " + 
-        (s.left)+ " Columna "+s.right+". Componente " + s.value + 
+        (s.left + 1)+ " Columna "+s.right+". Componente " + s.value + 
         " no reconocido."); 
 
         TError tmp = new TError("Sintactico",lexema, "TOKEN NO ERA EL ESPERADO",fila,columna);
@@ -122,9 +126,10 @@ terminal String prFin;
 //definicion de no terminales
 non terminal INICIO,INSTRUCCIONES,INSTRUCCION, ERROR;
 non terminal E,DECLARACIONES,ASIGNACIONES,COMENTARIOS,COMENTARIO_MULTI,IF,SELECCION_MULTIPLE,CICLO_FOR, CICLO_WHILE; 
-non terminal CICLO_DOWHILE,RETORNO,METODO,FUNCIONES,PARAMETROS,IMPRIMIR,IMPRIMIRNL;
-non terminal DECLARARNUM,DECLARARCADENA,DECLARARCADENAL,DECLARARBOOLEANO,DECLARARCARACTER,LISTAVARIABLES,LISTAVARIABLES2,CONDICION,ERROR_INSTRUCCIONES;
-non terminal ASIGNARNUM,ASIGNARCADENA,ASIGNARBOOLEANO,ASIGNARCARACTER;
+non terminal CICLO_DOWHILE,RETORNO,METODO,FUNCIONES,PARAMETROS,EJECUTAR,IMPRIMIR,IMPRIMIRNL;
+non terminal DECLARARNUM,DECLARARNUML,DECLARARCADENA,DECLARARCADENAL,DECLARARBOOLEANO,DECLARARBOOLEANOL,DECLARARCARACTER;
+non terminal DECLARARCARACTERL,LISTAVARIABLES,LISTAVARIABLES2,CONDICION,ERROR_INSTRUCCIONES;
+non terminal ASIGNARNUM,ASIGNARNUML,ASIGNARCADENA,ASIGNARCADENAL,ASIGNARBOOLEANO,ASIGNARBOOLEANOL,ASIGNARCARACTER,ASIGNARCARACTERL;
 non terminal EXPRESIONARITMETICA,PROCEDIMIENTOS;
 
 
@@ -167,9 +172,10 @@ INSTRUCCION::= COMENTARIOS
             | RETORNO
             | METODO
             | FUNCIONES
-            | PARAMETROS
+            | EJECUTAR
             | IMPRIMIR
             | IMPRIMIRNL
+            | error tpuntoycoma  {: System.out.println("Falta un ;"); :}
 ;
 
 
@@ -184,10 +190,23 @@ COMENTARIO_MULTI::= tcomentarioMulti
 //gramatica para las declaraciones
 
 DECLARACIONES::= DECLARARNUM
+            | DECLARARNUML
             | DECLARARCADENA
             | DECLARARCADENAL
             | DECLARARBOOLEANO
+            | DECLARARBOOLEANOL
             | DECLARARCARACTER
+            | DECLARARCARACTERL
+;
+
+//Lista de variables
+
+LISTAVARIABLES::= tvariable LISTAVARIABLES2
+            |
+;
+
+LISTAVARIABLES2::= tcoma tvariable LISTAVARIABLES2
+            | tcoma tvariable
 ;
 
 
@@ -195,7 +214,8 @@ DECLARACIONES::= DECLARARNUM
 
 DECLARARNUM::= prIngresar tvariable:a prComo prNumero prConValor tnumero_int:in tpuntoycoma
             | prIngresar tvariable:a prComo prNumero prConValor tnumero_float:fl tpuntoycoma
-            | error tpuntoycoma {: errorm += " Falta un ;"; :}
+
+
 //{: codigoTraducidoPython+= a + " = " + n + "\n";:}
 /*{: 
  codigoTraducidoPython+= a + " = " + n + "\n";
@@ -209,8 +229,11 @@ DECLARARNUM::= prIngresar tvariable:a prComo prNumero prConValor tnumero_int:in 
       System.out.println("An error occurred.");
       e.printStackTrace();
     }
- :} */
-            
+ :} */           
+;
+
+DECLARARNUML::= prIngresar LISTAVARIABLES prComo prNumero prConValor tnumero_int tpuntoycoma
+             | prIngresar LISTAVARIABLES prComo prNumero prConValor tnumero_float tpuntoycoma
 ;
 
 //declaracion de cadenas
@@ -221,24 +244,23 @@ DECLARARCADENA::= prIngresar tvariable prComo prCadena prConValor tcadena tpunto
 DECLARARCADENAL::= prIngresar LISTAVARIABLES prComo prCadena prConValor tcadena tpuntoycoma
 ;
 
-LISTAVARIABLES::= tvariable LISTAVARIABLES2
-            |
-;
-
-LISTAVARIABLES2::= tcoma tvariable LISTAVARIABLES2
-            | tcoma tvariable
-;
-
 //declaracion de booleanos
 
 DECLARARBOOLEANO::= prIngresar tvariable prComo prBoolean prConValor prVerdadero tpuntoycoma
                 |  prIngresar tvariable prComo prBoolean prConValor prFalso tpuntoycoma
 ;
 
+DECLARARBOOLEANOL::= prIngresar LISTAVARIABLES prComo prBoolean prConValor prVerdadero tpuntoycoma
+                | prIngresar LISTAVARIABLES prComo prBoolean prConValor prFalso tpuntoycoma
+;
+
+//declaracion de caracteres
 
 DECLARARCARACTER::= prIngresar tvariable prComo prCaracter prConValor tcaracter tpuntoycoma
 ;
 
+DECLARARCARACTERL::= prIngresar LISTAVARIABLES prComo prCaracter prConValor tcaracter tpuntoycoma
+;
 
 //declaracion de operaciones
 
@@ -249,9 +271,13 @@ DECLARARCARACTER::= prIngresar tvariable prComo prCaracter prConValor tcaracter 
 
 
 ASIGNACIONES::= ASIGNARNUM
+            | ASIGNARNUML
             | ASIGNARCADENA
+            | ASIGNARCADENAL
             | ASIGNARBOOLEANO
+            | ASIGNARBOOLEANOL
             | ASIGNARCARACTER
+            | ASIGNARCARACTERL
 ;
 
 //asignando numeros
@@ -260,9 +286,16 @@ ASIGNARNUM::= tvariable tflecha tnumero_int tpuntoycoma
             | tvariable tflecha tnumero_float tpuntoycoma
 ;
 
+ASIGNARNUML::= LISTAVARIABLES tflecha tnumero_int tpuntoycoma
+            | LISTAVARIABLES tflecha tnumero_float tpuntoycoma
+;
+
 //asignando cadena
 
 ASIGNARCADENA::= tvariable tflecha tcadena tpuntoycoma
+;
+
+ASIGNARCADENAL::= LISTAVARIABLES tflecha tcadena tpuntoycoma
 ;
 
 //asignando booleano
@@ -271,16 +304,23 @@ ASIGNARBOOLEANO::= tvariable tflecha prVerdadero tpuntoycoma
                 | tvariable tflecha prFalso tpuntoycoma
 ;
 
+ASIGNARBOOLEANOL::= LISTAVARIABLES tflecha prVerdadero tpuntoycoma
+                | LISTAVARIABLES tflecha prFalso tpuntoycoma
+;
+
 //asignando caracter
 
 ASIGNARCARACTER::= tvariable tflecha tcaracter tpuntoycoma
 ;
 
+ASIGNARCARACTERL::= LISTAVARIABLES tflecha tcaracter tpuntoycoma
+;
+
 //Sentencias
 // IF
 
-IF::= prSi CONDICION prEntonces INSTRUCCION prFinSi
-    | prSi CONDICION prEntonces INSTRUCCION prDeloContrario INSTRUCCION prFinSi
+IF::= prSi CONDICION prEntonces INSTRUCCIONES prFinSi
+    | prSi CONDICION prEntonces INSTRUCCIONES prDeloContrario INSTRUCCION prFinSi
 ;
 
 CONDICION::= tvariable prEsIGUAL tvariable
@@ -321,8 +361,22 @@ RETORNO::= prRetornar CONDICION
 
 //METODO
 
-METODO::= prMetodo tvariable INSTRUCCION prFinMetodo
+METODO::= prMetodo tvariable INSTRUCCIONES prFinMetodo
+        | prMetodo tvariable prConParametros tparA tparC INSTRUCCIONES prFinMetodo
 ;
+
+
+//FUNCIONES
+
+
+//LLAMADA DE FUNCIONES Y METODOS
+
+EJECUTAR::= prEjecutar tvariable:a tparA tparC tpuntoycoma
+{: 
+System.out.println("ejecutar" + a + "\n");
+:}
+;
+
 
 
 // impresiones
@@ -340,3 +394,4 @@ IMPRIMIRNL::= prImprimirNl tcadena tpuntoycoma
             | prImprimirNl tparA tvariable tparC tpuntoycoma
             | prImprimirNl tparA tcadena tparC tpuntoycoma
 ;
+

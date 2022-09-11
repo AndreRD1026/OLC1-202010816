@@ -11,13 +11,13 @@ ingresaR _v1_, _v2_, _v3_ cOmo CadenA con_vAlor "esta es una cadena";
 
 //seccion de declraciones de funciones de variables
 Ingresar _variable1_      coMo NumEro cOn_valor 5;
-Ingresar _variable2_      coMo NumEro cOn_valor fin   //ERROR sintactico, reportar que falta un punto y coma, recuperarse del error
+
 
 ingresaR _curso1_         cOmo cadena con_vAlor "olc";
 ingresaR _curso2_         cOmo cadena con_vAlor "olc";
 ingresaR _curso3_         cOmo cadena con_vAlor "olc";
 ingresar _pi1_            como numero con_valor 3;
-ingresar _pi2_            como numero con_valor 3.1;
+ingresar _pi2_,_pi5_            como numero con_valor 3.1;
 ingresar _pi3_            como numero con_valor 3.14;
 ingresar _pi4_            como numero con_valor 3.141;
 ingresar _anio1_          como numero con_valor 1;
@@ -34,21 +34,21 @@ ingresar _flag2_          como boolean  con_valor falso;
 ingresar _name1_          como caracter con_valor 'f';
 ingresar _name2_          como caracter con_valor 'e';
 ingresar _name3_          como caracter con_valor 'r';
-//ingresar _name4_, _name6_ como caracter con_valor 'n';
+ingresar _name4_, _name6_ como caracter con_valor 'n';
 ingresar _name5_          como caracter con_valor 'a';
 ingresar _name7_          como caracter con_valor '${100}';
 ingresar _name8_          como caracter con_valor '${111}';
 
-
+Ingresar _variable2_      coMo NumEro cOn_valor 50  //ERROR sintactico, reportar que falta un punto y coma, recuperarse del error
 @ /*otro error lexico*/
 
 //seccion de asignaciones
 _v1_                           -> "esta es la cadena numero 1";
 _v2_ -> verdadero;
 _v4_ -> 'o';
-//_v2_, _v3_                     -> "estas cadenas deben ser diferentes";
-//_curso1_ , _curso2_ ,_curso3_  -> "Organizacion de lenguajes y compiladores 1";
-//_curso1_ , _curso2_ ,_curso3_  "Organizacion de lenguajes y compiladores 1" ;   /******error sintactico, le falta la flecha*/
+_v2_, _v3_                     -> verdadero;
+_curso1_ , _curso2_ ,_curso3_  -> "Organizacion de lenguajes y compiladores 1";
+_curso1_ , _curso2_ ,_curso3_  "Organizacion de lenguajes y compiladores 1" ;   /*error sintactico, le falta la flecha*/
 
 
 $ //otro error lexico
@@ -83,6 +83,18 @@ fin_mientras
 
 metodo _metodo1_
         imprimir_nl "estamos entrando al metodo 1"; 
+        imprimir "otra prueba ";
 fin_metodo
+
+
+
+metodo _potenciaManual_ con_parametros ()
+        ingresar _i_ como Numero con_valor 0;
+        ingresar _acumulado_ como Numero con_valor 0;       
+        imprimir _acumulado_;
+        imprimir_nl " Esta es la potencia Manual";      
+fin_metodo
+
+ejecutar _metodo_1_();
 
 fin

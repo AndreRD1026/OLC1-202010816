@@ -12,6 +12,7 @@ parser code
 
     public static String tipo="Lista";
     public String codigoTraducidoPython="";
+    public String codigoTraducidoGolang="";
     public String errorm="";
 
     
@@ -70,6 +71,8 @@ terminal String tdivision;
 terminal String tmodulo;
 terminal String tparA;
 terminal String tparC;
+terminal String tcorA;
+terminal String tcorC;
 terminal String tguionBajo;
 terminal String tflecha;
 terminal String tinterrogaciona;
@@ -88,9 +91,12 @@ terminal String prIngresar;
 terminal String prComo;
 terminal String prConValor;
 terminal String prSi;
+terminal String prMayor;
+terminal String prMenor;
 terminal String prMayorIgual;
 terminal String prMenorIgual;
 terminal String prEsIGUAL;
+terminal String prEsDiferente;
 terminal String prEntonces;
 terminal String prFinSi;
 terminal String prOSi;
@@ -118,20 +124,21 @@ terminal String prImprimirNl;
 terminal String prFin;
 
 
-//precedencia de los operadores
-
-//precedence left tsuma,tresta, tmultiplicacion,tdivision, tmodulo;
-
 
 //definicion de no terminales
 non terminal INICIO,INSTRUCCIONES,INSTRUCCION, ERROR;
-non terminal E,DECLARACIONES,ASIGNACIONES,COMENTARIOS,COMENTARIO_MULTI,IF,SELECCION_MULTIPLE,CICLO_FOR, CICLO_WHILE; 
+non terminal E,DECLARACIONES,ASIGNACIONES,COMENTARIOS,COMENTARIO_MULTI,IF,LISTAOSI,LISTAOSI2,SEGUN,CICLO_FOR, CICLO_WHILE; 
 non terminal CICLO_DOWHILE,RETORNO,METODO,FUNCIONES,PARAMETROS,EJECUTAR,IMPRIMIR,IMPRIMIRNL;
 non terminal DECLARARNUM,DECLARARNUML,DECLARARCADENA,DECLARARCADENAL,DECLARARBOOLEANO,DECLARARBOOLEANOL,DECLARARCARACTER;
-non terminal DECLARARCARACTERL,LISTAVARIABLES,LISTAVARIABLES2,CONDICION,ERROR_INSTRUCCIONES;
+non terminal DECLARARCARACTERL,LISTAVARIABLES,LISTAVARIABLES2,DECLARARCONOPERACION,CONDICION,ERROR_INSTRUCCIONES;
 non terminal ASIGNARNUM,ASIGNARNUML,ASIGNARCADENA,ASIGNARCADENAL,ASIGNARBOOLEANO,ASIGNARBOOLEANOL,ASIGNARCARACTER,ASIGNARCARACTERL;
 non terminal EXPRESIONARITMETICA,PROCEDIMIENTOS;
+non terminal operaciones, relacional, PRUEBA;
 
+//precedencia de los operadores
+
+precedence left tsuma,tresta, tmultiplicacion,tdivision, prMod, prPotencia;
+precedence left prMayor, prMenor, prMayorIgual, prMenorIgual, prEsIGUAL,prEsDiferente;
 
 
 //gramaticas
@@ -140,10 +147,16 @@ start with INICIO;
 //INICIO::= prInicio INSTRUCCIONES prFin {:System.out.println("FIN DE ANALISIS");:};
 INICIO::= prInicio INSTRUCCIONES prFin {:
 
-    String fileName = "prueba.py";
+    String fileName = "SalidaTraducida.py";
     try{
     PrintWriter writer = new PrintWriter(fileName);
+    writer.println("def main():");
     writer.println(codigoTraducidoPython);
+    writer.println("");
+    writer.println("");
+    writer.println("if __name__ == '__main__':");
+    writer.println("\tmain()");
+    writer.println("");
     writer.close();
     }
     catch (IOException e){
@@ -165,7 +178,7 @@ INSTRUCCION::= COMENTARIOS
             | DECLARACIONES
             | ASIGNACIONES
             | IF
-            | SELECCION_MULTIPLE
+            | SEGUN
             | CICLO_FOR
             | CICLO_WHILE
             | CICLO_DOWHILE
@@ -181,10 +194,15 @@ INSTRUCCION::= COMENTARIOS
 
 //gramatica para comentarios
 
-COMENTARIOS::= tcomentario
+COMENTARIOS::= tcomentario:coment 
+{: coment = coment.replace("/", "");  
+codigoTraducidoPython += "#" + coment +  "\n" ;  :}
 ;
 
-COMENTARIO_MULTI::= tcomentarioMulti
+COMENTARIO_MULTI::= tcomentarioMulti:comentm
+{: comentm = comentm.replace("/*", "'''");  
+comentm = comentm.replace("*/", "'''");
+codigoTraducidoPython += comentm +  "\n" ;  :}
 ;
 
 //gramatica para las declaraciones
@@ -197,6 +215,7 @@ DECLARACIONES::= DECLARARNUM
             | DECLARARBOOLEANOL
             | DECLARARCARACTER
             | DECLARARCARACTERL
+            | DECLARARCONOPERACION
 ;
 
 //Lista de variables
@@ -212,24 +231,10 @@ LISTAVARIABLES2::= tcoma tvariable LISTAVARIABLES2
 
 //declaracion de numeros
 
-DECLARARNUM::= prIngresar tvariable:a prComo prNumero prConValor tnumero_int:in tpuntoycoma
-            | prIngresar tvariable:a prComo prNumero prConValor tnumero_float:fl tpuntoycoma
-
-
-//{: codigoTraducidoPython+= a + " = " + n + "\n";:}
-/*{: 
- codigoTraducidoPython+= a + " = " + n + "\n";
- String fileName = "prueba.py";
-    try{
-    PrintWriter writer = new PrintWriter(fileName, encoding);
-    writer.println(codigoTraducidoPython);
-    writer.close();
-    }
-    catch (IOException e){
-      System.out.println("An error occurred.");
-      e.printStackTrace();
-    }
- :} */           
+DECLARARNUM::= prIngresar tvariable:a prComo prNumero prConValor tnumero_int:b tpuntoycoma {: a = a.replace("_", "");
+codigoTraducidoPython += "\t" + a + " = " + b + "\n" ; :}
+            | prIngresar tvariable:a prComo prNumero prConValor tnumero_float:c tpuntoycoma {: a = a.replace("_", "");
+codigoTraducidoPython += "\t" + a + " = " + c + "\n" ; :}        
 ;
 
 DECLARARNUML::= prIngresar LISTAVARIABLES prComo prNumero prConValor tnumero_int tpuntoycoma
@@ -238,7 +243,9 @@ DECLARARNUML::= prIngresar LISTAVARIABLES prComo prNumero prConValor tnumero_int
 
 //declaracion de cadenas
 
-DECLARARCADENA::= prIngresar tvariable prComo prCadena prConValor tcadena tpuntoycoma
+DECLARARCADENA::= prIngresar tvariable:a prComo prCadena prConValor tcadena:b tpuntoycoma 
+{: a = a.replace("_", "");
+codigoTraducidoPython += "\t" + a + " = " + b + "\n" ; :}
 ;
 
 DECLARARCADENAL::= prIngresar LISTAVARIABLES prComo prCadena prConValor tcadena tpuntoycoma
@@ -246,8 +253,10 @@ DECLARARCADENAL::= prIngresar LISTAVARIABLES prComo prCadena prConValor tcadena 
 
 //declaracion de booleanos
 
-DECLARARBOOLEANO::= prIngresar tvariable prComo prBoolean prConValor prVerdadero tpuntoycoma
-                |  prIngresar tvariable prComo prBoolean prConValor prFalso tpuntoycoma
+DECLARARBOOLEANO::= prIngresar tvariable:a prComo prBoolean prConValor prVerdadero:b tpuntoycoma {: a = a.replace("_", "");
+codigoTraducidoPython += "\t" + a + " = " + "True" + "\n" ; :}   
+                |  prIngresar tvariable:a prComo prBoolean prConValor prFalso:b tpuntoycoma {: a = a.replace("_", "");
+codigoTraducidoPython += "\t" + a + " = " + "False" + "\n" ; :}   
 ;
 
 DECLARARBOOLEANOL::= prIngresar LISTAVARIABLES prComo prBoolean prConValor prVerdadero tpuntoycoma
@@ -264,6 +273,34 @@ DECLARARCARACTERL::= prIngresar LISTAVARIABLES prComo prCaracter prConValor tcar
 
 //declaracion de operaciones
 
+DECLARARCONOPERACION::= prIngresar tvariable prComo prNumero prConValor operaciones:a tpuntoycoma {: System.out.println("Reconoce operacion: " + a);:}
+                    | prIngresar tvariable:z prComo prBoolean prConValor relacional tpuntoycoma {: System.out.println("salida: " + z);:}
+;
+
+
+operaciones::= operaciones tresta operaciones 
+            | operaciones tsuma operaciones
+            | operaciones tmultiplicacion operaciones
+            | operaciones tdivision operaciones
+            | operaciones prPotencia operaciones
+            | operaciones prMod operaciones
+            | tparA operaciones tparC
+            | tcorA operaciones tcorC
+            | tvariable
+
+;
+
+relacional::= operaciones prMayor operaciones 
+        | operaciones prMenor operaciones
+        | operaciones:b prMayorIgual:mi operaciones {:System.out.println(" booleano " + b + " " + mi );:}
+        | operaciones prMenorIgual operaciones
+        | operaciones prEsIGUAL operaciones
+        | operaciones prEsDiferente operaciones
+;  
+
+PRUEBA::= tnumero_int
+        | tnumero_float
+;
 
 
 
@@ -282,8 +319,10 @@ ASIGNACIONES::= ASIGNARNUM
 
 //asignando numeros
 
-ASIGNARNUM::= tvariable tflecha tnumero_int tpuntoycoma
-            | tvariable tflecha tnumero_float tpuntoycoma
+ASIGNARNUM::= tvariable:a tflecha tnumero_int:b tpuntoycoma {: a = a.replace("_", "");
+codigoTraducidoPython += "\t" + a + " = " + b + "\n" ; :}   
+            | tvariable:a tflecha tnumero_float:b tpuntoycoma {: a = a.replace("_", "");
+codigoTraducidoPython += "\t" + a + " = " + b + "\n" ; :}   
 ;
 
 ASIGNARNUML::= LISTAVARIABLES tflecha tnumero_int tpuntoycoma
@@ -292,7 +331,8 @@ ASIGNARNUML::= LISTAVARIABLES tflecha tnumero_int tpuntoycoma
 
 //asignando cadena
 
-ASIGNARCADENA::= tvariable tflecha tcadena tpuntoycoma
+ASIGNARCADENA::= tvariable:a tflecha tcadena:b tpuntoycoma {: a = a.replace("_", "");
+codigoTraducidoPython += "\t" + a + " = " + b + "\n" ; :}   
 ;
 
 ASIGNARCADENAL::= LISTAVARIABLES tflecha tcadena tpuntoycoma
@@ -300,8 +340,10 @@ ASIGNARCADENAL::= LISTAVARIABLES tflecha tcadena tpuntoycoma
 
 //asignando booleano
 
-ASIGNARBOOLEANO::= tvariable tflecha prVerdadero tpuntoycoma
-                | tvariable tflecha prFalso tpuntoycoma
+ASIGNARBOOLEANO::= tvariable:a tflecha prVerdadero:b tpuntoycoma {: a = a.replace("_", "");
+codigoTraducidoPython += "\t" + a + " = " + "True" + "\n" ; :}   
+                | tvariable:a tflecha prFalso:b tpuntoycoma {: a = a.replace("_", "");
+codigoTraducidoPython += "\t" + a + " = " + "False" + "\n" ; :}   
 ;
 
 ASIGNARBOOLEANOL::= LISTAVARIABLES tflecha prVerdadero tpuntoycoma
@@ -310,7 +352,8 @@ ASIGNARBOOLEANOL::= LISTAVARIABLES tflecha prVerdadero tpuntoycoma
 
 //asignando caracter
 
-ASIGNARCARACTER::= tvariable tflecha tcaracter tpuntoycoma
+ASIGNARCARACTER::= tvariable:a tflecha tcaracter:b tpuntoycoma {: a = a.replace("_", "");
+codigoTraducidoPython += "\t" + a + " = " + b + "\n" ; :}   
 ;
 
 ASIGNARCARACTERL::= LISTAVARIABLES tflecha tcaracter tpuntoycoma
@@ -320,7 +363,9 @@ ASIGNARCARACTERL::= LISTAVARIABLES tflecha tcaracter tpuntoycoma
 // IF
 
 IF::= prSi CONDICION prEntonces INSTRUCCIONES prFinSi
-    | prSi CONDICION prEntonces INSTRUCCIONES prDeloContrario INSTRUCCION prFinSi
+    | prSi CONDICION prEntonces INSTRUCCIONES prDeloContrario INSTRUCCIONES prFinSi
+    | prSi CONDICION prEntonces INSTRUCCIONES prOSi CONDICION prEntonces INSTRUCCIONES prDeloContrario INSTRUCCIONES prFinSi
+    | prSi CONDICION prEntonces INSTRUCCIONES LISTAOSI prDeloContrario INSTRUCCIONES prFinSi
 ;
 
 CONDICION::= tvariable prEsIGUAL tvariable
@@ -334,9 +379,13 @@ CONDICION::= tvariable prEsIGUAL tvariable
             | tvariable prMenorIgual tnumero_float
 ;
 
+LISTAOSI::= prOSi CONDICION prEntonces INSTRUCCIONES LISTAOSI
+;
 
 // SEGUN
 
+SEGUN::= prSegun tvariable prHacer prFinSegun
+;
 
 
 // MIENTRAS
@@ -381,17 +430,17 @@ System.out.println("ejecutar" + a + "\n");
 
 // impresiones
 
-IMPRIMIR::= prImprimir tcadena:a tpuntoycoma {: codigoTraducidoPython += "print" + "(" + a + ")" + "\n" ;:}
-            | prImprimir tvariable:b tpuntoycoma {: codigoTraducidoPython+= "print" + "(" +  b + ")" + "\n"; :}
-            | prImprimir tparA tvariable:c tparC tpuntoycoma {: codigoTraducidoPython+= "print" + "(" +  c + ")" + "\n"; :}
-            | prImprimir tparA tcadena:d tparC tpuntoycoma {: codigoTraducidoPython+= "print" + "(" +  d + ")" + "\n"; :}
+IMPRIMIR::= prImprimir tcadena:a tpuntoycoma {: codigoTraducidoPython += "\tprint" + "(" + a + ")" + "\n" ;:}
+            | prImprimir tvariable:b tpuntoycoma {:  b = b.replace("_", ""); codigoTraducidoPython+= "\tprint" + "(" +  b + ")" + "\n"; :}
+            | prImprimir tparA tvariable:c tparC tpuntoycoma {:  c = c.replace("_", ""); codigoTraducidoPython+= "\tprint" + "(" +  c + ")" + "\n"; :}
+            | prImprimir tparA tcadena:d tparC tpuntoycoma {: codigoTraducidoPython+= "\tprint" + "(" +  d + ")" + "\n"; :}
 
 ;
 
 
-IMPRIMIRNL::= prImprimirNl tcadena tpuntoycoma
-            | prImprimirNl tvariable tpuntoycoma
-            | prImprimirNl tparA tvariable tparC tpuntoycoma
-            | prImprimirNl tparA tcadena tparC tpuntoycoma
+IMPRIMIRNL::= prImprimirNl tcadena:a tpuntoycoma {: codigoTraducidoPython += "\tprint" + "(" + a + ")" + "\n" ;:}
+            | prImprimirNl tvariable:a tpuntoycoma {:  a = a.replace("_", ""); codigoTraducidoPython += "\tprint" + "(" + a + ")" + "\n" ;:}
+            | prImprimirNl tparA tvariable:a tparC tpuntoycoma {:  a = a.replace("_", ""); codigoTraducidoPython += "\tprint" + "(" + a + ")" + "\n" ;:}
+            | prImprimirNl tparA tcadena:a tparC tpuntoycoma {: codigoTraducidoPython += "\tprint" + "(" + a + ")" + "\n" ;:}
 ;
 

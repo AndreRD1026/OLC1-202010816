@@ -93,6 +93,18 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                     return new Symbol(Simbolos.tparC, yycolumn, yyline, yytext());
                   }
 
+<YYINITIAL>"["   {
+                    //codigo en java
+                    System.out.println("Reconocio token: <corcheteabre> lexema: "+yytext());
+                    return new Symbol(Simbolos.tcorA, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"]"   {
+                    //codigo en java
+                    System.out.println("Reconocio token: <corchetecierra> lexema: "+yytext());
+                    return new Symbol(Simbolos.tcorC, yycolumn, yyline, yytext());
+                  }
+
 <YYINITIAL>"_"   {
                     //codigo en java
                     System.out.println("Reconocio token: <guion_bajo> lexema: "+yytext());
@@ -201,6 +213,18 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                     return new Symbol(Simbolos.prSi, yycolumn, yyline, yytext());
                   }
 
+<YYINITIAL>"mayor"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prMayor, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"menor"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prMenor, yycolumn, yyline, yytext());
+                  }
+
 <YYINITIAL>"mayor_o_igual"   {
                     //codigo en java
                     System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
@@ -217,6 +241,12 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                     //codigo en java
                     System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
                     return new Symbol(Simbolos.prEsIGUAL, yycolumn, yyline, yytext());
+                  }
+
+<YYINITIAL>"es_diferente"   {
+                    //codigo en java
+                    System.out.println("Reconocio palabra_reservada, lexema: "+yytext());
+                    return new Symbol(Simbolos.prEsDiferente, yycolumn, yyline, yytext());
                   }
 
 <YYINITIAL>"entonces"   {

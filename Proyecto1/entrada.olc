@@ -95,6 +95,13 @@ metodo _potenciaManual_ con_parametros ()
         imprimir_nl " Esta es la potencia Manual";      
 fin_metodo
 
-ejecutar _metodo_1_();
+
+
+ingresar _operaciones1Basica2_      como numero con_valor _operaciones1Basica_-_operaciones1Basica_; 
+
+ingresar _operacionRela5_ como bOoleAn con_valor _operaciones1Basica_ es_igual _operaciones1Basica_;
+
+ingresar _operacionRela3_ como BooLean con_valor (_operaciones1Basica_+ _prueba_) Mayor_o_igual _ultimo_;
+
 
 fin

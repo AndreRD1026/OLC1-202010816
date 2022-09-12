@@ -774,6 +774,20 @@ public class Analizador_sintactico extends java_cup.runtime.lr_parser {
     public String codigoTraducidoGolang="";
     public String errorm="";
 
+    public static boolean isNumeric(String cadena) {
+
+        boolean resultado;
+
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
+    }
+    
     
     /**
      * Método al que se llama automáticamente ante algún error sintactico.
@@ -853,7 +867,7 @@ class CUP$Analizador_sintactico$actions {
           case 1: // INICIO ::= prInicio INSTRUCCIONES prFin 
             {
               Object RESULT =null;
-		
+		 System.out.println("FIN DE ANALISIS");
 
     String fileName = "SalidaTraducida.py";
     try{
@@ -1311,6 +1325,28 @@ codigoTraducidoPython += "\t" + a + " = " + "False" + "\n" ;
           case 45: // DECLARARCARACTER ::= prIngresar tvariable prComo prCaracter prConValor tcaracter tpuntoycoma 
             {
               Object RESULT =null;
+		int aleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-5)).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-5)).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-5)).value;
+		int bleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).left;
+		int bright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).right;
+		String b = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).value;
+		 a = a.replace("_", "");
+b = b.replace("$","");
+b = b.replace("{","");
+b = b.replace("}","");
+b = b.replace("'","");
+
+        if (isNumeric(b) == true) {
+            int prueba = Integer.parseInt(b);
+            char convertedChar =  (char)prueba;
+            String s=String.valueOf(convertedChar);
+            codigoTraducidoPython += "\t" + a + " = " + "'" +  s  + "'" + "\n";
+            //System.out.println("Es un número");
+        } else {
+            codigoTraducidoPython += "\t" + a + " = " + "'" + b  + "'" + "\n";
+            //System.out.println("Es una letra");
+        }
 
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("DECLARARCARACTER",29, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-6)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
@@ -1716,7 +1752,22 @@ codigoTraducidoPython += "\t" + a + " = " + "False" + "\n" ;
 		int bright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).value;
 		 a = a.replace("_", "");
-codigoTraducidoPython += "\t" + a + " = " + b + "\n" ; 
+b = b.replace("$","");
+b = b.replace("{","");
+b = b.replace("}","");
+b = b.replace("'","");
+
+        if (isNumeric(b) == true) {
+            int prueba = Integer.parseInt(b);
+            char convertedChar =  (char)prueba;
+            String s=String.valueOf(convertedChar);
+            codigoTraducidoPython += "\t" + a + " = " + "'" +  s  + "'" + "\n";
+            //System.out.println("Es un número");
+        } else {
+            codigoTraducidoPython += "\t" + a + " = " + "'" + b  + "'" + "\n";
+            //System.out.println("Es una letra");
+        }
+
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("ASIGNARCARACTER",42, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-3)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;

@@ -7,13 +7,16 @@ package olc1_proyecto1;
 import analizadores.Analizador_Lexico;
 import analizadores.Analizador_sintactico;
 import analizadores.TError;
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -278,7 +281,7 @@ String path="";//creamos una variable global para guardar el path
        String prueba;
        int conta_errors = 0;
         
-        
+       //Analizador_Lexico lexico  = new Analizador_Lexico(new FileInputStream(texto));
         /*try {
 
             Analizador_Lexico lexico = new Analizador_Lexico(new BufferedReader(new FileReader(texto)));
@@ -290,7 +293,7 @@ String path="";//creamos una variable global para guardar el path
         
         if (contenido != "") {
             try {
-            lexico = new Analizador_Lexico(new BufferedReader(new FileReader(archivo)));
+            lexico = new Analizador_Lexico(new BufferedReader(new StringReader(texto)));
             //lexico = new Analizador_Lexico(new BufferedReader(new FileReader(cajatexto.getText())));
             sintactico = new Analizador_sintactico(lexico);
             sintactico.parse();
@@ -299,6 +302,7 @@ String path="";//creamos una variable global para guardar el path
                 contenido = "";
                 JOptionPane.showMessageDialog(this, "GENERANDO REPORTE DE ERRORES", "ERROR ENCONTRADO", WARNING_MESSAGE);
                 ReporteErrores();
+                abrirarchivo("REPORTE DE ERRORES.html");
                 Errores = true;
                 conta_errors ++;
                 prueba = String.valueOf(conta_errors);
@@ -316,7 +320,7 @@ String path="";//creamos una variable global para guardar el path
             } else {
                 JOptionPane.showMessageDialog(this, "INGRESE ARCHIVO EXP", "ADVERTENCIA", WARNING_MESSAGE);
             } 
-               
+             
         
         
         
@@ -325,7 +329,8 @@ String path="";//creamos una variable global para guardar el path
 
     private void r_errorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_r_errorsActionPerformed
         // TODO add your handling code here:
-        ReporteErrores();
+        //ReporteErrores();
+        abrirarchivo("REPORTE DE ERRORES.html");
         
     }//GEN-LAST:event_r_errorsActionPerformed
 
@@ -472,6 +477,19 @@ public void ReporteErrores() {
                 e2.printStackTrace();
             }
         }
+    }
+
+    public void abrirarchivo(String archivo){
+
+     try {
+
+            File objetofile = new File (archivo);
+            Desktop.getDesktop().open(objetofile);
+
+     }catch (IOException ex) {
+
+            System.out.println(ex);
+     }
     }
   
     /**

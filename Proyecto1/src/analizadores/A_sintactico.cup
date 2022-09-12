@@ -15,6 +15,20 @@ parser code
     public String codigoTraducidoGolang="";
     public String errorm="";
 
+    public static boolean isNumeric(String cadena) {
+
+        boolean resultado;
+
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
+    }
+    
     
     /**
      * Método al que se llama automáticamente ante algún error sintactico.
@@ -145,7 +159,7 @@ precedence left prMayor, prMenor, prMayorIgual, prMenorIgual, prEsIGUAL,prEsDife
 start with INICIO;
 
 //INICIO::= prInicio INSTRUCCIONES prFin {:System.out.println("FIN DE ANALISIS");:};
-INICIO::= prInicio INSTRUCCIONES prFin {:
+INICIO::= prInicio INSTRUCCIONES prFin {: System.out.println("FIN DE ANALISIS");
 
     String fileName = "SalidaTraducida.py";
     try{
@@ -265,7 +279,24 @@ DECLARARBOOLEANOL::= prIngresar LISTAVARIABLES prComo prBoolean prConValor prVer
 
 //declaracion de caracteres
 
-DECLARARCARACTER::= prIngresar tvariable prComo prCaracter prConValor tcaracter tpuntoycoma
+DECLARARCARACTER::= prIngresar tvariable:a prComo prCaracter prConValor tcaracter:b tpuntoycoma
+{: a = a.replace("_", "");
+b = b.replace("$","");
+b = b.replace("{","");
+b = b.replace("}","");
+b = b.replace("'","");
+
+        if (isNumeric(b) == true) {
+            int prueba = Integer.parseInt(b);
+            char convertedChar =  (char)prueba;
+            String s=String.valueOf(convertedChar);
+            codigoTraducidoPython += "\t" + a + " = " + "'" +  s  + "'" + "\n";
+            //System.out.println("Es un número");
+        } else {
+            codigoTraducidoPython += "\t" + a + " = " + "'" + b  + "'" + "\n";
+            //System.out.println("Es una letra");
+        }
+:}
 ;
 
 DECLARARCARACTERL::= prIngresar LISTAVARIABLES prComo prCaracter prConValor tcaracter tpuntoycoma
@@ -353,7 +384,22 @@ ASIGNARBOOLEANOL::= LISTAVARIABLES tflecha prVerdadero tpuntoycoma
 //asignando caracter
 
 ASIGNARCARACTER::= tvariable:a tflecha tcaracter:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython += "\t" + a + " = " + b + "\n" ; :}   
+b = b.replace("$","");
+b = b.replace("{","");
+b = b.replace("}","");
+b = b.replace("'","");
+
+        if (isNumeric(b) == true) {
+            int prueba = Integer.parseInt(b);
+            char convertedChar =  (char)prueba;
+            String s=String.valueOf(convertedChar);
+            codigoTraducidoPython += "\t" + a + " = " + "'" +  s  + "'" + "\n";
+            //System.out.println("Es un número");
+        } else {
+            codigoTraducidoPython += "\t" + a + " = " + "'" + b  + "'" + "\n";
+            //System.out.println("Es una letra");
+        }
+:}   
 ;
 
 ASIGNARCARACTERL::= LISTAVARIABLES tflecha tcaracter tpuntoycoma

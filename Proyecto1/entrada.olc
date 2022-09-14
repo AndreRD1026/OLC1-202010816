@@ -24,7 +24,6 @@ ingresar _anio1_          como numero con_valor 1;
 ingresar _anio2_          como numero con_valor 9;
 ingresar _anio3_          como numero con_valor 4;
 ingresar _anio4_          como numero con_valor 5;
-//ingresar _variableNeg_    como numero con_valor -5.0;
 ingresar _encabezado1_    como cadena con_valor "Universidad San Carlos de Guatemala...;";
 /* ingresar _encabezado2_    como cadena con_valor "Escuela de Ciencias y Sistemas
 Segundo semestre
@@ -81,6 +80,12 @@ fin_mientras
 
 
 
+
+mientras _v4_ mayor_o_igual _v5_ hacer 
+        imprimir _v8_;
+fin_mientras
+
+
 metodo _metodo1_
         imprimir_nl "estamos entrando al metodo 1"; 
         imprimir "otra prueba ";
@@ -90,7 +95,10 @@ fin_metodo
 
 metodo _potenciaManual_ con_parametros ()
         ingresar _i_ como Numero con_valor 0;
-        ingresar _acumulado_ como Numero con_valor 0;       
+        ingresar _acumulado_ como Numero con_valor 0;
+        para _i_->0 hasta _exponente_ hacer
+                _acumulado_ -> verdadero;
+        fin_para        
         imprimir _acumulado_;
         imprimir_nl " Esta es la potencia Manual";      
 fin_metodo
@@ -102,6 +110,7 @@ ingresar _operaciones1Basica2_      como numero con_valor _operaciones1Basica_-_
 ingresar _operacionRela5_ como bOoleAn con_valor _operaciones1Basica_ es_igual _operaciones1Basica_;
 
 ingresar _operacionRela3_ como BooLean con_valor (_operaciones1Basica_+ _prueba_) Mayor_o_igual _ultimo_;
+
 
 
 fin

@@ -30,7 +30,9 @@ import java.util.LinkedList;
 letra  = [a-zA-Z]
 variable = ([\_][^\n\_]* [\_])
 cadena = ([\"][^\n\"]* [\"])
+//cadena= ([\"][^\n\"]+[\"])
 caracter = ([\'][^\n\']* [\'])
+numero = [0-9]+
 numero_int = [0-9]+
 numero_float = [0-9]+([.][0-9]+)?
 comentario = ("//" [^"\n"]+)
@@ -57,7 +59,7 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                   }
 <YYINITIAL>"+"   {
                     //codigo en java
-                    System.out.println("Reconocio token: <cruz> lexema: "+yytext());
+                    System.out.println("Reconocio token: <tsuma> lexema: "+yytext());
                     return new Symbol(Simbolos.tsuma, yycolumn, yyline, yytext());
                   }
 <YYINITIAL>"-"   {
@@ -414,13 +416,10 @@ comentarioMulti = "/*"[^"*/"]*"*/"
 
 <YYINITIAL>{comentario}  {
                     System.out.println("Reconocio token: <comentario> lexema: "+yytext());
-                    return new Symbol(Simbolos.tcomentario, yycolumn, yyline, yytext());
                     }
 
 <YYINITIAL>{comentarioMulti} {
-                    System.out.println("Reconocio token: <comentarioMulti> lexema: "+ yytext());
-                    return new Symbol(Simbolos.tcomentarioMulti, yycolumn, yyline, yytext());
-                    
+                    System.out.println("Reconocio token: <comentarioMulti> lexema: "+ yytext());        
                 } 
 
 <YYINITIAL> {numero_int} {
@@ -432,6 +431,8 @@ comentarioMulti = "/*"[^"*/"]*"*/"
                     System.out.println("Reconocio token: <numero_float> lexema: "+ yytext());
                     return new Symbol(Simbolos.tnumero_float, yycolumn, yyline, yytext());
                 }
+
+
 
 
 [\t \n \f \r ] { /* Espacios en blanco se ignoran */}

@@ -801,7 +801,7 @@ public class Analizador_Lexico implements java_cup.runtime.Scanner {
           case 79: break;
           case 10: 
             { //codigo en java
-                    System.out.println("Reconocio token: <cruz> lexema: "+yytext());
+                    System.out.println("Reconocio token: <tsuma> lexema: "+yytext());
                     return new Symbol(Simbolos.tsuma, yycolumn, yyline, yytext());
             } 
             // fall through
@@ -909,7 +909,6 @@ public class Analizador_Lexico implements java_cup.runtime.Scanner {
           case 95: break;
           case 26: 
             { System.out.println("Reconocio token: <comentario> lexema: "+yytext());
-                    return new Symbol(Simbolos.tcomentario, yycolumn, yyline, yytext());
             } 
             // fall through
           case 96: break;
@@ -929,7 +928,6 @@ public class Analizador_Lexico implements java_cup.runtime.Scanner {
           case 98: break;
           case 29: 
             { System.out.println("Reconocio token: <comentarioMulti> lexema: "+ yytext());
-                    return new Symbol(Simbolos.tcomentarioMulti, yycolumn, yyline, yytext());
             } 
             // fall through
           case 99: break;

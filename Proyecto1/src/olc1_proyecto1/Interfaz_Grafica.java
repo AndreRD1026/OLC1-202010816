@@ -255,6 +255,7 @@ String path="";//creamos una variable global para guardar el path
 
     private void btn_cleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cleanActionPerformed
         cajatexto.setText("");
+        contenido = "";
     }//GEN-LAST:event_btn_cleanActionPerformed
 
     private void golang_codeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_golang_codeActionPerformed
@@ -279,32 +280,20 @@ String path="";//creamos una variable global para guardar el path
        
        String texto = cajatexto.getText();
        String prueba;
-       int conta_errors = 0;
-        
-       //Analizador_Lexico lexico  = new Analizador_Lexico(new FileInputStream(texto));
-        /*try {
-
-            Analizador_Lexico lexico = new Analizador_Lexico(new BufferedReader(new FileReader(texto)));
-            Analizador_sintactico sintactico = new Analizador_sintactico(lexico);
-            sintactico.parse();
-
-        } catch (Exception e) {
-        } */
-        
+       int conta_errors;
+              
         if (contenido != "") {
             try {
             lexico = new Analizador_Lexico(new BufferedReader(new StringReader(texto)));
-            //lexico = new Analizador_Lexico(new BufferedReader(new FileReader(cajatexto.getText())));
             sintactico = new Analizador_sintactico(lexico);
             sintactico.parse();
 
             if (sintactico.errores.size() > 0) {
-                contenido = "";
                 JOptionPane.showMessageDialog(this, "GENERANDO REPORTE DE ERRORES", "ERROR ENCONTRADO", WARNING_MESSAGE);
                 ReporteErrores();
                 abrirarchivo("REPORTE DE ERRORES.html");
                 Errores = true;
-                conta_errors ++;
+                conta_errors  =sintactico.errores.size();
                 prueba = String.valueOf(conta_errors);
                 cont_errors.setText(prueba);
             } else {
@@ -318,7 +307,7 @@ String path="";//creamos una variable global para guardar el path
         } catch (Exception e) {
         }
             } else {
-                JOptionPane.showMessageDialog(this, "INGRESE ARCHIVO EXP", "ADVERTENCIA", WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "DEBE CARGAR UN ARCHIVO", "ADVERTENCIA", WARNING_MESSAGE);
             } 
              
         
@@ -329,7 +318,7 @@ String path="";//creamos una variable global para guardar el path
 
     private void r_errorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_r_errorsActionPerformed
         // TODO add your handling code here:
-        //ReporteErrores();
+        ReporteErrores();
         abrirarchivo("REPORTE DE ERRORES.html");
         
     }//GEN-LAST:event_r_errorsActionPerformed

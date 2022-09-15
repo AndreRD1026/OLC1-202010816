@@ -16,7 +16,7 @@ Ingresar _variable1_      coMo NumEro cOn_valor 5;
 ingresaR _curso1_         cOmo cadena con_vAlor "olc";
 ingresaR _curso2_         cOmo cadena con_vAlor "olc";
 ingresaR _curso3_         cOmo cadena con_vAlor "olc";
-ingresar _pi1_            como numero con_valor 3;
+ingresar _pi1_            como numero con_valor 3+3;
 ingresar _pi2_,_pi5_            como numero con_valor 3.1;
 ingresar _pi3_            como numero con_valor 3.14;
 ingresar _pi4_            como numero con_valor 3.141;
@@ -47,28 +47,24 @@ _v2_ -> verdadero;
 _v4_ -> 'o';
 _v2_, _v3_                     -> verdadero;
 _curso1_ , _curso2_ ,_curso3_  -> "Organizacion de lenguajes y compiladores 1";
+_prueba1_ -> 15;
+_otro_, _otro1_ -> 22;
 _curso1_ , _curso2_ ,_curso3_  "Organizacion de lenguajes y compiladores 1" ;   /*error sintactico, le falta la flecha*/
 
 
 $ //otro error lexico
 
-//imprimir_nl _encabezado1_;
-//imprimir_nl _encabezado2_;
+imprimir_nl _encabezado1_;
+imprimir_nl _encabezado2_;
 imprimir  "...";
 imprimir _anio1_ ;
 imprimir _anio2_ ;
 imprimir _anio3_ ;
 imprimir _anio4_ ;
-//imprimir_nl ".";
+imprimir_nl ".";
 imprimir (_v3_);
 
 // IF
-
-si _v1_ es_igual 14 entonces
-        imprimir_nl "no tiene que imprimir este mensaje";
-        de_lo_contrario
-            imprimir "este print es un ejemplo";
-fin_si
 
 
 mientras _var1_ es_igual _var3_ hacer 
@@ -111,6 +107,56 @@ ingresar _operacionRela5_ como bOoleAn con_valor _operaciones1Basica_ es_igual _
 
 ingresar _operacionRela3_ como BooLean con_valor (_operaciones1Basica_+ _prueba_) Mayor_o_igual _ultimo_;
 
+
+si _v1_ es_igual _v2_ entonces
+        imprimir_nl "Al parecer no funciona la asignacion";
+        mientras not (_variable1_ mayor_o_igual 5*5+8/2) hacer
+                imprimir _variable1_;
+                _variable1_ -> _variable1_ + 1;
+        fin_mientras
+fin_si
+
+si _v1_ es_igual _v3_ entonces
+        imprimir_nl "no tiene que imprimir este mensaje2222";
+        de_lo_contrario
+            imprimir "este print es un ejemplo22222";
+fin_si
+
+si _v1_ es_igual _v4_ entonces
+        imprimir_nl "este es el segundo if";
+                o_si _v1_ es_igual 13 entonces
+                    imprimir_nl "primer else";
+                o_si _v1_ es_igual 14 entonces
+                    imprimir_nl "segundo else";
+                o_si _v1_ es_igual 15 entonces
+                    imprimir_nl "tercer else";
+        de_lo_contrario
+            imprimir_nl "ultimo else sin condicion";
+fin_si
+
+
+ingresar _varB_ como Boolean con_valor falso; 
+
+
+ingresar _operaciones1Basica_      como numero con_valor 1+(1);               //2 el resultado
+ingresar _operaciones1Basica2_      como numero con_valor _operaciones1Basica_+_operaciones1Basica_;               //               
+ingresar _operaciones1Intermedia_  Como nUmero con_valor 15+(9*8)+200/8*3+9;  //171 el resultado
+ingresar _operaciones1Avanzadas1_  ComO numeRo con_valor ((15+9)*8+200/8*3+9);   //291 el resultado
+ingresar _operaciones1Avanzadas2_  coMo numero con_valor 30 potencia [22.2-2.2] + (2);   
+ingresar _operaciones1Avanzadas3_  como nuMero con_valor (30 potencia [2]) + (2);   
+ingresar _operaciones1Avanzadas4_  Como numeRo con_valor (30 potencia [10-8+9-4*2-1]) + (2) ;  
+ingresar _operaciones1Avanzadas5_  coMo nUmero con_valor 30 potencia [10-8+9-4*2-1]) + (2) ;  
+ingresar _operaciones1Avanzadas6_  Como numeRo con_valor (5*8) mod (1+5+6);   //4 es el resultado
+
+ingresar _operacionRela1_ como BooleaN con_valor 5+5 mayor 5;
+ingresar _operacionRela3_ como boolean con_valor _operaciones1Basica_ mayor 8;
+ingresar _operacionRela3_ como BooLean con_valor (_operaciones1Basica_+6) Mayor_o_igual 8;
+ingresar _operacionRela3_ como boolean con_valor (_operaciones1Basica_+6) menor_o_igual 8;
+ingresar _operacionRela4_ como booleAn con_valor _operaciones1Basica_ es_iGual 8;
+ingresar _operacionRela5_ como boolean con_valor _operaciones1Basica_ es_igual _operaciones1Basica_;
+ingresar _operacionRela6_ como Boolean con_valor _operaciones1Basica_ es_iguAl _operaciones1Basica_+1;
+ingresar _operacionRela7_ como boolEan con_valor _operaciones1Basica_ es_igual (_operaciones1Basica_)*(8+5);
+ingresar _operacionRela5_ como bOoleAn con_valor _operaciones1Basica_ es_diferente _operaciones1Basica_;
 
 
 fin

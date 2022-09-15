@@ -7,6 +7,7 @@ package analizadores;
 
 import java_cup.runtime.Symbol;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java_cup.runtime.XMLElement;
@@ -893,7 +894,9 @@ public class Analizador_sintactico extends java_cup.runtime.lr_parser {
 
 
 
-    public static LinkedList<TError> errores = new LinkedList<TError>(); 
+    public static LinkedList<TError> errores = new LinkedList<TError>();
+    public static ArrayList<String> vars = new ArrayList<String>();
+
 
     public static String tipo="Lista";
     public String codigoTraducidoPython="";
@@ -1245,7 +1248,10 @@ class CUP$Analizador_sintactico$actions {
           case 27: // LISTAVARIABLES ::= tvariable LISTAVARIABLES2 
             {
               Object RESULT =null;
-
+		int aleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).value;
+		 vars.add(a); System.out.println("Imprime algo ? " + vars); 
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("LISTAVARIABLES",29, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;
@@ -1263,7 +1269,10 @@ class CUP$Analizador_sintactico$actions {
           case 29: // LISTAVARIABLES2 ::= tcoma tvariable LISTAVARIABLES2 
             {
               Object RESULT =null;
-
+		int aleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).value;
+		 vars.add(a); System.out.println("Imprime algo ? " + vars); 
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("LISTAVARIABLES2",30, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;
@@ -1272,7 +1281,10 @@ class CUP$Analizador_sintactico$actions {
           case 30: // LISTAVARIABLES2 ::= tcoma tvariable 
             {
               Object RESULT =null;
-
+		int aleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
+		 vars.add(a); System.out.println("Imprime algo ? " + vars); 
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("LISTAVARIABLES2",30, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;
@@ -1313,7 +1325,16 @@ codigoTraducidoPython += a + " = " + c + "\n" ;
           case 33: // DECLARARNUML ::= prIngresar LISTAVARIABLES prComo prNumero prConValor tnumero_int tpuntoycoma 
             {
               Object RESULT =null;
-
+		int ntleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).left;
+		int ntright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).right;
+		String nt = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).value;
+		 
+for (String varia : vars) {
+  System.out.println("es el for " + varia);
+    varia = varia.replace("_", "");
+  codigoTraducidoPython += varia + " = " + nt + "\n" ;
+}
+vars.clear(); 
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("DECLARARNUML",22, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-6)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;
@@ -1322,7 +1343,16 @@ codigoTraducidoPython += a + " = " + c + "\n" ;
           case 34: // DECLARARNUML ::= prIngresar LISTAVARIABLES prComo prNumero prConValor tnumero_float tpuntoycoma 
             {
               Object RESULT =null;
-
+		int flleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).left;
+		int flright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).right;
+		String fl = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).value;
+		 
+for (String varia : vars) {
+  System.out.println("es el for " + varia);
+    varia = varia.replace("_", "");
+  codigoTraducidoPython += varia + " = " + fl + "\n" ;
+}
+vars.clear(); 
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("DECLARARNUML",22, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-6)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;

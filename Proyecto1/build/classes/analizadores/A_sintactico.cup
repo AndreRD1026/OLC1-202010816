@@ -1,6 +1,7 @@
 package analizadores;
 import java_cup.runtime.Symbol;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -8,7 +9,9 @@ parser code
 {:
 
 
-    public static LinkedList<TError> errores = new LinkedList<TError>(); 
+    public static LinkedList<TError> errores = new LinkedList<TError>();
+    public static ArrayList<String> vars = new ArrayList<String>();
+
 
     public static String tipo="Lista";
     public String codigoTraducidoPython="";
@@ -219,12 +222,12 @@ DECLARACIONES::= DECLARARNUM
 
 //Lista de variables
 
-LISTAVARIABLES::= tvariable LISTAVARIABLES2
+LISTAVARIABLES::= tvariable:a LISTAVARIABLES2 {: vars.add(a); System.out.println("Imprime algo ? " + vars); :}
             |
 ;
 
-LISTAVARIABLES2::= tcoma tvariable LISTAVARIABLES2
-            | tcoma tvariable
+LISTAVARIABLES2::= tcoma tvariable:a LISTAVARIABLES2 {: vars.add(a); System.out.println("Imprime algo ? " + vars); :}
+            | tcoma tvariable:a {: vars.add(a); System.out.println("Imprime algo ? " + vars); :}
 ;
 
 
@@ -236,8 +239,20 @@ codigoTraducidoPython += a + " = " + b + "\n" ; :}
 codigoTraducidoPython += a + " = " + c + "\n" ; :}        
 ;
 
-DECLARARNUML::= prIngresar LISTAVARIABLES prComo prNumero prConValor tnumero_int tpuntoycoma
-             | prIngresar LISTAVARIABLES prComo prNumero prConValor tnumero_float tpuntoycoma
+DECLARARNUML::= prIngresar LISTAVARIABLES prComo prNumero prConValor tnumero_int:nt tpuntoycoma {: 
+for (String varia : vars) {
+  System.out.println("es el for " + varia);
+    varia = varia.replace("_", "");
+  codigoTraducidoPython += varia + " = " + nt + "\n" ;
+}
+vars.clear(); :}
+             | prIngresar LISTAVARIABLES prComo prNumero prConValor tnumero_float:fl tpuntoycoma {: 
+for (String varia : vars) {
+  System.out.println("es el for " + varia);
+    varia = varia.replace("_", "");
+  codigoTraducidoPython += varia + " = " + fl + "\n" ;
+}
+vars.clear(); :}
 ;
 
 //declaracion de cadenas

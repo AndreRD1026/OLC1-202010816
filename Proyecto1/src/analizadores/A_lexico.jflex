@@ -34,8 +34,8 @@ cadena = ([\"][^\n\"]* [\"])
 caracter = ([\'][^\n\']* [\'])
 numero = [0-9]+([.][0-9]+)?
 //numero = [0-9]+
-numerooperacion = [0-9]+([.][0-9]+)?
 comentario = ("//" [^"\n"]+)
+//comentarioMulti = [/*]+[^"*/"]*[*/]+
 comentarioMulti = "/*"[^"*/"]*"*/"
 
 
@@ -425,11 +425,6 @@ comentarioMulti = "/*"[^"*/"]*"*/"
 <YYINITIAL> {numero} {
                     System.out.println("Reconocio token: <numero> lexema: "+ yytext());
                     return new Symbol(Simbolos.numero, yycolumn, yyline, yytext());
-                }
-
-<YYINITIAL> {numerooperacion} {
-                    System.out.println("Reconocio token: <numero> lexema: "+ yytext());
-                    return new Symbol(Simbolos.numerooperacion, yycolumn, yyline, yytext());
                 }
 
 <YYINITIAL>{cadena} {

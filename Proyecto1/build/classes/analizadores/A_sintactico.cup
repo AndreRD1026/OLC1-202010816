@@ -40,12 +40,8 @@ parser code
         int fila = s.right;
         int columna = s.left;
 
-        System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
-        System.out.println("\t\t" + errorm);
-        System.out.println("\t\tLexema: "+lexema);
-        System.out.println("\t\tFila: "+fila);
-        System.out.println("\t\tColumna: "+columna);
-
+        System.out.println("Error Sintáctico en la Línea " + (s.right + 1) +
+        " Columna "+s.left + ". No se esperaba este caracter: " +s.value+".");
         TError tmp = new TError("Sintactico",lexema,"Caracter no esperado",fila,columna);
         errores.add(tmp);
     } 
@@ -150,27 +146,28 @@ non terminal DECLARARNUM,DECLARARNUML,DECLARARCADENA,DECLARARCADENAL,DECLARARBOO
 non terminal DECLARARCARACTERL,LISTAVARIABLES,LISTAVARIABLES2,DECLARARCONOPERACION,CONDICIONIF,ERROR_INSTRUCCIONES;
 non terminal ASIGNARNUM,ASIGNARNUML,ASIGNARCADENA,ASIGNARCADENAL,ASIGNARBOOLEANO,ASIGNARBOOLEANOL,ASIGNARCARACTER,ASIGNARCARACTERL;
 non terminal EXPRESIONARITMETICA,EXPRESIONES,EXPRESION,PROCEDIMIENTOS;
-non terminal CONDICIONMIENTRAS, LISTAPARAMETROS;
+non terminal CONDICIONMIENTRAS, LISTAPARAMETROS, TIPODATO;
 non terminal OPREACIONESP;
-non terminal operaciones, relacional,logico, PRUEBA;
-non terminal expr_list, expr_part;
-non terminal expr;
+non terminal RELACIONAL,LOGICO, PRUEBA;
+non terminal multipleRep;
 
 //precedencia de los operadores
 
 precedence left tsuma;
 precedence left tresta, tmultiplicacion,tdivision, prMod, prPotencia;
 precedence left prMayor, prMenor, prMayorIgual, prMenorIgual, prEsIGUAL,prEsDiferente;
-precedence left prOR, prAND, prNOT;
+precedence left prOR, prAND;
+precedence right prNOT;
 
 
 //gramaticas
 start with INICIO;
 
 //INICIO::= prInicio INSTRUCCIONES prFin {:System.out.println("FIN DE ANALISIS");:};
-INICIO::= prInicio INSTRUCCIONES prFin {: System.out.println("FIN DE ANALISIS");
+INICIO::= prInicio INSTRUCCIONES:prrr prFin {: System.out.println("FIN DE ANALISIS");
 
-    String fileName = "SalidaTraducida.py";
+    codigoTraducidoPython += prrr;
+    String fileName = "SalidaTraducidaPY.py";
     try{
     PrintWriter writer = new PrintWriter(fileName);
     writer.println("def main():");
@@ -186,12 +183,33 @@ INICIO::= prInicio INSTRUCCIONES prFin {: System.out.println("FIN DE ANALISIS");
       System.out.println("An error occurred.");
       e.printStackTrace();
       }
+
+     String fileNameGo = "SalidaTraducidaGo.go";
+    try{
+    PrintWriter writer = new PrintWriter(fileNameGo);
+    writer.println("package main");
+    writer.println("import (");
+    writer.println("\t" + "\"fmt\"");
+    writer.println(")");
+    writer.println(codigoTraducidoGolang);
+    writer.println("");
+    writer.println("");
+    //writer.println("if __name__ == '__main__':");
+    //writer.println("\tmain()");
+    writer.println("");
+    writer.close();
+    }
+    catch (IOException e){
+      System.out.println("An error occurred.");
+      e.printStackTrace();
+      }
+
 :}
 ;
 
 
 
-INSTRUCCIONES::= INSTRUCCION:a INSTRUCCIONES:b {: RESULT= a; :}
+INSTRUCCIONES::= INSTRUCCION:a  INSTRUCCIONES:b {: RESULT=a; RESULT=b;:}
                 | INSTRUCCION:a {: RESULT=a; :}
 ;
 
@@ -207,9 +225,9 @@ INSTRUCCION::= DECLARACIONES:declarar {: RESULT=declarar; :}
             | METODO:met {: RESULT=met; :}
             | FUNCIONES:func {: RESULT=func; :}
             | EJECUTAR:exec {: RESULT=exec; :}
-            | IMPRIMIR:impr {: RESULT=impr; :}
-            | IMPRIMIRNL:imprln {: RESULT=imprln; :}
-            | error tpuntoycoma  {: System.out.println("Falta un ;"); :}
+            | IMPRIMIR:impr {: RESULT= impr;:}
+            | IMPRIMIRNL:imprln {: RESULT=imprln;:}
+            | error tpuntoycoma  
 ;
 
 //gramatica para las declaraciones
@@ -239,19 +257,19 @@ LISTAVARIABLES2::= tcoma tvariable:a LISTAVARIABLES2 {: vars.add(a); :}
 
 DECLARARCONOPERACION::= prIngresar tvariable:a prComo prNumero prConValor EXPRESIONARITMETICA:b tpuntoycoma {: a = a.replace("_", "");
 codigoTraducidoPython += a + " = " + b + "\n"; :} 
-                    | prIngresar tvariable:a prComo prNumero prConValor relacional:b tpuntoycoma {: a = a.replace("_", "");
+                    | prIngresar tvariable:a prComo prNumero prConValor RELACIONAL:b tpuntoycoma {: a = a.replace("_", "");
 codigoTraducidoPython += a + " = " + b + "\n"; :}
-                    | prIngresar tvariable:a prComo prNumero prConValor logico:b tpuntoycoma {: a = a.replace("_", "");
+                    | prIngresar tvariable:a prComo prNumero prConValor LOGICO:b tpuntoycoma {: a = a.replace("_", "");
 codigoTraducidoPython += a + " = " + b + "\n"; :}
-                    | prIngresar tvariable:a prComo prBoolean prConValor operaciones:b tpuntoycoma {: a = a.replace("_", "");
+                    | prIngresar tvariable:a prComo prBoolean prConValor EXPRESIONARITMETICA:b tpuntoycoma {: a = a.replace("_", "");
 codigoTraducidoPython += a + " = " + b + "\n"; :}
-                    | prIngresar tvariable:a prComo prBoolean prConValor relacional:b tpuntoycoma {: a = a.replace("_", "");
+                    | prIngresar tvariable:a prComo prBoolean prConValor RELACIONAL:b tpuntoycoma {: a = a.replace("_", "");
 codigoTraducidoPython += a + " = " + b + "\n"; :}
-                    | prIngresar tvariable:a prComo prBoolean prConValor logico:b tpuntoycoma {: a = a.replace("_", "");
+                    | prIngresar tvariable:a prComo prBoolean prConValor LOGICO:b tpuntoycoma {: a = a.replace("_", "");
 codigoTraducidoPython += a + " = " + b + "\n"; :}
 ;
 
-EXPRESIONARITMETICA::= EXPRESIONARITMETICA EXPRESIONES:a {: RESULT=a;:}
+EXPRESIONARITMETICA::= EXPRESIONARITMETICA:b EXPRESIONES:a {: RESULT=b;:}
             | EXPRESIONES:a {: RESULT=a;:}
 ;
 
@@ -267,34 +285,22 @@ EXPRESION::= numero:n {: RESULT=n; :}
         | EXPRESION:I prPotencia EXPRESION:r {: RESULT= I + "**" + r;:}
         | tparA:para EXPRESION:e tparC {: RESULT= "(" + e + ")"; :}
         | tcorA:para EXPRESION:e tcorC {: RESULT= "[" + e + "]"; :}
+        | tvariable:b {: RESULT= b;:}
 ;
 
 
-operaciones::= operaciones:op1 tresta:signo operaciones:op2 {: RESULT=op1+signo+op2; :}
-            | operaciones:op1 tsuma:signo operaciones:op {: RESULT=op1+signo+op1; :}
-            | operaciones:op1 tmultiplicacion:signo operaciones:op2 {: RESULT=op1+signo+op1; :}
-            | operaciones:op1 tdivision:signo operaciones:op2 {: RESULT=op1+signo+op1; :}
-            | operaciones:op1 prPotencia:signo operaciones:op2 {: RESULT=op1+signo+op1; :}
-            | operaciones:op1 prMod:signo operaciones:op2 {: RESULT=op1+signo+op1; :}
-            | tparA:parA operaciones:op tparC:parC {: RESULT=parA+op+parC; :}
-            | tcorA:corA operaciones:op tcorC:corC {: RESULT=corA+op+corC; :}
-            | tvariable:b {: RESULT=b; :}
-;
-
-
-
-relacional::= operaciones:op1 prMayor:signo operaciones:op2 {: RESULT=op1+">"+op2; :}
-        | operaciones:op1 prMenor:signo operaciones:op2 {: RESULT=op1+"<"+op2; :}
-        | operaciones:op1 prMayorIgual:signo operaciones:op2 {: RESULT=op1+">="+op2; :}
-        | operaciones:op1 prMenorIgual:signo operaciones:op2 {: RESULT=op1+"<="+op2; :}
-        | operaciones:op1 prEsIGUAL:signo operaciones:op2 {: RESULT=op1+"=="+op2; :}
-        | operaciones:op1 prEsDiferente:signo operaciones:op2 {: RESULT=op1+"!="+op2; :}
+RELACIONAL::= EXPRESION:op1 prMayor:signo EXPRESION:op2 {: RESULT=op1+">"+op2; :}
+        | EXPRESION:op1 prMenor:signo EXPRESION:op2 {: RESULT=op1+"<"+op2; :}
+        | EXPRESION:op1 prMayorIgual:signo EXPRESION:op2 {: RESULT=op1+">="+op2; :}
+        | EXPRESION:op1 prMenorIgual:signo EXPRESION:op2 {: RESULT=op1+"<="+op2; :}
+        | EXPRESION:op1 prEsIGUAL:signo EXPRESION:op2 {: RESULT=op1+"=="+op2; :}
+        | EXPRESION:op1 prEsDiferente:signo EXPRESION:op2 {: RESULT=op1+"!="+op2; :}
 ;   
 
 
-logico::= operaciones:op1 prOR:signo operaciones:op2 {: RESULT=op1+"or"+op2; :}
-        | operaciones:op1 prAND:signo operaciones:op2 {: RESULT=op1+"and"+op2; :}
-        | operaciones:op1 prNOT:signo operaciones:op2 {: RESULT=op1+"not"+op2; :}
+LOGICO::= EXPRESION:op1 prOR:signo EXPRESION:op2 {: RESULT=op1+"or"+op2; :}
+        | EXPRESION:op1 prAND:signo EXPRESION:op2 {: RESULT=op1+"and"+op2; :}
+        | EXPRESION:op1 prNOT:signo EXPRESION:op2 {: RESULT=op1+"not"+op2; :}
 ; 
 
 
@@ -553,47 +559,63 @@ CONDICIONIF::= tvariable:a prEsIGUAL tvariable:b {: a = a.replace("_", ""); b = 
   RESULT = "("+ a + ">" + b + "):" + "\n"; :}
             | tvariable:a prMenor numero:b {: a = a.replace("_", "");
   RESULT = "("+ a + "<" + b + "):" + "\n"; :}
+            | tvariable:a prOR numero:b {: a = a.replace("_", "");
+  RESULT = "("+ a + "or" + b + "):" + "\n"; :}
+            | tvariable:a prAND numero:b {: a = a.replace("_", "");
+  RESULT = "("+ a + "and" + b + "):" + "\n"; :}
+            | prNOT numero:b {: 
+  RESULT = "(" + "not" + b + "):" + "\n"; :}
+ 
 ;
 
 // SEGUN
 
-SEGUN::= prSegun tvariable prHacer prFinSegun
+SEGUN::= prSegun tvariable:a prHacer multipleRep:b prDeloContrario prEntonces INSTRUCCIONES:c prFinSegun {: :}
+        | prSegun tvariable:a prHacer multipleRep:b prFinSegun
+;
+
+multipleRep::= tinterrogaciona numero tinterrogacionc prEntonces INSTRUCCIONES 
+            | multipleRep tinterrogaciona numero tinterrogacionc prEntonces INSTRUCCIONES
 ;
 
 // PARA
 
-CICLO_FOR::= prPara tvariable tflecha tvariable prHasta tvariable prHacer INSTRUCCIONES prFinPara
-            | prPara tvariable tflecha numero prHasta tvariable prHacer INSTRUCCIONES prFinPara
-            | prPara tvariable tflecha tvariable prHasta numero prHacer INSTRUCCIONES prFinPara
-            | prPara tvariable tflecha numero prHasta numero prHacer INSTRUCCIONES prFinPara
-            | prPara tvariable tflecha prHasta prHacer 
+CICLO_FOR::= prPara tvariable:a tflecha EXPRESIONARITMETICA:b prHasta  EXPRESIONARITMETICA:c prHacer INSTRUCCIONES:d prFinPara {: a = a.replace("_","");
+codigoTraducidoPython += "for " + a + " in " + b + ":" + "\n" + c + "\n" ; :}
+            | prPara tvariable tflecha EXPRESIONARITMETICA prHasta EXPRESIONARITMETICA prIncremental EXPRESIONARITMETICA prHacer INSTRUCCIONES prFinPara
+            | prPara tvariable tflecha EXPRESIONARITMETICA prHasta EXPRESIONARITMETICA prHacer prFinPara
 ;
 // MIENTRAS
 
-CICLO_WHILE::= prMientras CONDICIONMIENTRAS prHacer INSTRUCCIONES prFinMientras {:
-//codigoTraducidoPython += "whileeee";
-:}
-            | prMientras CONDICIONMIENTRAS prHacer prFinMientras {: //codigoTraducidoPython += "while" + "\n"; :}
+CICLO_WHILE::= prMientras EXPRESIONARITMETICA:con prHacer INSTRUCCIONES prFinMientras {:
+codigoTraducidoPython += "while" + con + "\n"; ;:}
+            | prMientras EXPRESIONARITMETICA:con prHacer prFinMientras {: codigoTraducidoPython += "while" + con + "\n"; :}
 ;
 
 CONDICIONMIENTRAS::= tvariable:a prEsIGUAL tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");
-  codigoTraducidoPython += "while" + "("+ a + "==" + b + "):" + "\n"; :}
+  RESULT = "("+ a + "==" + b + "):" + "\n"; :}
             | tvariable:a prEsIGUAL numero:b {: a = a.replace("_", "");
-  codigoTraducidoPython += "while" + "("+ a + "==" + b + "):" + "\n"; :}
+  RESULT = "("+ a + "==" + b + "):" + "\n"; :}
             | tvariable:a prMayorIgual tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");
-  codigoTraducidoPython += "while" + "("+ a + ">=" + b + "):" + "\n"; :}
+  RESULT = "("+ a + ">=" + b + "):" + "\n"; :}
             | tvariable:a {: a = a.replace("_", "");
-  codigoTraducidoPython += "while" + "("+ a + "):" + "\n"; :}
+  RESULT = "while" + "("+ a + "):" + "\n"; :}
             | tvariable:a prMenorIgual tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");
-  codigoTraducidoPython += "while" + "("+ a + "<=" + b + "):" + "\n"; :}
+  RESULT = "while" + "("+ a + "<=" + b + "):" + "\n"; :}
             | tvariable:a prMayorIgual numero:b {: a = a.replace("_", "");
-  codigoTraducidoPython += "while" + "("+ a + ">=" + b + "):" + "\n"; :}
+  RESULT = "while" + "("+ a + ">=" + b + "):" + "\n"; :}
             | tvariable:a prMenorIgual numero:b {: a = a.replace("_", "");
-  codigoTraducidoPython += "while" + "("+ a + "<=" + b + "):" + "\n"; :}
+  RESULT = "while" + "("+ a + "<=" + b + "):" + "\n"; :}
             | tvariable:a prMayor numero:b {: a = a.replace("_", "");
-  codigoTraducidoPython += "while" + "("+ a + ">" + b + "):" + "\n"; :}
+  RESULT = "while" + "("+ a + ">" + b + "):" + "\n"; :}
             | tvariable:a prMenor numero:b {: a = a.replace("_", "");
-  codigoTraducidoPython += "while" + "("+ a + "<" + b + "):" + "\n"; :}
+  RESULT = "while" + "("+ a + "<" + b + "):" + "\n"; :}
+            | tvariable:a prOR numero:b {: a = a.replace("_", "");
+  RESULT = "while" + "("+ a + "or" + b + "):" + "\n"; :}
+            | tvariable:a prAND numero:b {: a = a.replace("_", "");
+  RESULT = "while" + "("+ a + "and" + b + "):" + "\n"; :}
+            | prNOT numero:b {:
+  RESULT = "while" + "(" + "not" + b + "):" + "\n"; :}
 ;
 
 //REPETIR HASTA
@@ -604,45 +626,67 @@ CICLO_DOWHILE::= prRepetir INSTRUCCION prHastaQue CONDICIONMIENTRAS
 
 //RETORNO
 
-RETORNO::= prRetornar CONDICIONMIENTRAS
-        | prRetornar numero
+RETORNO::= prRetornar EXPRESIONARITMETICA:b tpuntoycoma {: codigoTraducidoPython += "return " + b + "\n";:}
 ;
 
 //METODO
 
 METODO::= prMetodo tvariable INSTRUCCIONES prFinMetodo
-        | prMetodo tvariable prConParametros tparA tparC LISTAPARAMETROS prFinMetodo
+        | prMetodo tvariable prConParametros tparA LISTAPARAMETROS tparC INSTRUCCIONES prFinMetodo
 ;
 
-LISTAPARAMETROS::= tvariable tcoma
+LISTAPARAMETROS::= tvariable:a prNumero:b {: a = a.replace("_", ""); RESULT=  a + b; :}
+                | tvariable:a prCadena:b {: a = a.replace("_", ""); RESULT=  a + b; :}
+                | tvariable:a prCaracter:b {: a = a.replace("_", ""); RESULT=  a + b; :}
+                | tvariable:a prBoolean:b {: a = a.replace("_", ""); RESULT= a + b; :}
+                | LISTAPARAMETROS:a tcoma:b tvariable:c prNumero:d {: RESULT= a + b +c +d; :}
+                | LISTAPARAMETROS:a tcoma:b tvariable:c prCadena:d {: RESULT= a + b +c +d; :}
+                | LISTAPARAMETROS:a tcoma:b tvariable:c prCaracter:d {: RESULT= a + b +c +d; :}
+                | LISTAPARAMETROS:a tcoma:b tvariable:c prBoolean:d {: RESULT= a + b +c +d; :}
 ;
 
 //FUNCIONES
 
+FUNCIONES::= prFuncion tvariable:a TIPODATO INSTRUCCIONES:in prFinFuncion {: a = a.replace("_",""); 
+RESULT= "def " + a + "():" + "\n" + in + "\n" + "return " + "\n" ;  :}
+            | prFuncion tvariable:a TIPODATO prConParametros LISTAPARAMETROS:b INSTRUCCIONES:in prFinFuncion {: a = a.replace("_",""); 
+RESULT= "def " + a + "(" + b + "):" + "\n" + in + "\n" + "return " + "\n" ;  :}
+;
+
+
+TIPODATO::= prNumero
+            | prCadena
+            | prCaracter
+            | prBoolean
+            | TIPODATO tcoma prNumero
+            | TIPODATO tcoma prCadena
+            | TIPODATO tcoma prCaracter
+            | TIPODATO tcoma prBoolean
+;
+
+
 
 //LLAMADA DE FUNCIONES Y METODOS
 
-EJECUTAR::= prEjecutar tvariable:a tparA tparC tpuntoycoma
-{: 
-System.out.println("ejecutar" + a + "\n");
-:}
+EJECUTAR::= prEjecutar tvariable:a tparA:b tparC:c tpuntoycoma {: a = a.replace("_","");  RESULT= a + b + c; :}
+            | prEjecutar tvariable:a tparA:b LISTAPARAMETROS:c tparC:d tpuntoycoma {: a = a.replace("_",""); RESULT= a + b + c + d;  :}
 ;
 
 
 
 // impresiones
 
-IMPRIMIR::= prImprimir tcadena:a tpuntoycoma {: a = a.replace("_", ""); RESULT= "print" + "(" + a + ")" + "\n"; :}
-            | prImprimir tvariable:b tpuntoycoma {:  b = b.replace("_", ""); RESULT= "print" + "(" +  b + ")" + "\n"; :}
+IMPRIMIR::= prImprimir tcadena:a tpuntoycoma {: a = a.replace("_", ""); RESULT= "print" + "(" + a + ")" + "\n";:}
+            | prImprimir tvariable:b tpuntoycoma {:  b = b.replace("_", ""); RESULT= "print" + "(" +  b + ")" + "\n";  :}
             | prImprimir tparA tvariable:c tparC tpuntoycoma {:  c = c.replace("_", ""); RESULT= "print" + "(" +  c + ")" + "\n"; :}
             | prImprimir tparA tcadena:d tparC tpuntoycoma {: RESULT= "print" + "(" +  d + ")" + "\n"; :}
 
 ;
 
 
-IMPRIMIRNL::= prImprimirNl tcadena:a tpuntoycoma {: a = a.replace("_",""); RESULT = "print" + "(" + a + ")" + "\n" ;:}
-            | prImprimirNl tvariable:a tpuntoycoma {:  a = a.replace("_", ""); RESULT = "print" + "(" + a + ")" + "\n" ;:}
-            | prImprimirNl tparA tvariable:a tparC tpuntoycoma {:  a = a.replace("_", ""); RESULT = "print" + "(" + a + ")" + "\n" ;:}
-            | prImprimirNl tparA tcadena:a tparC tpuntoycoma {: RESULT = "print" + "(" + a + ")" + "\n" ;:}
+IMPRIMIRNL::= prImprimirNl tcadena:a tpuntoycoma {: a = a.replace("_",""); RESULT= "print" + "(" + a + ")" + "\n";:}
+            | prImprimirNl tvariable:a tpuntoycoma {:  a = a.replace("_", ""); RESULT= "print" + "(" + a + ")" + "\n";:}
+            | prImprimirNl tparA tvariable:a tparC tpuntoycoma {:  a = a.replace("_", ""); RESULT= "print" + "(" + a + ")" + "\n";:}
+            | prImprimirNl tparA tcadena:a tparC tpuntoycoma {: RESULT= "print" + "(" + a + ")" + "\n"; :}
 ;
 

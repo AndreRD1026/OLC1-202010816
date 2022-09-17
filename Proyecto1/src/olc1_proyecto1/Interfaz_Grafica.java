@@ -6,6 +6,7 @@ package olc1_proyecto1;
 
 import analizadores.Analizador_Lexico;
 import analizadores.Analizador_sintactico;
+import analizadores.Nodo1;
 import analizadores.TError;
 import java.awt.Desktop;
 import java.io.BufferedReader;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static java_cup.emit.parser;
+import java_cup.parser;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -254,13 +257,34 @@ String path="";//creamos una variable global para guardar el path
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_cleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cleanActionPerformed
-        cajatexto.setText("");
-        contenido = "";
+    
+        //cajatexto.setText("");
+        //contenido = "";
+        /*try {
+            new parser(new Analizador_Lexico(new BufferedReader(new StringReader(cajatexto.getText())))).parse();
+            Nodo1 raiz = Analizador_sintactico.padre;
+            Graficar(recorrido(raiz), "AST_PROYECTO");
+            
+            JOptionPane.showMessageDialog(null, "COMPILADO CON EXITO");
+         
+    } catch (Exception ex) {
+        Logger.getLogger(Interfaz_Grafica.class.getName()).log(Level.SEVERE, null, ex);
+    } */
+        
+        
     }//GEN-LAST:event_btn_cleanActionPerformed
 
     private void golang_codeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_golang_codeActionPerformed
         // TODO add your handling code here:
-         
+        if (contenido != "") {
+            try {
+            System.out.println(sintactico.codigoTraducidoGolang);
+            JOptionPane.showMessageDialog(null,"File Created!", "Generating File!", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+        }
+            } else {
+                JOptionPane.showMessageDialog(this, "DEBE ANALIZAR UN ARCHIVO", "ADVERTENCIA", WARNING_MESSAGE);
+            }
     }//GEN-LAST:event_golang_codeActionPerformed
 
     private void openfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openfileActionPerformed
@@ -325,8 +349,16 @@ String path="";//creamos una variable global para guardar el path
 
     private void python_codeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_python_codeActionPerformed
         // TODO add your handling code here:
-        System.out.println(sintactico.codigoTraducidoPython);
-        JOptionPane.showMessageDialog(null,"File Created!", "Generating File!", JOptionPane.INFORMATION_MESSAGE);
+        if (contenido != "") {
+            try {
+            System.out.println(sintactico.codigoTraducidoPython);
+            JOptionPane.showMessageDialog(null,"File Created!", "Generating File!", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+        }
+            } else {
+                JOptionPane.showMessageDialog(this, "DEBE ANALIZAR UN ARCHIVO", "ADVERTENCIA", WARNING_MESSAGE);
+            } 
+        
     }//GEN-LAST:event_python_codeActionPerformed
 
     public void leerArchivos() {
@@ -362,13 +394,47 @@ String path="";//creamos una variable global para guardar el path
         }
     }
     
+public static String recorrido(Nodo1 raiz){
+    String cuerpo = "";
+    for(Nodo1 hijos : raiz.hijos){
+        if (!(hijos.Etiqueta.equals("Vacio"))){
+            cuerpo += "\"" + raiz.idNod + "." + raiz.Etiqueta + "=" + raiz.valor + "\"->\"" ;
+            cuerpo += recorrido(hijos);
+        }
+    }
+    return cuerpo;
+}
+
+
+public static void Graficar(String cadena, String cad) { 
+    FileWriter fichero = null;
+    PrintWriter pw = null;
+    String nombre = cad;
+    String archivo = nombre + ".dot";
+    
+    try{
+        fichero = new FileWriter(archivo);
+        pw = new PrintWriter(fichero);
+        pw.println("digraph G {node[shape=ellipse, style=filled, color=darkgreen]");
+        pw.println(cadena);
+        pw.println("\n}");
+        fichero.close();
+    } catch (Exception e){
+        System.out.println(e);
+    }
+    //String cmd = "dot.exe -Tpng" + nombre + ".dot -o " + cad + ".png";
+    //Runtime.getRuntime().exec(cmd);
+    System.out.println("Prueba");
+    JOptionPane.showMessageDialog(null, "HOLA");
+}
+    
     
    
 public void guardar(){
     String texto = cajatexto.getText();//variable para comparacion
         
         if (texto.matches("[[ ]*[\n]*[\t]]*")) {
-            JOptionPane.showMessageDialog(null,"No hay texto para guardar!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"No hay datos para guardar!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
         }else{
             
             JFileChooser fileChooser = new JFileChooser();
@@ -412,7 +478,7 @@ public void ReporteErrores() {
             pw.println("<body>");
             pw.println("<center>");
             pw.println("<h1>  REPORTE ERRORES </h1>");
-            pw.println("<table class=\"table table-dark table-hover\">");
+            pw.println("<table class=\"table table-striped table-hover\">");
             pw.println("<tbody>");
 
             pw.println("<td>Num</td>");

@@ -233,7 +233,8 @@ RESULT= nd;
 ;
 
 
-INSTRUCCION::= DECLARACIONES:n {: 
+INSTRUCCION::= DECLARACIONES:n {:
+RESULT=n; 
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Declaracion");
 nd.setIdNod(parser.cont);
@@ -241,7 +242,7 @@ parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
 :}
-            | ASIGNACIONES:n {: 
+            | ASIGNACIONES:n {: RESULT=n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Asignacion");
 nd.setIdNod(parser.cont);
@@ -249,7 +250,8 @@ parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
 :}
-            | IF:n {: 
+            | IF:n {: RESULT=n;
+RESULT = n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("IF");
 nd.setIdNod(parser.cont);
@@ -257,7 +259,7 @@ parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
  :}
-            | SEGUN:n {:
+            | SEGUN:n {: RESULT=n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Segun");
 nd.setIdNod(parser.cont);
@@ -265,7 +267,7 @@ parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
  :}
-            | CICLO_FOR:n {:
+            | CICLO_FOR:n {: RESULT=n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Para");
 nd.setIdNod(parser.cont);
@@ -273,7 +275,7 @@ parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
  :}
-            | CICLO_WHILE:n {: 
+            | CICLO_WHILE:n {: RESULT=n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Mientras");
 nd.setIdNod(parser.cont);
@@ -281,7 +283,7 @@ parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
 :}
-            | CICLO_DOWHILE:n {: 
+            | CICLO_DOWHILE:n {: RESULT=n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Mientras_Hacer");
 nd.setIdNod(parser.cont);
@@ -289,7 +291,7 @@ parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
 :}
-            | RETORNO:n {: 
+            | RETORNO:n {: RESULT=n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Retorno");
 nd.setIdNod(parser.cont);
@@ -297,7 +299,7 @@ parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
 :}
-            | METODO:n {:  
+            | METODO:n {:  RESULT=n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Metodo");
 nd.setIdNod(parser.cont);
@@ -305,7 +307,7 @@ parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
 :}
-            | FUNCIONES:n {: 
+            | FUNCIONES:n {: RESULT=n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Funciones");
 nd.setIdNod(parser.cont);
@@ -313,7 +315,7 @@ parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
 :}
-            | EJECUTAR:n {: 
+            | EJECUTAR:n {: RESULT=n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Ejecutar");
 nd.setIdNod(parser.cont);
@@ -321,7 +323,7 @@ parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
 :}
-            | IMPRIMIR:n {: 
+            | IMPRIMIR:n {: RESULT=n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Imprimir");
 nd.setIdNod(parser.cont);
@@ -330,7 +332,7 @@ nd.AddHijos((Nodo1) n);
 RESULT= nd;
 
 :}
-            | IMPRIMIRNL:n1 {:
+            | IMPRIMIRNL:n1 {: RESULT=n1;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Imprimir_nl");
 nd.setIdNod(parser.cont);
@@ -1557,6 +1559,36 @@ Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
 Nodo1 nd3 = new Nodo1();
 Nodo1 nd4 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Rerservada");
+nd1.setValor(iif.toString());
+nd2.setEtiqueta("Condicion");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(en.toString());
+nd4.setEtiqueta("Palabra_Reservada");
+nd4.setValor(fnsi.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) in);
+nd.AddHijos((Nodo1) nd4);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+
+:}
+    | prSi:iif CONDICIONIF:a prEntonces:en INSTRUCCIONES:in prDeloContrario:contr INSTRUCCIONES:in2 prFinSi:fnsi {: codigoTraducidoPython += "if " + "(" + a + "):" + "\n" + in + " else: " + "\n" + in2 +  "\n"; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
 Nodo1 nd5 = new Nodo1();
 nd.setEtiqueta("Entrada");
 nd1.setEtiqueta("Palabra_Rerservada");
@@ -1565,15 +1597,17 @@ nd2.setEtiqueta("Condicion");
 nd2.setValor(a.toString());
 nd3.setEtiqueta("Palabra_Reservada");
 nd3.setValor(en.toString());
-nd4.setEtiqueta("Instruccion");
-nd4.setValor(in.toString());
 nd4.setEtiqueta("Palabra_Reservada");
-nd4.setValor(fnsi.toString());
+nd4.setValor(contr.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(fnsi.toString());
 nd.setValor("");
 nd.AddHijos((Nodo1) nd1);
 nd.AddHijos((Nodo1) nd2);
 nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) in);
 nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) in2);
 nd.AddHijos((Nodo1) nd5);
 nd.setIdNod(parser.cont);
 nd1.setIdNod(parser.cont);
@@ -1585,40 +1619,80 @@ parser.cont++;
 RESULT= nd;
 
 :}
-    | prSi CONDICIONIF:a prEntonces INSTRUCCIONES:in prDeloContrario:b INSTRUCCIONES:in2 prFinSi {: codigoTraducidoPython += "if " + "(" + a + "):" + "\n" + in + " else: " + "\n" + in2 +  "\n"; :}
-    | prSi CONDICIONIF:a prEntonces INSTRUCCIONES:in LISTAOSI:ls prDeloContrario INSTRUCCIONES:in2 prFinSi {: codigoTraducidoPython += "if " + "(" + a + "):" + "\n" + in + ls + in2 + " else: " + "\n" + in2 +  "\n"; :}
+    | prSi:iif CONDICIONIF:a prEntonces:en INSTRUCCIONES:in LISTAOSI:ls prDeloContrario:contr INSTRUCCIONES:in2 prFinSi:fnsi {: codigoTraducidoPython += "if " +  a  + "\n" + in + ls + in2 + " else: " + "\n" + in2 +  "\n"; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Rerservada");
+nd1.setValor(iif.toString());
+nd2.setEtiqueta("Condicion");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(en.toString());
+nd4.setEtiqueta("Lista_OSI");
+nd4.setValor(ls.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(contr.toString());
+nd6.setEtiqueta("Palabra_Reservada");
+nd6.setValor(fnsi.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) in);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) in2);
+nd.AddHijos((Nodo1) nd6);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+
+:}
 ;
-
-
 
 LISTAOSI::= prOSi CONDICIONIF:a prEntonces INSTRUCCIONES:in LISTAOSI:lis {: RESULT= "else " +  a + in + lis  + "\n" ;:}
             | prOSi CONDICIONIF:a prEntonces INSTRUCCIONES:in {: RESULT= "else " + a +  in + "\n"; :}
 ;
 
-CONDICIONIF::= tvariable:a prEsIGUAL:igual tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");   
-Nodo1 nd = new Nodo1();
-Nodo1 nd1 = new Nodo1();
-Nodo1 nd2 = new Nodo1();
-Nodo1 nd3 = new Nodo1();
-nd.setEtiqueta("Condicion");
-nd1.setEtiqueta("variable");
-nd1.setValor(a.toString());
-nd2.setEtiqueta("Palabra_Reservada");
-nd2.setValor(igual.toString());
-nd3.setEtiqueta("Variable");
-nd3.setValor(a.toString());
-nd.AddHijos((Nodo1) nd1);
-nd.AddHijos((Nodo1) nd2);
-nd.AddHijos((Nodo1) nd3);
-nd.setIdNod(parser.cont);
-nd1.setIdNod(parser.cont);
-nd2.setIdNod(parser.cont);
-nd3.setIdNod(parser.cont);
-parser.cont++;
-RESULT= nd;
-RESULT= a + "==" + b;
-
-:} 
+CONDICIONIF::= tvariable:a prEsIGUAL:igual tvariable:b {: a = a.replace("_", ""); b = b.replace("_", ""); RESULT= "(" +  a + "==" + b + "):" + "\n";:} 
+            | tvariable:a prEsIGUAL numero:b {: a = a.replace("_", "");
+  RESULT = "("+ a + "==" + b + "):" + "\n"; :}
+            | tvariable:a {: a = a.replace("_", ""); 
+  RESULT = "("+ a + "):" + "\n"; :}
+            | tvariable:a prMayorIgual tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");
+  RESULT = "("+ a + ">=" + b + "):" + "\n"; :}
+            | tvariable:a prMenorIgual tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");
+  RESULT = "("+ a + "<=" + b + "):" + "\n"; :}
+            | tvariable:a prMayorIgual numero:b {: a = a.replace("_", ""); 
+  RESULT = "("+ a + ">=" + b + "):" + "\n"; :}
+            | tvariable:a prMenorIgual numero:b {: a = a.replace("_", "");
+  RESULT = "("+ a + "<=" + b + "):" + "\n"; :}
+            | tvariable:a prMayor tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");
+  RESULT = "("+ a + ">" + b + "):" + "\n"; :}
+            | tvariable:a prMenor tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");
+  RESULT = "("+ a + "<" + b + "):" + "\n"; :}
+            | tvariable:a prMayor numero:b {: a = a.replace("_", "");
+  RESULT = "("+ a + ">" + b + "):" + "\n"; :}
+            | tvariable:a prMenor numero:b {: a = a.replace("_", "");
+  RESULT = "("+ a + "<" + b + "):" + "\n"; :}
+            | tvariable:a prOR numero:b {: a = a.replace("_", "");
+  RESULT = "("+ a + "or" + b + "):" + "\n"; :}
+            | tvariable:a prAND numero:b {: a = a.replace("_", "");
+  RESULT = "("+ a + "and" + b + "):" + "\n"; :}
+            | prNOT numero:b {: 
+  RESULT = "(" + "not" + b + "):" + "\n"; :}
 ;
 
 // SEGUN
@@ -1633,10 +1707,164 @@ multipleRep::= tinterrogaciona numero tinterrogacionc prEntonces INSTRUCCIONES
 
 // PARA
 
-CICLO_FOR::= prPara tvariable:a tflecha EXPRESIONARITMETICA:b prHasta  EXPRESIONARITMETICA:c prHacer INSTRUCCIONES:d prFinPara {: a = a.replace("_","");
-codigoTraducidoPython += "for " + a + " in " + b + ":" + "\n" + c + "\n" ; :}
-            | prPara tvariable tflecha EXPRESIONARITMETICA prHasta EXPRESIONARITMETICA prIncremental EXPRESIONARITMETICA prHacer INSTRUCCIONES prFinPara
-            | prPara tvariable tflecha EXPRESIONARITMETICA prHasta EXPRESIONARITMETICA prHacer prFinPara
+CICLO_FOR::= prPara:par tvariable:a tflecha:flech EXPRESIONARITMETICA:b prHasta:hast  EXPRESIONARITMETICA:c prHacer:hac INSTRUCCIONES:d prFinPara:fnpara {: a = a.replace("_","");
+codigoTraducidoPython += "for " + a + " in " + b + ":" + "\n" + c + "\n" ; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+Nodo1 nd8 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Rerservada");
+nd1.setValor(par.toString());
+nd2.setEtiqueta("Variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("flecha");
+nd3.setValor(flech.toString());
+nd4.setEtiqueta("Expresion");
+nd4.setValor(b.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(hast.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(c.toString());
+nd7.setEtiqueta("Palabra_Reservada");
+nd7.setValor(hac.toString());
+nd8.setEtiqueta("Palabra_Reservada");
+nd8.setValor(fnpara.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.AddHijos((Nodo1) d);
+nd.AddHijos((Nodo1) nd8);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+nd8.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
+            | prPara:par tvariable:a tflecha:flech EXPRESIONARITMETICA:b prHasta:hast EXPRESIONARITMETICA:c prIncremental:incr EXPRESIONARITMETICA:d prHacer:hac INSTRUCCIONES:in prFinPara:fnpara {:
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+Nodo1 nd8 = new Nodo1();
+Nodo1 nd9 = new Nodo1();
+Nodo1 nd10 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Rerservada");
+nd1.setValor(par.toString());
+nd2.setEtiqueta("Variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("flecha");
+nd3.setValor(flech.toString());
+nd4.setEtiqueta("Expresion");
+nd4.setValor(b.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(hast.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(c.toString());
+nd7.setEtiqueta("Palabra_Reservada");
+nd7.setValor(incr.toString());
+nd8.setEtiqueta("Expresion");
+nd8.setValor(d.toString());
+nd9.setEtiqueta("Palabra_Reservada");
+nd9.setValor(hac.toString());
+nd10.setEtiqueta("Palabra_Reservada");
+nd10.setValor(fnpara.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.AddHijos((Nodo1) nd8);
+nd.AddHijos((Nodo1) nd9);
+nd.AddHijos((Nodo1) in);
+nd.AddHijos((Nodo1) nd10);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+nd8.setIdNod(parser.cont);
+nd9.setIdNod(parser.cont);
+nd10.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
+            | prPara:par tvariable:a tflecha:flech EXPRESIONARITMETICA:b prHasta:hast EXPRESIONARITMETICA:c prHacer:hac prFinPara:fnpara {:
+
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+Nodo1 nd8 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Rerservada");
+nd1.setValor(par.toString());
+nd2.setEtiqueta("Variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("flecha");
+nd3.setValor(flech.toString());
+nd4.setEtiqueta("Expresion");
+nd4.setValor(b.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(hast.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(c.toString());
+nd7.setEtiqueta("Palabra_Reservada");
+nd7.setValor(hac.toString());
+nd8.setEtiqueta("Palabra_Reservada");
+nd8.setValor(fnpara.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.AddHijos((Nodo1) nd8);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+nd8.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
 ;
 // MIENTRAS
 

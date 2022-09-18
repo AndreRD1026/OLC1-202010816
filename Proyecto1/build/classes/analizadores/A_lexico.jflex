@@ -33,9 +33,8 @@ cadena = ([\"][^\n\"]* [\"])
 //cadena = (["][^"]*["])
 caracter = ([\'][^\n\']* [\'])
 numero = [0-9]+([.][0-9]+)?
-//numero = [0-9]+
 comentario = ("//" [^"\n"]+)
-//comentarioMulti = [\/]\[^]\+([^/][^]\+)[\/]
+//comentarioMulti =  [\/]\[^]\+([^/][^]\+)[\/]
 comentarioMulti = "/*"[^"*/"]*"*/"
 
 

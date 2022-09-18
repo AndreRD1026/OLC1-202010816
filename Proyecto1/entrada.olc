@@ -136,7 +136,7 @@ funcion _potenciaFuncion_ Numero con_parametros (_base_ Numero, _exponente_ Nume
         retornar _potencia_;
 fin_funcion
 
-metodo _metodo_1_
+metodo _metodo1_
         imprimir_nl "estamos entrando al metodo 1";     
         ejecutar _potenciaManual_(3*1+4/2, 3+2);
         imprimir_nl " Esta es la potencia Funcion";

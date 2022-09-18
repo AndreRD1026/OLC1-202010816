@@ -258,18 +258,23 @@ String path="";//creamos una variable global para guardar el path
 
     private void btn_cleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cleanActionPerformed
     
+    try {
         //cajatexto.setText("");
         //contenido = "";
-        /*try {
-            new parser(new Analizador_Lexico(new BufferedReader(new StringReader(cajatexto.getText())))).parse();
-            Nodo1 raiz = Analizador_sintactico.padre;
-            Graficar(recorrido(raiz), "AST_PROYECTO");
+        new Analizador_sintactico(new Analizador_Lexico(new BufferedReader(new StringReader(cajatexto.getText())))).parse();
+         Nodo1 raiz = Analizador_sintactico.padre;
+         Graficar(recorrido(raiz), "AST_PROYECTO");
             
-            JOptionPane.showMessageDialog(null, "COMPILADO CON EXITO");
-         
+         JOptionPane.showMessageDialog(null, "COMPILADO CON EXITO");
     } catch (Exception ex) {
-        Logger.getLogger(Interfaz_Grafica.class.getName()).log(Level.SEVERE, null, ex);
-    } */
+        JOptionPane.showMessageDialog(null, "EXISTE UN ERROR");
+    }
+            //lexico = new Analizador_Lexico(new BufferedReader(new StringReader(cajatexto.getText())));
+            //sintactico = new Analizador_sintactico(lexico);
+            //sintactico.parse();
+           
+           
+
         
         
     }//GEN-LAST:event_btn_cleanActionPerformed
@@ -311,7 +316,7 @@ String path="";//creamos una variable global para guardar el path
             lexico = new Analizador_Lexico(new BufferedReader(new StringReader(texto)));
             sintactico = new Analizador_sintactico(lexico);
             sintactico.parse();
-
+              
             if (sintactico.errores.size() > 0) {
                 JOptionPane.showMessageDialog(this, "GENERANDO REPORTE DE ERRORES", "ERROR ENCONTRADO", WARNING_MESSAGE);
                 ReporteErrores();
@@ -398,15 +403,17 @@ public static String recorrido(Nodo1 raiz){
     String cuerpo = "";
     for(Nodo1 hijos : raiz.hijos){
         if (!(hijos.Etiqueta.equals("Vacio"))){
-            cuerpo += "\"" + raiz.idNod + "." + raiz.Etiqueta + "=" + raiz.valor + "\"->\"" ;
+            cuerpo += "\"" + raiz.idNod + "." + raiz.Etiqueta + "=" + raiz.valor + "\"->\"" + hijos.idNod + "." + hijos.Etiqueta + "=" + hijos.valor + "\""  ;
             cuerpo += recorrido(hijos);
+        } else{
+            System.out.println(raiz.Etiqueta);
         }
     }
     return cuerpo;
 }
 
 
-public static void Graficar(String cadena, String cad) { 
+public static void Graficar(String cadena, String cad) throws IOException { 
     FileWriter fichero = null;
     PrintWriter pw = null;
     String nombre = cad;
@@ -422,9 +429,20 @@ public static void Graficar(String cadena, String cad) {
     } catch (Exception e){
         System.out.println(e);
     }
-    //String cmd = "dot.exe -Tpng" + nombre + ".dot -o " + cad + ".png";
-    //Runtime.getRuntime().exec(cmd);
-    System.out.println("Prueba");
+    /*try{
+    String cmd = "dot -Tpng" + nombre + ".dot -o " + cad + ".png";
+    Runtime.getRuntime().exec(cmd);
+    } catch(IOException ioe){
+        System.out.println(ioe);
+    } */
+    try {
+        String[] cmd = {"dot -Tpng " + archivo +  "-o AST.png"};
+	//Runtime.getRuntime().exec(cmd); 
+        Runtime rt = Runtime.getRuntime();
+        rt.exec(cmd);
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
     JOptionPane.showMessageDialog(null, "HOLA");
 }
     

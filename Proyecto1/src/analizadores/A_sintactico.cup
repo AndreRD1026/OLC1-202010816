@@ -7,6 +7,12 @@ import java.io.PrintWriter;
 
 parser code 
 {:
+    public static Nodo1 padre;
+    public int cont = 0;
+    public int contprIngresar = 0;
+    public int tipodato = 0;
+    public int palrcomo = 0;
+    public int puntocoma = 0;
 
     public static LinkedList<TError> errores = new LinkedList<TError>();
     public static ArrayList<String> vars = new ArrayList<String>();
@@ -149,7 +155,7 @@ non terminal EXPRESIONARITMETICA,EXPRESIONES,EXPRESION,PROCEDIMIENTOS;
 non terminal CONDICIONMIENTRAS, LISTAPARAMETROS, TIPODATO;
 non terminal OPREACIONESP;
 non terminal RELACIONAL,LOGICO, PRUEBA;
-non terminal multipleRep;
+non terminal multipleRep, S;
 
 //precedencia de los operadores
 
@@ -161,12 +167,28 @@ precedence right prNOT;
 
 
 //gramaticas
-start with INICIO;
+start with S;
 
-//INICIO::= prInicio INSTRUCCIONES prFin {:System.out.println("FIN DE ANALISIS");:};
-INICIO::= prInicio INSTRUCCIONES:prrr prFin {: System.out.println("FIN DE ANALISIS");
+S::= INICIO:n1 {: 
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("GLOBAL");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n1);
+parser.padre = (Nodo1) nd;
+RESULT= nd;
+:}
+;
 
-    codigoTraducidoPython += prrr;
+INICIO::= prInicio:a INSTRUCCIONES:n prFin {:
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("prInicio");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+
+codigoTraducidoPython += n;
     String fileName = "SalidaTraducidaPY.py";
     try{
     PrintWriter writer = new PrintWriter(fileName);
@@ -184,63 +206,151 @@ INICIO::= prInicio INSTRUCCIONES:prrr prFin {: System.out.println("FIN DE ANALIS
       e.printStackTrace();
       }
 
-     String fileNameGo = "SalidaTraducidaGo.go";
-    try{
-    PrintWriter writer = new PrintWriter(fileNameGo);
-    writer.println("package main");
-    writer.println("import (");
-    writer.println("\t" + "\"fmt\"");
-    writer.println(")");
-    writer.println(codigoTraducidoGolang);
-    writer.println("");
-    writer.println("");
-    //writer.println("if __name__ == '__main__':");
-    //writer.println("\tmain()");
-    writer.println("");
-    writer.close();
-    }
-    catch (IOException e){
-      System.out.println("An error occurred.");
-      e.printStackTrace();
-      }
-
 :}
 ;
 
 
 
-INSTRUCCIONES::= INSTRUCCION:a  INSTRUCCIONES:b {: RESULT=a; RESULT=b;:}
-                | INSTRUCCION:a {: RESULT=a; :}
+INSTRUCCIONES::= INSTRUCCION:n  INSTRUCCIONES:n1 {: RESULT=n;
+RESULT=n1;
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Instrucciones");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+nd.AddHijos((Nodo1) n1);
+RESULT= nd;
+
+  :}
+                | INSTRUCCION:n {: RESULT=n;
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Instrucciones");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+ :}
 ;
 
 
-INSTRUCCION::= DECLARACIONES:declarar {: RESULT=declarar; :}
-            | ASIGNACIONES:asign {: RESULT=asign; :}
-            | IF:conif {: RESULT=conif; :}
-            | SEGUN:seg {: RESULT=seg; :}
-            | CICLO_FOR:foor {: RESULT=foor; :}
-            | CICLO_WHILE:whilee {: RESULT=whilee; :}
-            | CICLO_DOWHILE:dowhile {: RESULT=dowhile; :}
-            | RETORNO:retrn {: RESULT=retrn; :}
-            | METODO:met {: RESULT=met; :}
-            | FUNCIONES:func {: RESULT=func; :}
-            | EJECUTAR:exec {: RESULT=exec; :}
-            | IMPRIMIR:impr {: RESULT= impr;:}
-            | IMPRIMIRNL:imprln {: RESULT=imprln;:}
-            | error tpuntoycoma  
+INSTRUCCION::= DECLARACIONES:n {: 
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Declaracion");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+:}
+            | ASIGNACIONES:n {: 
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Asignacion");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+:}
+            | IF:n {: 
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("IF");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+ :}
+            | SEGUN:n {:
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Segun");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+ :}
+            | CICLO_FOR:n {:
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Para");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+ :}
+            | CICLO_WHILE:n {: 
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Mientras");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+:}
+            | CICLO_DOWHILE:n {: 
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Mientras_Hacer");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+:}
+            | RETORNO:n {: 
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Retorno");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+:}
+            | METODO:n {:  
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Metodo");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+:}
+            | FUNCIONES:n {: 
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Funciones");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+:}
+            | EJECUTAR:n {: 
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Ejecutar");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+:}
+            | IMPRIMIR:n {: 
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Imprimir");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n);
+RESULT= nd;
+
+:}
+            | IMPRIMIRNL:n1 {:
+Nodo1 nd = new Nodo1();
+nd.setEtiqueta("Imprimir_nl");
+nd.setIdNod(parser.cont);
+parser.cont++;
+nd.AddHijos((Nodo1) n1);
+RESULT= nd;
+:}
+            | error tpuntoycoma
 ;
 
 //gramatica para las declaraciones
 
-DECLARACIONES::= DECLARARCONOPERACION:dec {: RESULT=dec; :}
-            | DECLARARNUML:dec1 {: RESULT=dec1; :}
-            | DECLARARCADENA:dec2 {: RESULT=dec2; :}
-            | DECLARARCADENAL:dec3 {: RESULT=dec3; :}
-            | DECLARARBOOLEANO:dec4 {: RESULT=dec4; :}
-            | DECLARARBOOLEANOL:dec5 {: RESULT=dec5; :}
-            | DECLARARCARACTER:dec6 {: RESULT=dec6; :}
-            | DECLARARCARACTERL:dec7 {: RESULT=dec7; :}
-            | DECLARARNUM:dec8 {: RESULT=dec8; :}
+DECLARACIONES::= DECLARARCONOPERACION:n {: RESULT= n; :}
+            | DECLARARNUML:n {:RESULT= n; :}
+            | DECLARARCADENA:n {:RESULT= n; :}
+            | DECLARARCADENAL:n {: RESULT= n; :}
+            | DECLARARBOOLEANO:n {: RESULT= n;:}
+            | DECLARARBOOLEANOL:n {: RESULT= n; :}
+            | DECLARARCARACTER:n {: RESULT= n; :}
+            | DECLARARCARACTERL:n {: RESULT= n; :}
 ;
 
 //Lista de variables
@@ -255,18 +365,271 @@ LISTAVARIABLES2::= tcoma tvariable:a LISTAVARIABLES2 {: vars.add(a); :}
 
 //declaracion de operaciones
 
-DECLARARCONOPERACION::= prIngresar tvariable:a prComo prNumero prConValor EXPRESIONARITMETICA:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n"; :} 
-                    | prIngresar tvariable:a prComo prNumero prConValor RELACIONAL:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n"; :}
-                    | prIngresar tvariable:a prComo prNumero prConValor LOGICO:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n"; :}
-                    | prIngresar tvariable:a prComo prBoolean prConValor EXPRESIONARITMETICA:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n"; :}
-                    | prIngresar tvariable:a prComo prBoolean prConValor RELACIONAL:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n"; :}
-                    | prIngresar tvariable:a prComo prBoolean prConValor LOGICO:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n"; :}
+DECLARARCONOPERACION::= prIngresar:pri tvariable:a prComo:co prNumero:nm prConValor:c1 EXPRESIONARITMETICA:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython += a + " = " + b + "\n";
+
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(nm.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:} 
+                    | prIngresar:pri tvariable:a prComo:co prNumero:nm prConValor:c1 RELACIONAL:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython += a + " = " + b + "\n"; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(nm.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
+                    | prIngresar:pri tvariable:a prComo:co prNumero:nm prConValor:c1 LOGICO:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython += a + " = " + b + "\n"; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(nm.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
+                    | prIngresar:pri tvariable:a prComo:co prBoolean:bl prConValor:c1 EXPRESIONARITMETICA:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython += a + " = " + b + "\n"; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(bl.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
+                    | prIngresar:pri tvariable:a prComo:co prBoolean:bl prConValor:c1 RELACIONAL:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython += a + " = " + b + "\n"; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(bl.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
+                    | prIngresar:pri tvariable:a prComo:co prBoolean:bl prConValor:c1 LOGICO:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython += a + " = " + b + "\n"; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(bl.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
 ;
 
 EXPRESIONARITMETICA::= EXPRESIONARITMETICA:b EXPRESIONES:a {: RESULT=b;:}
@@ -311,54 +674,351 @@ LOGICO::= EXPRESION:op1 prOR:signo EXPRESION:op2 {: RESULT=op1+"or"+op2; :}
 //            | prIngresar tvariable:a prComo prNumero prConValor numero:b tpuntoycoma
 //;
 
-DECLARARNUML::= prIngresar LISTAVARIABLES prComo prNumero prConValor numero:num tpuntoycoma {: 
+DECLARARNUML::= prIngresar:pri LISTAVARIABLES:a prComo:co prNumero:nm prConValor:c1 numero:b tpuntoycoma:comaa {: 
 for (String varia : vars) {
     varia = varia.replace("_", "");
-  codigoTraducidoPython += varia + " = " + num + "\n" ;
+  codigoTraducidoPython += varia + " = " + nm + "\n" ;
 }
-vars.clear(); :}
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variables");
+nd2.setValor(vars.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(nm.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+vars.clear(); 
+:}
 ;
 
 //declaracion de cadenas
 
-DECLARARCADENA::= prIngresar tvariable:a prComo prCadena prConValor tcadena:b tpuntoycoma 
+DECLARARCADENA::= prIngresar:pri tvariable:a prComo:co prCadena:cad prConValor:c1 tcadena:b tpuntoycoma:comaa 
 {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n" ; :}
+codigoTraducidoPython += a + " = " + b + "\n" ; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+b = b.replace("\"","");
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(cad.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
 ;
 
-DECLARARCADENAL::= prIngresar LISTAVARIABLES prComo prCadena prConValor tcadena:cad tpuntoycoma {: 
+DECLARARCADENAL::= prIngresar:pri LISTAVARIABLES prComo:co prCadena:cade prConValor:c1 tcadena:cad tpuntoycoma:comaa {: 
 for (String varia : vars) {
     varia = varia.replace("_", "");
   codigoTraducidoPython += varia + " = " + cad + "\n" ;
 }
+cad = cad.replace("\"", "");
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variables");
+nd2.setValor(vars.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(cad.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(cad.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
 vars.clear(); :}
 ;
 
 //declaracion de booleanos
 
-DECLARARBOOLEANO::= prIngresar tvariable:a prComo prBoolean prConValor prVerdadero:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython +=  a + " = " + "True" + "\n" ; :}   
-                |  prIngresar tvariable:a prComo prBoolean prConValor prFalso:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + "False" + "\n" ; :}   
+DECLARARBOOLEANO::= prIngresar:pri tvariable:a prComo:co prBoolean:bl prConValor:c1 prVerdadero:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython +=  a + " = " + "True" + "\n" ; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(bl.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}   
+                |  prIngresar:pri tvariable:a prComo:co prBoolean:bl prConValor:c1 prFalso:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython += a + " = " + "False" + "\n" ; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(bl.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}   
 ;
 
-DECLARARBOOLEANOL::= prIngresar LISTAVARIABLES prComo prBoolean prConValor prVerdadero:v tpuntoycoma {: 
+DECLARARBOOLEANOL::= prIngresar:pri LISTAVARIABLES prComo:co prBoolean:bl prConValor:c1 prVerdadero:v tpuntoycoma:comaa {: 
 for (String varia : vars) {
     varia = varia.replace("_", "");
   codigoTraducidoPython += varia + " = " + v + "\n" ;
 }
-vars.clear(); :}
-                | prIngresar LISTAVARIABLES prComo prBoolean prConValor prFalso:f tpuntoycoma {: 
+
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variables");
+nd2.setValor(vars.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(bl.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(v.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+vars.clear(); 
+ :}
+                | prIngresar:pri LISTAVARIABLES prComo:co prBoolean:bl prConValor:c1 prFalso:f tpuntoycoma:comaa {: 
 for (String varia : vars) {
     varia = varia.replace("_", "");
   codigoTraducidoPython += varia + " = " + f + "\n" ;
 }
-vars.clear(); :}
+
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variables");
+nd2.setValor(vars.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(bl.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(f.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+vars.clear(); 
+:}
 ;
 
 //declaracion de caracteres
 
-DECLARARCARACTER::= prIngresar tvariable:a prComo prCaracter prConValor tcaracter:b tpuntoycoma
+DECLARARCARACTER::= prIngresar:pri tvariable:a prComo:co prCaracter:car prConValor:c1 tcaracter:b tpuntoycoma:comaa
 {: a = a.replace("_", "");
 b = b.replace("$","");
 b = b.replace("{","");
@@ -375,10 +1035,54 @@ b = b.replace("'","");
             codigoTraducidoPython += a + " = " + "'" + b  + "'" + "\n";
             //System.out.println("Es una letra");
         }
+
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(car.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+
+
 :}
 ;
 
-DECLARARCARACTERL::= prIngresar LISTAVARIABLES prComo prCaracter prConValor tcaracter:b tpuntoycoma {: 
+DECLARARCARACTERL::= prIngresar:pri LISTAVARIABLES prComo:co prCaracter:car prConValor:c1 tcaracter:b tpuntoycoma:comaa {: 
 b = b.replace("$","");
 b = b.replace("{","");
 b = b.replace("}","");
@@ -403,80 +1107,344 @@ b = b.replace("'","");
             }
             vars.clear();
             //System.out.println("Es una letra");
-        } 
+        }
+
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+Nodo1 nd6 = new Nodo1();
+Nodo1 nd7 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variables");
+nd2.setValor(vars.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(co.toString());
+nd4.setEtiqueta("tipo_dato");
+nd4.setValor(car.toString());
+nd5.setEtiqueta("Palabra_Reservada");
+nd5.setValor(c1.toString());
+nd6.setEtiqueta("Expresion");
+nd6.setValor(b.toString());
+nd7.setEtiqueta("Puntocoma");
+nd7.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.AddHijos((Nodo1) nd6);
+nd.AddHijos((Nodo1) nd7);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+nd6.setIdNod(parser.cont);
+nd7.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+vars.clear(); 
+
+ 
 :}
 ;
 
 // gramatica para las asignaciones
 
 
-ASIGNACIONES::= ASIGNARNUM
-            | ASIGNARNUML
-            | ASIGNARCADENA
-            | ASIGNARCADENAL
-            | ASIGNARBOOLEANO
-            | ASIGNARBOOLEANOL
-            | ASIGNARCARACTER
-            | ASIGNARCARACTERL
+ASIGNACIONES::= ASIGNARNUM:n {: RESULT=n; :}
+            | ASIGNARNUML:n {: RESULT=n; :}
+            | ASIGNARCADENA:n {: RESULT=n; :}
+            | ASIGNARCADENAL:n {: RESULT=n; :}
+            | ASIGNARBOOLEANO:n {: RESULT=n; :}
+            | ASIGNARBOOLEANOL:n {: RESULT=n; :}
+            | ASIGNARCARACTER:n {: RESULT=n; :}
+            | ASIGNARCARACTERL:n {: RESULT=n; :}
 ;
 
 //asignando numeros
 
-ASIGNARNUM::= tvariable:a tflecha numero:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython +=  a + " = " + b + "\n" ; :}    
+ASIGNARNUM::= tvariable:a tflecha:flech EXPRESIONARITMETICA:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython +=  a + " = " + b + "\n" ; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Variable");
+nd1.setValor(a.toString());
+nd2.setEtiqueta("flecha");
+nd2.setValor(flech.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(b.toString());
+nd4.setEtiqueta("Puntocoma");
+nd4.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}    
 ;
 
-ASIGNARNUML::= LISTAVARIABLES tflecha numero:num tpuntoycoma {: 
+ASIGNARNUML::= LISTAVARIABLES tflecha:flech EXPRESIONARITMETICA:num tpuntoycoma:comaa {: 
 for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
   codigoTraducidoPython += varia + " = " + num + "\n" ;
 }
-vars.clear(); :}
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Variables");
+nd1.setValor(vars.toString());
+nd2.setEtiqueta("flecha");
+nd2.setValor(flech.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(num.toString());
+nd4.setEtiqueta("Puntocoma");
+nd4.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+vars.clear(); 
+:}
 ;
 
 //asignando cadena
 
-ASIGNARCADENA::= tvariable:a tflecha tcadena:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n" ; :}   
+ASIGNARCADENA::= tvariable:a tflecha:flech tcadena:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython += a + " = " + b + "\n" ; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+b = b.replace("\"","");
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Variable");
+nd1.setValor(a.toString());
+nd2.setEtiqueta("flecha");
+nd2.setValor(flech.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(b.toString());
+nd4.setEtiqueta("Puntocoma");
+nd4.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}   
 ;
 
-ASIGNARCADENAL::= LISTAVARIABLES tflecha tcadena:cad tpuntoycoma {: 
+ASIGNARCADENAL::= LISTAVARIABLES tflecha:flech tcadena:cad tpuntoycoma:comaa {: 
 for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
   codigoTraducidoPython += varia + " = " + cad + "\n" ;
 }
-vars.clear(); :}
+cad = cad.replace("\"","");
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Variables");
+nd1.setValor(vars.toString());
+nd2.setEtiqueta("flecha");
+nd2.setValor(flech.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(cad.toString());
+nd4.setEtiqueta("Puntocoma");
+nd4.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+vars.clear(); 
+:}
 ;
 
 //asignando booleano
 
-ASIGNARBOOLEANO::= tvariable:a tflecha prVerdadero:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + "True" + "\n" ; :}   
-                | tvariable:a tflecha prFalso:b tpuntoycoma {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + "False" + "\n" ; :}   
+ASIGNARBOOLEANO::= tvariable:a tflecha:flech prVerdadero:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython += a + " = " + "True" + "\n" ;
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Variable");
+nd1.setValor(a.toString());
+nd2.setEtiqueta("flecha");
+nd2.setValor(flech.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(b.toString());
+nd4.setEtiqueta("Puntocoma");
+nd4.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+ :}   
+                | tvariable:a tflecha:flech prFalso:b tpuntoycoma:comaa {: a = a.replace("_", "");
+codigoTraducidoPython += a + " = " + "False" + "\n" ; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Variable");
+nd1.setValor(a.toString());
+nd2.setEtiqueta("flecha");
+nd2.setValor(flech.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(b.toString());
+nd4.setEtiqueta("Puntocoma");
+nd4.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+
+:}   
 ;
 
-ASIGNARBOOLEANOL::= LISTAVARIABLES tflecha prVerdadero:v tpuntoycoma {: 
+ASIGNARBOOLEANOL::= LISTAVARIABLES tflecha:flech prVerdadero:v tpuntoycoma:comaa {: 
 for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
   codigoTraducidoPython += varia + " = " + v + "\n" ;
 }
-vars.clear(); :}
-                | LISTAVARIABLES tflecha prFalso:f tpuntoycoma {: 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Variables");
+nd1.setValor(vars.toString());
+nd2.setEtiqueta("flecha");
+nd2.setValor(flech.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(v.toString());
+nd4.setEtiqueta("Puntocoma");
+nd4.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+vars.clear(); 
+ :}
+                | LISTAVARIABLES tflecha:flech prFalso:f tpuntoycoma:comaa {: 
 for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
   codigoTraducidoPython += varia + " = " + f + "\n" ;
 }
-vars.clear(); :}
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Variables");
+nd1.setValor(vars.toString());
+nd2.setEtiqueta("flecha");
+nd2.setValor(flech.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(f.toString());
+nd4.setEtiqueta("Puntocoma");
+nd4.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+vars.clear(); 
+:}
 ;
 
 //asignando caracter
 
-ASIGNARCARACTER::= tvariable:a tflecha tcaracter:b tpuntoycoma {: a = a.replace("_", "");
+ASIGNARCARACTER::= tvariable:a tflecha:flech tcaracter:b tpuntoycoma:comaa {: a = a.replace("_", "");
 b = b.replace("$","");
 b = b.replace("{","");
 b = b.replace("}","");
@@ -492,10 +1460,37 @@ b = b.replace("'","");
             codigoTraducidoPython += a + " = " + "'" + b  + "'" + "\n";
             //System.out.println("Es una letra");
         }
+
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Variable");
+nd1.setValor(a.toString());
+nd2.setEtiqueta("flecha");
+nd2.setValor(flech.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(b.toString());
+nd4.setEtiqueta("Puntocoma");
+nd4.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
 :}   
 ;
 
-ASIGNARCARACTERL::= LISTAVARIABLES tflecha tcaracter:b tpuntoycoma {: 
+ASIGNARCARACTERL::= LISTAVARIABLES tflecha:flech tcaracter:b tpuntoycoma:comaa {: 
 b = b.replace("$","");
 b = b.replace("{","");
 b = b.replace("}","");
@@ -521,13 +1516,75 @@ b = b.replace("'","");
             vars.clear();
             //System.out.println("Es una letra");
         } 
+
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Variables");
+nd1.setValor(vars.toString());
+nd2.setEtiqueta("flecha");
+nd2.setValor(flech.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(b.toString());
+nd4.setEtiqueta("Puntocoma");
+nd4.setValor(comaa.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+vars.clear(); 
+
 :}
 ;
 
 //Sentencias
 // IF
 
-IF::= prSi CONDICIONIF:a prEntonces INSTRUCCIONES:in prFinSi {: codigoTraducidoPython += "if " + "(" + a + "):" + "\n" + in; :}
+IF::= prSi:iif CONDICIONIF:a prEntonces:en INSTRUCCIONES:in prFinSi:fnsi {: codigoTraducidoPython += "if " + "(" + a + "):" + "\n" + in; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Rerservada");
+nd1.setValor(iif.toString());
+nd2.setEtiqueta("Condicion");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Palabra_Reservada");
+nd3.setValor(en.toString());
+nd4.setEtiqueta("Instruccion");
+nd4.setValor(in.toString());
+nd4.setEtiqueta("Palabra_Reservada");
+nd4.setValor(fnsi.toString());
+nd.setValor("");
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+
+:}
     | prSi CONDICIONIF:a prEntonces INSTRUCCIONES:in prDeloContrario:b INSTRUCCIONES:in2 prFinSi {: codigoTraducidoPython += "if " + "(" + a + "):" + "\n" + in + " else: " + "\n" + in2 +  "\n"; :}
     | prSi CONDICIONIF:a prEntonces INSTRUCCIONES:in LISTAOSI:ls prDeloContrario INSTRUCCIONES:in2 prFinSi {: codigoTraducidoPython += "if " + "(" + a + "):" + "\n" + in + ls + in2 + " else: " + "\n" + in2 +  "\n"; :}
 ;
@@ -538,34 +1595,30 @@ LISTAOSI::= prOSi CONDICIONIF:a prEntonces INSTRUCCIONES:in LISTAOSI:lis {: RESU
             | prOSi CONDICIONIF:a prEntonces INSTRUCCIONES:in {: RESULT= "else " + a +  in + "\n"; :}
 ;
 
-CONDICIONIF::= tvariable:a prEsIGUAL tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");  RESULT= a + "==" + b; :}
-            | tvariable:a prEsIGUAL numero:b {: a = a.replace("_", "");
-  RESULT = "("+ a + "==" + b + "):" + "\n"; :}
-            | tvariable:a {: a = a.replace("_", ""); 
-  RESULT = "("+ a + "):" + "\n"; :}
-            | tvariable:a prMayorIgual tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");
-  RESULT = "("+ a + ">=" + b + "):" + "\n"; :}
-            | tvariable:a prMenorIgual tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");
-  RESULT = "("+ a + "<=" + b + "):" + "\n"; :}
-            | tvariable:a prMayorIgual numero:b {: a = a.replace("_", ""); 
-  RESULT = "("+ a + ">=" + b + "):" + "\n"; :}
-            | tvariable:a prMenorIgual numero:b {: a = a.replace("_", "");
-  RESULT = "("+ a + "<=" + b + "):" + "\n"; :}
-            | tvariable:a prMayor tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");
-  RESULT = "("+ a + ">" + b + "):" + "\n"; :}
-            | tvariable:a prMenor tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");
-  RESULT = "("+ a + "<" + b + "):" + "\n"; :}
-            | tvariable:a prMayor numero:b {: a = a.replace("_", "");
-  RESULT = "("+ a + ">" + b + "):" + "\n"; :}
-            | tvariable:a prMenor numero:b {: a = a.replace("_", "");
-  RESULT = "("+ a + "<" + b + "):" + "\n"; :}
-            | tvariable:a prOR numero:b {: a = a.replace("_", "");
-  RESULT = "("+ a + "or" + b + "):" + "\n"; :}
-            | tvariable:a prAND numero:b {: a = a.replace("_", "");
-  RESULT = "("+ a + "and" + b + "):" + "\n"; :}
-            | prNOT numero:b {: 
-  RESULT = "(" + "not" + b + "):" + "\n"; :}
- 
+CONDICIONIF::= tvariable:a prEsIGUAL:igual tvariable:b {: a = a.replace("_", ""); b = b.replace("_", "");   
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+nd.setEtiqueta("Condicion");
+nd1.setEtiqueta("variable");
+nd1.setValor(a.toString());
+nd2.setEtiqueta("Palabra_Reservada");
+nd2.setValor(igual.toString());
+nd3.setEtiqueta("Variable");
+nd3.setValor(a.toString());
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+RESULT= a + "==" + b;
+
+:} 
 ;
 
 // SEGUN
@@ -676,17 +1729,232 @@ EJECUTAR::= prEjecutar tvariable:a tparA:b tparC:c tpuntoycoma {: a = a.replace(
 
 // impresiones
 
-IMPRIMIR::= prImprimir tcadena:a tpuntoycoma {: a = a.replace("_", ""); RESULT= "print" + "(" + a + ")" + "\n";:}
-            | prImprimir tvariable:b tpuntoycoma {:  b = b.replace("_", ""); RESULT= "print" + "(" +  b + ")" + "\n";  :}
-            | prImprimir tparA tvariable:c tparC tpuntoycoma {:  c = c.replace("_", ""); RESULT= "print" + "(" +  c + ")" + "\n"; :}
-            | prImprimir tparA tcadena:d tparC tpuntoycoma {: RESULT= "print" + "(" +  d + ")" + "\n"; :}
+IMPRIMIR::= prImprimir:pri tcadena:n tpuntoycoma:comaa {: RESULT= "print" + "(" +  n + ")" + "\n";
+n = n.replace("\"","");
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("Expresion");
+nd2.setValor(n.toString());
+nd3.setEtiqueta("Puntocoma");
+nd3.setValor(comaa.toString());
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
+        | prImprimir:pri tvariable:b tpuntoycoma:comaa {:  b = b.replace("_", ""); RESULT= "print" + "(" +  b + ")" + "\n";  
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("variable");
+nd2.setValor(b.toString());
+nd3.setEtiqueta("Puntocoma");
+nd3.setValor(comaa.toString());
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
+        | prImprimir:pri tparA:parA tvariable:c tparC:parC tpuntoycoma:comaa {:  c = c.replace("_", ""); RESULT= "print" + "(" +  c + ")" + "\n"; 
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("Parentesis");
+nd2.setValor(parA.toString());
+nd3.setEtiqueta("variable");
+nd3.setValor(c.toString());
+nd4.setEtiqueta("Parentesis");
+nd4.setValor(parC.toString());
+nd5.setEtiqueta("Puntocoma");
+nd5.setValor(comaa.toString());
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
 
+:}
+        | prImprimir:pri tparA:parA tcadena:d tparC:parC tpuntoycoma:comaa {: RESULT= "print" + "(" +  d + ")" + "\n"; 
+d = d.replace("\"","");
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("Parentesis");
+nd2.setValor(parA.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(d.toString());
+nd4.setEtiqueta("Parentesis");
+nd4.setValor(parC.toString());
+nd5.setEtiqueta("Puntocoma");
+nd5.setValor(comaa.toString());
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
 ;
 
 
-IMPRIMIRNL::= prImprimirNl tcadena:a tpuntoycoma {: a = a.replace("_",""); RESULT= "print" + "(" + a + ")" + "\n";:}
-            | prImprimirNl tvariable:a tpuntoycoma {:  a = a.replace("_", ""); RESULT= "print" + "(" + a + ")" + "\n";:}
-            | prImprimirNl tparA tvariable:a tparC tpuntoycoma {:  a = a.replace("_", ""); RESULT= "print" + "(" + a + ")" + "\n";:}
-            | prImprimirNl tparA tcadena:a tparC tpuntoycoma {: RESULT= "print" + "(" + a + ")" + "\n"; :}
+IMPRIMIRNL::= prImprimirNl:pri tcadena:n tpuntoycoma:comaa {: RESULT= "print" + "(" + n + ")" + "\n";
+n = n.replace("\"","");
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("Expresion");
+nd2.setValor(n.toString());
+nd3.setEtiqueta("Puntocoma");
+nd3.setValor(comaa.toString());
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
+
+            | prImprimirNl:pri tvariable:a tpuntoycoma:comaa {:  a = a.replace("_", ""); RESULT= "print" + "(" + a + ")" + "\n";
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("Variable");
+nd2.setValor(a.toString());
+nd3.setEtiqueta("Puntocoma");
+nd3.setValor(comaa.toString());
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+:}
+            | prImprimirNl:pri tparA:parA tvariable:a tparC:parC tpuntoycoma:comaa {:  a = a.replace("_", ""); RESULT= "print" + "(" + a + ")" + "\n";
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("Parentesis");
+nd2.setValor(parA.toString());
+nd3.setEtiqueta("variable");
+nd3.setValor(a.toString());
+nd4.setEtiqueta("Parentesis");
+nd4.setValor(parC.toString());
+nd5.setEtiqueta("Puntocoma");
+nd5.setValor(comaa.toString());
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+
+:}
+            | prImprimirNl:pri tparA:parA tcadena:a tparC:parC tpuntoycoma:comaa {: RESULT= "print" + "(" + a + ")" + "\n";
+a = a.replace("\"","");
+Nodo1 nd = new Nodo1();
+Nodo1 nd1 = new Nodo1();
+Nodo1 nd2 = new Nodo1();
+Nodo1 nd3 = new Nodo1();
+Nodo1 nd4 = new Nodo1();
+Nodo1 nd5 = new Nodo1();
+nd.setEtiqueta("Entrada");
+nd1.setEtiqueta("Palabra_Reservada");
+nd1.setValor(pri.toString());
+nd2.setEtiqueta("Parentesis");
+nd2.setValor(parA.toString());
+nd3.setEtiqueta("Expresion");
+nd3.setValor(a.toString());
+nd4.setEtiqueta("Parentesis");
+nd4.setValor(parC.toString());
+nd5.setEtiqueta("Puntocoma");
+nd5.setValor(comaa.toString());
+nd.AddHijos((Nodo1) nd1);
+nd.AddHijos((Nodo1) nd2);
+nd.AddHijos((Nodo1) nd3);
+nd.AddHijos((Nodo1) nd4);
+nd.AddHijos((Nodo1) nd5);
+nd.setIdNod(parser.cont);
+nd1.setIdNod(parser.cont);
+nd2.setIdNod(parser.cont);
+nd3.setIdNod(parser.cont);
+nd4.setIdNod(parser.cont);
+nd5.setIdNod(parser.cont);
+parser.cont++;
+RESULT= nd;
+
+ :}
 ;
 

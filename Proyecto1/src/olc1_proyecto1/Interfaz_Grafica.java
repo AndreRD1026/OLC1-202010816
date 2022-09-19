@@ -18,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import static java.lang.Compiler.command;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -429,20 +430,14 @@ public static void Graficar(String cadena, String cad) throws IOException {
     } catch (Exception e){
         System.out.println(e);
     }
-    /*try{
-    String cmd = "dot -Tpng" + nombre + ".dot -o " + cad + ".png";
-    Runtime.getRuntime().exec(cmd);
+    try{
+    //String cmd = "dot -Tpng" + nombre + ".dot -o " + cad + ".png";
+    String command = "dot -Tpng AST_PROYECTO.dot -o AST.png";
+    //Process p = Runtime.getRuntime().exec(command);
+    Runtime.getRuntime().exec(command);
     } catch(IOException ioe){
         System.out.println(ioe);
-    } */
-    try {
-        String[] cmd = {"dot -Tpng " + archivo +  "-o AST.png"};
-	//Runtime.getRuntime().exec(cmd); 
-        Runtime rt = Runtime.getRuntime();
-        rt.exec(cmd);
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
+    } 
     JOptionPane.showMessageDialog(null, "HOLA");
 }
     

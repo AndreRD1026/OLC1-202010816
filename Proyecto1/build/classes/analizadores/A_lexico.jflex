@@ -34,18 +34,11 @@ cadena = ([\"][^\n\"]* [\"])
 caracter = ([\'][^\n\']* [\'])
 numero = [0-9]+([.][0-9]+)?
 comentario = ("//" [^"\n"]+)
-//comentarioMulti =  [\/]\[^]\+([^/][^]\+)[\/]
-comentarioMulti = "/*"[^"*/"]*"*/"
+comentarioMulti = [\/][\*]+(((\s|\S)[^\*]*)|([\n]*)|(]\*]*[^\/]))([\*]+[\/])
 
 
 
 %%
-<YYINITIAL>"."   {
-                    //codigo en java
-                    System.out.println("Reconocio token: <punto> lexema: "+yytext());
-                    return new Symbol(Simbolos.tpunto, yycolumn, yyline, yytext());
-                  }
-
 <YYINITIAL>","   {
                     //codigo en java
                     System.out.println("Reconocio token: <coma> lexema: "+yytext());

@@ -23,7 +23,7 @@ INSTRUCCION::= DECLARACIONES
             | EJECUTAR
             | IMPRIMIR
             | IMPRIMIRNL
-            | error tpuntoycoma  
+            | error  
 
 
 //declaraciones
@@ -63,6 +63,8 @@ EXPRESIONARITMETICA::= EXPRESIONARITMETICA EXPRESIONES
 
 
 EXPRESIONES::= EXPRESION
+	    | RELACIONAL
+	    | LOGICO
 
 
 EXPRESION::= numero
@@ -74,6 +76,10 @@ EXPRESION::= numero
         | EXPRESION prPotencia EXPRESION
         | tparA EXPRESION tparC
         | tcorA EXPRESION tcorC
+	| tparA RELACIONAL tparC
+        | tcorA RELACIONAL tcorC
+	| tparA LOGICO tparC
+        | tcorA LOGICO tcorC
         | tvariable
 
 
@@ -92,9 +98,6 @@ LOGICO::= EXPRESION prOR EXPRESION
 
 //declaracion de numeros
 
-//DECLARARNUM::= prIngresar tvariable prComo prNumero prConValor operaciones tpuntoycoma
-//            | prIngresar tvariable prComo prNumero prConValor numero tpuntoycoma
-//;
 
 DECLARARNUML::= prIngresar LISTAVARIABLES prComo prNumero prConValor numero tpuntoycoma
 
@@ -134,10 +137,10 @@ ASIGNACIONES::= ASIGNARNUM
 
 //asignando numeros
 
-ASIGNARNUM::= tvariable tflecha numero tpuntoycoma     
+ASIGNARNUM::= tvariable tflecha EXPRESIONARITMETICA tpuntoycoma     
 
 
-ASIGNARNUML::= LISTAVARIABLES tflecha numero tpuntoycoma
+ASIGNARNUML::= LISTAVARIABLES tflecha EXPRESIONARITMETICA tpuntoycoma
 
 //asignando cadena
 
@@ -173,20 +176,15 @@ LISTAOSI::= prOSi CONDICIONIF prEntonces INSTRUCCIONES LISTAOSI
             | prOSi CONDICIONIF prEntonces INSTRUCCIONES
 ;
 
-CONDICIONIF::= tvariable prEsIGUAL tvariable
-            | tvariable prEsIGUAL numero
+CONDICIONIF::= tvariable prEsIGUAL EXPRESIONARITMETICA
             | tvariable
-            | tvariable prMayorIgual tvariable
-            | tvariable prMenorIgual tvariable 
-            | tvariable prMayorIgual numero
-            | tvariable prMenorIgual numero 
-            | tvariable prMayor tvariable 
-            | tvariable prMenor tvariable 
-            | tvariable prMayor numero
-            | tvariable prMenor numero 
-            | tvariable prOR numero
-            | tvariable prAND numero
-            | prNOT numero
+            | tvariable prMayorIgual EXPRESIONARITMETICA
+            | tvariable prMenorIgual EXPRESIONARITMETICA
+            | tvariable prMayor EXPRESIONARITMETICA
+            | tvariable prMenor EXPRESIONARITMETICA
+            | tvariable prOR EXPRESIONARITMETICA
+            | tvariable prAND EXPRESIONARITMETICA
+            | prNOT EXPRESIONARITMETICA
 
 // SEGUN
 
@@ -208,15 +206,12 @@ CICLO_FOR::= prPara tvariable tflecha EXPRESIONARITMETICA prHasta  EXPRESIONARIT
 CICLO_WHILE::= prMientras EXPRESIONARITMETICA prHacer INSTRUCCIONES prFinMientras
             | prMientras EXPRESIONARITMETICA prHacer prFinMientras
 
-CONDICIONMIENTRAS::= tvariable prEsIGUAL tvariable
-            | tvariable prEsIGUAL numero
-            | tvariable prMayorIgual tvariable
+CONDICIONMIENTRAS::= tvariable prEsIGUAL EXPRESIONARITMETICA
+            | tvariable prMayorIgual EXPRESIONARITMETICA
             | tvariable
-            | tvariable prMenorIgual tvariable
-            | tvariable prMayorIgual numero
-            | tvariable prMenorIgual numero
-            | tvariable prMayor numero
-            | tvariable prMenor numero
+            | tvariable prMenorIgual EXPRESIONARITMETICA
+            | tvariable prMayor EXPRESIONARITMETICA
+            | tvariable prMenor EXPRESIONARITMETICA
             | tvariable prOR numero
             | tvariable prAND numero
             | prNOT numero
@@ -256,10 +251,6 @@ TIPODATO::= prNumero
             | prCadena
             | prCaracter
             | prBoolean
-            | TIPODATO tcoma prNumero
-            | TIPODATO tcoma prCadena
-            | TIPODATO tcoma prCaracter
-            | TIPODATO tcoma prBoolean
 
 
 

@@ -330,8 +330,6 @@ String path="";//creamos una variable global para guardar el path
             sintactico = new Analizador_sintactico(lexico);
             sintactico.parse();  
             if (sintactico.errores.size() > 0) {
-                //Nodo1 raiz = Analizador_sintactico.padre;
-                //Graficar(recorrido(raiz), "AST_PROYECTO");
                 JOptionPane.showMessageDialog(this, "GENERANDO REPORTE DE ERRORES", "ERROR ENCONTRADO", WARNING_MESSAGE);
                 ReporteErrores();
                 abrirarchivo("REPORTE DE ERRORES.html");
@@ -340,8 +338,6 @@ String path="";//creamos una variable global para guardar el path
                 prueba = String.valueOf(conta_errors);
                 cont_errors.setText(prueba);
             } else {
-                //Nodo1 raiz = Analizador_sintactico.padre;
-                //Graficar(recorrido(raiz), "AST_PROYECTO");
                 ReporteErrores();
                 Errores = false;
                 ErroresLex = lexico.errores;
@@ -457,22 +453,13 @@ public static void Graficar(String cadena, String cad) throws IOException {
         pw.println(cadena);
         pw.println("\n}");
         fichero.close();
-
+        String command = "dot -Tpng AST_PROYECTO.dot -o AST.png";
+        Runtime.getRuntime().exec(command);
         
     } catch (Exception e){
         System.out.println(e);
     }
-    try{
-    //String cmd = "dot -Tpng" + nombre + ".dot -o " + cad + ".png";
-    String command = "open dot -Tpng AST_PROYECTO.dot -o AST.png";
-    //Process p = Runtime.getRuntime().exec(command);
-    //Runtime.getRuntime().exec(command);
-    Runtime.getRuntime().exec(command);
-    } catch(IOException ioe){
-        System.out.println(ioe);
-    }  
-    
-    
+     
     JOptionPane.showMessageDialog(null, "Analisis Completado");
 }
             

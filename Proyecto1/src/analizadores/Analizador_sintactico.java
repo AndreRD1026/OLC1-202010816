@@ -1140,6 +1140,7 @@ public class Analizador_sintactico extends java_cup.runtime.lr_parser {
     public static String tipo="Lista";
     public String codigoTraducidoPython="";
     public String pruebas = "";
+    public String pruebas2 = "";
     public String codigoTraducidoGolang="";
     public String errorm="";
 
@@ -1251,6 +1252,23 @@ class CUP$Analizador_sintactico$actions {
     writer.println("");
     writer.println("if __name__ == '__main__':");
     writer.println("\tmain()");
+    writer.println("");
+    writer.close();
+    }
+    catch (IOException e){
+      System.out.println("An error occurred.");
+      e.printStackTrace();
+      }
+
+
+ String fileName1 = "SalidaTraducidaGO.go";
+    try{
+    PrintWriter writer = new PrintWriter(fileName1);
+    writer.println("package main");
+    writer.println("import" + "\t" + "\"fmt\"");
+    writer.println("func main() {");
+    writer.println(codigoTraducidoGolang);
+    writer.println("}");
     writer.println("");
     writer.close();
     }
@@ -1760,6 +1778,8 @@ RESULT= nd;
 		 a = a.replace("_", "");
 RESULT = a + " = " + b + "\n";
 codigoTraducidoPython += "\t" + a + " = " + b + "\n";
+codigoTraducidoGolang += "var " + a + " float64 " + " = " + pruebas + "\n";
+codigoTraducidoGolang += "var " + a + " float64 " + " = " + b + "\n";
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -1832,7 +1852,8 @@ RESULT= nd;
 		int comaaright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).right;
 		String comaa = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
 		 a = a.replace("_", "");
-codigoTraducidoPython += "\t" + a + " = " + b + "\n"; 
+codigoTraducidoPython += "\t" + a + " = " + b + "\n";
+codigoTraducidoGolang += "var " + a + " bool " + " = " + b + "\n"; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -1979,7 +2000,7 @@ RESULT= nd;
 		int rleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).left;
 		int rright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).right;
 		Object r = (Object)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
-		 RESULT= I + " - " + r ; 
+		 RESULT= I + " - " + r ;
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("EXPRESION",38, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;
@@ -2024,7 +2045,7 @@ RESULT= nd;
 		int rleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).left;
 		int rright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).right;
 		Object r = (Object)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
-		RESULT= I + "%" + r;
+		RESULT= I + "%" + r; 
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("EXPRESION",38, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;
@@ -2039,7 +2060,7 @@ RESULT= nd;
 		int rleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).left;
 		int rright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).right;
 		Object r = (Object)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
-		 RESULT= I + "**" + r;
+		 RESULT= I + "**" + r; pruebas= "math.Pow(" + "float64" + "(" + I + ")," + "float64" + "(" + r + ")" + ")" + "\n";  
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("EXPRESION",38, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;
@@ -2084,7 +2105,7 @@ RESULT= nd;
 		int eleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).value;
-		 RESULT= "(" + e + ")"; 
+		 RESULT= "(" + e + ")";  
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("EXPRESION",38, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;
@@ -2099,7 +2120,7 @@ RESULT= nd;
 		int eleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).value;
-		 RESULT= "[" + e + "]"; 
+		 RESULT= "[" + e + "]";  
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("EXPRESION",38, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;
@@ -2114,7 +2135,7 @@ RESULT= nd;
 		int eleft = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-1)).value;
-		 RESULT= "(" + e + ")"; 
+		 RESULT= "(" + e + ")";
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("EXPRESION",38, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;
@@ -2267,7 +2288,7 @@ RESULT= nd;
 		int op2left = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).left;
 		int op2right = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).right;
 		Object op2 = (Object)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
-		 RESULT=op1+"or"+op2; 
+		 RESULT=op1+"or"+op2;
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("LOGICO",44, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
           return CUP$Analizador_sintactico$result;
@@ -2337,6 +2358,7 @@ RESULT= nd;
 for (String varia : vars) {
     varia = varia.replace("_", "");
   codigoTraducidoPython += "\t" + varia + " = " + nm + "\n" ;
+  codigoTraducidoGolang += "var " + varia + " float64 " + " = " + nm + "\n";
 }
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -2412,6 +2434,7 @@ vars.clear();
 		String comaa = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
 		 a = a.replace("_", "");
 codigoTraducidoPython += "\t" + a + " = " + b + "\n" ; 
+codigoTraducidoGolang += "var " + a + " string " + " = " + b + "\n";
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -2485,6 +2508,7 @@ RESULT= nd;
 for (String varia : vars) {
     varia = varia.replace("_", "");
   codigoTraducidoPython += "\t" + varia + " = " + cad + "\n" ;
+  codigoTraducidoGolang += "var " + varia + " string " + " = " + cad + "\n";
 }
 cad = cad.replace("\"", "");
 Nodo1 nd = new Nodo1();
@@ -2559,7 +2583,8 @@ vars.clear();
 		int comaaright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).right;
 		String comaa = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
 		 a = a.replace("_", "");
-codigoTraducidoPython += "\t" +  a + " = " + "True" + "\n" ; 
+codigoTraducidoPython += "\t" +  a + " = " + "True" + "\n" ;
+codigoTraducidoGolang += "var " + a + " bool " + " = " + "true" + "\n";  
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -2633,6 +2658,7 @@ RESULT= nd;
 		String comaa = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
 		 a = a.replace("_", "");
 codigoTraducidoPython += "\t" + a + " = " + "False" + "\n" ; 
+codigoTraducidoGolang += "var " + a + " bool " + " = " + "false" + "\n"; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -2705,6 +2731,7 @@ RESULT= nd;
 for (String varia : vars) {
     varia = varia.replace("_", "");
   codigoTraducidoPython += "\t" + varia + " = " + v + "\n" ;
+  codigoTraducidoGolang += "var " + varia + " bool " + " = " + "true" + "\n"; 
 }
 
 Nodo1 nd = new Nodo1();
@@ -2780,6 +2807,7 @@ vars.clear();
 for (String varia : vars) {
     varia = varia.replace("_", "");
   codigoTraducidoPython += "\t" + varia + " = " + f + "\n" ;
+codigoTraducidoGolang += "var " + varia + " bool " + " = " + "false" + "\n";
 }
 
 Nodo1 nd = new Nodo1();
@@ -2865,9 +2893,11 @@ b = b.replace("'","");
             char convertedChar =  (char)prueba;
             String s=String.valueOf(convertedChar);
             codigoTraducidoPython += "\t" + a + " = " + "'" +  s  + "'" + "\n";
+            codigoTraducidoGolang += "var " + a + " byte " + " = " + "'" +  s + "'" + "\n";
             //System.out.println("Es un número");
         } else {
             codigoTraducidoPython += "\t" + a + " = " + "'" + b  + "'" + "\n";
+            codigoTraducidoGolang += "var " + a + " byte " + " = " + "'" + b + "'" + "\n";
             //System.out.println("Es una letra");
         }
 
@@ -2955,6 +2985,7 @@ b = b.replace("'","");
             System.out.println("es el for " + varia);
               varia = varia.replace("_", "");
             codigoTraducidoPython += "\t" + varia + " = " + "'" +  s  + "'" + "\n";
+            codigoTraducidoGolang += "var " + varia + " byte " + " = " + "'" + s + "'" + "\n";
             }
             vars.clear();
             //System.out.println("Es un número");
@@ -2963,6 +2994,7 @@ b = b.replace("'","");
             System.out.println("es el for " + varia);
               varia = varia.replace("_", "");
              codigoTraducidoPython += "\t" + varia + " = " + "'" + b  + "'" + "\n";
+             codigoTraducidoGolang += "var " + varia + " byte " + " = " + "'" + b + "'" + "\n";
             }
             vars.clear();
             //System.out.println("Es una letra");
@@ -3130,7 +3162,8 @@ vars.clear();
 		int comaaright = ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()).right;
 		String comaa = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
 		 a = a.replace("_", "");
-codigoTraducidoPython += "\t" + a + " = " + b + "\n"; 
+codigoTraducidoPython += "\t" + a + " = " + b + "\n";
+codigoTraducidoGolang += "var " + a + " float64 " + " = " + b + "\n"; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -3180,6 +3213,7 @@ for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
   codigoTraducidoPython += "\t" + varia + " = " + num + "\n" ;
+  codigoTraducidoGolang += "var " + varia + " float64 " + " = " + num + "\n";
 }
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -3231,6 +3265,7 @@ vars.clear();
 		String comaa = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
 		 a = a.replace("_", "");
 codigoTraducidoPython += "\t" + a + " = " + b + "\n"; 
+codigoTraducidoGolang += "var " + a + " string " + " = " + b + "\n";
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -3281,6 +3316,7 @@ for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
   codigoTraducidoPython += "\t" + varia + " = " + cad + "\n";
+  codigoTraducidoGolang += "var " + varia + " string " + " = " + cad + "\n";
 }
 cad = cad.replace("\"","");
 Nodo1 nd = new Nodo1();
@@ -3333,6 +3369,7 @@ vars.clear();
 		String comaa = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
 		 a = a.replace("_", "");
 codigoTraducidoPython += "\t" + a + " = " + "True" + "\n";
+codigoTraducidoGolang += "var " + a + " bool " + " = " + "true" + "\n"; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -3382,6 +3419,7 @@ RESULT= nd;
 		String comaa = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
 		 a = a.replace("_", "");
 codigoTraducidoPython += "\t" + a + " = " + "False" + "\n"; 
+codigoTraducidoGolang += "var " + a + " bool " + " = " + "false" + "\n"; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -3432,6 +3470,7 @@ for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
   codigoTraducidoPython += "\t" +  varia + " = " + v + "\n";
+  codigoTraducidoGolang += "var " + varia + " bool " + " = " + "true" + "\n"; 
 }
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -3483,6 +3522,7 @@ for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
   codigoTraducidoPython += "\t" + varia + " = " + f + "\n";
+  codigoTraducidoGolang += "var " + varia + " bool " + " = " + "false" + "\n"; 
 }
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -3543,9 +3583,11 @@ b = b.replace("'","");
             char convertedChar =  (char)prueba;
             String s=String.valueOf(convertedChar);
             codigoTraducidoPython += "\t" + a + " = " + "'" +  s  + "'" + "\n";
+            codigoTraducidoGolang += "var " + a + " byte " + " = " +  "'" + s + "'" + "\n";
             //System.out.println("Es un número");
         } else {
             codigoTraducidoPython += "\t" + a + " = " + "'" + b  + "'" + "\n";
+            codigoTraducidoGolang += "var " + a + " byte " + " = " + "'" + b + "'" + "\n";
             //System.out.println("Es una letra");
         }
 
@@ -3607,6 +3649,7 @@ b = b.replace("'","");
             System.out.println("es el for " + varia);
               varia = varia.replace("_", "");
             codigoTraducidoPython += "\t" + varia + " = " + "'" +  s  + "'" + "\n";
+            codigoTraducidoGolang += "var " + varia + " byte " + " = " + "'" + s + "'" + "\n";
             }
             vars.clear();
             //System.out.println("Es un número");
@@ -3615,6 +3658,7 @@ b = b.replace("'","");
             System.out.println("es el for " + varia);
               varia = varia.replace("_", "");
              codigoTraducidoPython += "\t"  + varia + " = " + "'" + b  + "'" + "\n";
+             codigoTraducidoGolang += "var " + varia + " byte " + " = " + "'" + b + "'" + "\n";
             }
             vars.clear();
             //System.out.println("Es una letra");
@@ -4910,6 +4954,7 @@ RESULT= nd;
 		String comaa = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
 		 RESULT += "\treturn " + b.toString() + "\n";
 codigoTraducidoPython += RESULT;
+codigoTraducidoGolang += "return " + b.toString() + "\n";
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -5522,6 +5567,7 @@ RESULT= nd;
 		  RESULT= "\tprint" + "(" +  n + ")" + "\n";
 //codigoTraducidoPython += "print" + "(" +  n + ")" + "\n";
 //codigoTraducidoPython += RESULT;
+codigoTraducidoGolang += "fmt.Println" + "(" + n + ")" + "\n";
 n = n.replace("\"","");
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -5564,6 +5610,7 @@ RESULT= nd;
 		  b = b.replace("_", ""); RESULT= "\tprint" + "(" +  b + ")" + "\n";  
 //codigoTraducidoPython += "print" + "(" + b + ")" + "\n";
 codigoTraducidoPython += RESULT;
+codigoTraducidoGolang += "fmt.Println" + "(" + b + ")" + "\n";
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -5611,6 +5658,7 @@ RESULT= nd;
 		  c = c.replace("_", ""); RESULT= "\tprint" + "(" +  c + ")" + "\n"; 
 //codigoTraducidoPython += "print" + parA.toString() + c + parC.toString() + "\n";
 codigoTraducidoPython += RESULT;
+codigoTraducidoGolang += "fmt.Println" + "(" + c + ")" + "\n";
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -5669,6 +5717,7 @@ RESULT= nd;
 		 RESULT= "\tprint" + "(" +  d + ")" + "\n";
 //codigoTraducidoPython += "print" + parA.toString() + d + parC.toString() + "\n"; 
 codigoTraducidoPython += RESULT;
+codigoTraducidoGolang += "fmt.Print" + "(" + d + ")" + "\n";
 d = d.replace("\"","");
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -5721,6 +5770,7 @@ RESULT= nd;
 		 RESULT= "\tprint" + "(" + n + ")" + "\n";
 //codigoTraducidoPython += "print" + "(" + n + ")" + "\n";
 //codigoTraducidoPython += RESULT;
+codigoTraducidoGolang += "fmt.Println" + "(" + n + ")" + "\n";
 n = n.replace("\"","");
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -5763,6 +5813,7 @@ RESULT= nd;
 		  a = a.replace("_", ""); RESULT= "\tprint" + "(" + a + ")" + "\n";
 //codigoTraducidoPython += "print" + "(" + a + ")" + "\n";
 codigoTraducidoPython += RESULT;
+codigoTraducidoGolang += "fmt.Println" + "(" + a + ")" + "\n";
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -5810,6 +5861,7 @@ RESULT= nd;
 		  a = a.replace("_", ""); RESULT= "\tprint" + "(" + a + ")" + "\n";
 //codigoTraducidoPython += "print" + parA.toString() + a + parC.toString() + "\n";
 codigoTraducidoPython += RESULT;
+codigoTraducidoGolang += "fmt.Println" + "(" + a + ")" + "\n";
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -5868,6 +5920,7 @@ RESULT= nd;
 		 RESULT= "\tprint" + "(" + a + ")" + "\n";
 //codigoTraducidoPython += "print" + parA.toString() + a + parC.toString() + "\n";
 codigoTraducidoPython += RESULT;
+codigoTraducidoGolang += "fmt.Println" + "(" + a + ")" + "\n";
 a = a.replace("\"","");
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();

@@ -15,6 +15,7 @@ parser code
 
     public static String tipo="Lista";
     public String codigoTraducidoPython="";
+    public String pruebas = "";
     public String codigoTraducidoGolang="";
     public String errorm="";
 
@@ -162,8 +163,6 @@ precedence right prNOT;
 start with INICIO;
 
 INICIO::= prInicio:pinic INSTRUCCIONES:n prFin:pfin {:
-
-//codigoTraducidoPython += n;
  String fileName = "SalidaTraducidaPY.py";
     try{
     PrintWriter writer = new PrintWriter(fileName);
@@ -218,6 +217,7 @@ nd.AddHijos((Nodo1) n);
 nd.AddHijos((Nodo1) n1);
 RESULT= nd;
 
+
   :}
                 | INSTRUCCION:n {: RESULT=n;
 Nodo1 nd = new Nodo1();
@@ -230,8 +230,7 @@ RESULT= nd;
 ;
 
 
-INSTRUCCION::= DECLARACIONES:n {:
-RESULT=n; 
+INSTRUCCION::= DECLARACIONES:n {: RESULT=n;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Declaracion");
 nd.setIdNod(parser.cont);
@@ -248,7 +247,7 @@ nd.AddHijos((Nodo1) n);
 RESULT= nd;
 :}
             | IF:n {: RESULT=n;
-RESULT = n;
+codigoTraducidoPython += RESULT;
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("IF");
 nd.setIdNod(parser.cont);
@@ -327,10 +326,8 @@ nd.setIdNod(parser.cont);
 parser.cont++;
 nd.AddHijos((Nodo1) n);
 RESULT= nd;
-
 :}
             | IMPRIMIRNL:n1 {: RESULT=n1;
-//codigoTraducidoPython+= n1.toString();
 Nodo1 nd = new Nodo1();
 nd.setEtiqueta("Imprimir_nl");
 nd.setIdNod(parser.cont);
@@ -338,7 +335,7 @@ parser.cont++;
 nd.AddHijos((Nodo1) n1);
 RESULT= nd;
 :}
-            | error tpuntoycoma
+            | error:err {: RESULT = err;:}
 ;
 
 //gramatica para las declaraciones
@@ -366,7 +363,8 @@ LISTAVARIABLES2::= tcoma tvariable:a LISTAVARIABLES2 {: vars.add(a); :}
 //declaracion de operaciones
 
 DECLARARCONOPERACION::= prIngresar:pri tvariable:a prComo:co prNumero:nm prConValor:c1 EXPRESIONARITMETICA:b tpuntoycoma:comaa {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n";
+RESULT = a + " = " + b + "\n";
+codigoTraducidoPython += "\t" + a + " = " + b + "\n";
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -411,7 +409,7 @@ RESULT= nd;
 :} 
 
                     | prIngresar:pri tvariable:a prComo:co prBoolean:bl prConValor:c1 EXPRESIONARITMETICA:b tpuntoycoma:comaa {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n"; 
+codigoTraducidoPython += "\t" + a + " = " + b + "\n"; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -503,7 +501,7 @@ LOGICO::= EXPRESION:op1 prOR:signo EXPRESION:op2 {: RESULT=op1+"or"+op2; :}
 DECLARARNUML::= prIngresar:pri LISTAVARIABLES:a prComo:co prNumero:nm prConValor:c1 numero:b tpuntoycoma:comaa {: 
 for (String varia : vars) {
     varia = varia.replace("_", "");
-  codigoTraducidoPython += varia + " = " + nm + "\n" ;
+  codigoTraducidoPython += "\t" + varia + " = " + nm + "\n" ;
 }
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -554,7 +552,7 @@ vars.clear();
 
 DECLARARCADENA::= prIngresar:pri tvariable:a prComo:co prCadena:cad prConValor:c1 tcadena:b tpuntoycoma:comaa 
 {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n" ; 
+codigoTraducidoPython += "\t" + a + " = " + b + "\n" ; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -603,7 +601,7 @@ RESULT= nd;
 DECLARARCADENAL::= prIngresar:pri LISTAVARIABLES prComo:co prCadena:cade prConValor:c1 tcadena:cad tpuntoycoma:comaa {: 
 for (String varia : vars) {
     varia = varia.replace("_", "");
-  codigoTraducidoPython += varia + " = " + cad + "\n" ;
+  codigoTraducidoPython += "\t" + varia + " = " + cad + "\n" ;
 }
 cad = cad.replace("\"", "");
 Nodo1 nd = new Nodo1();
@@ -653,7 +651,7 @@ vars.clear(); :}
 //declaracion de booleanos
 
 DECLARARBOOLEANO::= prIngresar:pri tvariable:a prComo:co prBoolean:bl prConValor:c1 prVerdadero:b tpuntoycoma:comaa {: a = a.replace("_", "");
-codigoTraducidoPython +=  a + " = " + "True" + "\n" ; 
+codigoTraducidoPython += "\t" +  a + " = " + "True" + "\n" ; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -697,7 +695,7 @@ parser.cont++;
 RESULT= nd;
 :}   
                 |  prIngresar:pri tvariable:a prComo:co prBoolean:bl prConValor:c1 prFalso:b tpuntoycoma:comaa {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + "False" + "\n" ; 
+codigoTraducidoPython += "\t" + a + " = " + "False" + "\n" ; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -745,7 +743,7 @@ RESULT= nd;
 DECLARARBOOLEANOL::= prIngresar:pri LISTAVARIABLES prComo:co prBoolean:bl prConValor:c1 prVerdadero:v tpuntoycoma:comaa {: 
 for (String varia : vars) {
     varia = varia.replace("_", "");
-  codigoTraducidoPython += varia + " = " + v + "\n" ;
+  codigoTraducidoPython += "\t" + varia + " = " + v + "\n" ;
 }
 
 Nodo1 nd = new Nodo1();
@@ -794,7 +792,7 @@ vars.clear();
                 | prIngresar:pri LISTAVARIABLES prComo:co prBoolean:bl prConValor:c1 prFalso:f tpuntoycoma:comaa {: 
 for (String varia : vars) {
     varia = varia.replace("_", "");
-  codigoTraducidoPython += varia + " = " + f + "\n" ;
+  codigoTraducidoPython += "\t" + varia + " = " + f + "\n" ;
 }
 
 Nodo1 nd = new Nodo1();
@@ -855,10 +853,10 @@ b = b.replace("'","");
             int prueba = Integer.parseInt(b);
             char convertedChar =  (char)prueba;
             String s=String.valueOf(convertedChar);
-            codigoTraducidoPython += a + " = " + "'" +  s  + "'" + "\n";
+            codigoTraducidoPython += "\t" + a + " = " + "'" +  s  + "'" + "\n";
             //System.out.println("Es un número");
         } else {
-            codigoTraducidoPython += a + " = " + "'" + b  + "'" + "\n";
+            codigoTraducidoPython += "\t" + a + " = " + "'" + b  + "'" + "\n";
             //System.out.println("Es una letra");
         }
 
@@ -921,7 +919,7 @@ b = b.replace("'","");
             for (String varia : vars) {
             System.out.println("es el for " + varia);
               varia = varia.replace("_", "");
-            codigoTraducidoPython += varia + " = " + "'" +  s  + "'" + "\n";
+            codigoTraducidoPython += "\t" + varia + " = " + "'" +  s  + "'" + "\n";
             }
             vars.clear();
             //System.out.println("Es un número");
@@ -929,7 +927,7 @@ b = b.replace("'","");
             for (String varia : vars) {
             System.out.println("es el for " + varia);
               varia = varia.replace("_", "");
-             codigoTraducidoPython += varia + " = " + "'" + b  + "'" + "\n";
+             codigoTraducidoPython += "\t" + varia + " = " + "'" + b  + "'" + "\n";
             }
             vars.clear();
             //System.out.println("Es una letra");
@@ -998,7 +996,7 @@ ASIGNACIONES::= ASIGNARNUM:n {: RESULT=n; :}
 //asignando numeros
 
 ASIGNARNUM::= tvariable:a tflecha:flech EXPRESIONARITMETICA:b tpuntoycoma:comaa {: a = a.replace("_", "");
-codigoTraducidoPython +=  a + " = " + b + "\n"; 
+codigoTraducidoPython += "\t" + a + " = " + b + "\n"; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -1032,7 +1030,7 @@ ASIGNARNUML::= LISTAVARIABLES tflecha:flech EXPRESIONARITMETICA:num tpuntoycoma:
 for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
-  codigoTraducidoPython += varia + " = " + num + "\n" ;
+  codigoTraducidoPython += "\t" + varia + " = " + num + "\n" ;
 }
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -1067,7 +1065,7 @@ vars.clear();
 //asignando cadena
 
 ASIGNARCADENA::= tvariable:a tflecha:flech tcadena:b tpuntoycoma:comaa {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + b + "\n"; 
+codigoTraducidoPython += "\t" + a + " = " + b + "\n"; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -1102,7 +1100,7 @@ ASIGNARCADENAL::= LISTAVARIABLES tflecha:flech tcadena:cad tpuntoycoma:comaa {:
 for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
-  codigoTraducidoPython += varia + " = " + cad + "\n";
+  codigoTraducidoPython += "\t" + varia + " = " + cad + "\n";
 }
 cad = cad.replace("\"","");
 Nodo1 nd = new Nodo1();
@@ -1138,7 +1136,7 @@ vars.clear();
 //asignando booleano
 
 ASIGNARBOOLEANO::= tvariable:a tflecha:flech prVerdadero:b tpuntoycoma:comaa {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + "True" + "\n";
+codigoTraducidoPython += "\t" + a + " = " + "True" + "\n";
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -1167,7 +1165,7 @@ parser.cont++;
 RESULT= nd;
  :}   
                 | tvariable:a tflecha:flech prFalso:b tpuntoycoma:comaa {: a = a.replace("_", "");
-codigoTraducidoPython += a + " = " + "False" + "\n"; 
+codigoTraducidoPython += "\t" + a + " = " + "False" + "\n"; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -1202,7 +1200,7 @@ ASIGNARBOOLEANOL::= LISTAVARIABLES tflecha:flech prVerdadero:v tpuntoycoma:comaa
 for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
-  codigoTraducidoPython += varia + " = " + v + "\n";
+  codigoTraducidoPython += "\t" +  varia + " = " + v + "\n";
 }
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -1236,7 +1234,7 @@ vars.clear();
 for (String varia : vars) {
   System.out.println("es el for " + varia);
     varia = varia.replace("_", "");
-  codigoTraducidoPython += varia + " = " + f + "\n";
+  codigoTraducidoPython += "\t" + varia + " = " + f + "\n";
 }
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -1280,10 +1278,10 @@ b = b.replace("'","");
             int prueba = Integer.parseInt(b);
             char convertedChar =  (char)prueba;
             String s=String.valueOf(convertedChar);
-            codigoTraducidoPython += a + " = " + "'" +  s  + "'" + "\n";
+            codigoTraducidoPython += "\t" + a + " = " + "'" +  s  + "'" + "\n";
             //System.out.println("Es un número");
         } else {
-            codigoTraducidoPython += a + " = " + "'" + b  + "'" + "\n";
+            codigoTraducidoPython += "\t" + a + " = " + "'" + b  + "'" + "\n";
             //System.out.println("Es una letra");
         }
 
@@ -1329,7 +1327,7 @@ b = b.replace("'","");
             for (String varia : vars) {
             System.out.println("es el for " + varia);
               varia = varia.replace("_", "");
-            codigoTraducidoPython += varia + " = " + "'" +  s  + "'" + "\n";
+            codigoTraducidoPython += "\t" + varia + " = " + "'" +  s  + "'" + "\n";
             }
             vars.clear();
             //System.out.println("Es un número");
@@ -1337,7 +1335,7 @@ b = b.replace("'","");
             for (String varia : vars) {
             System.out.println("es el for " + varia);
               varia = varia.replace("_", "");
-             codigoTraducidoPython += varia + " = " + "'" + b  + "'" + "\n";
+             codigoTraducidoPython += "\t"  + varia + " = " + "'" + b  + "'" + "\n";
             }
             vars.clear();
             //System.out.println("Es una letra");
@@ -1377,7 +1375,8 @@ vars.clear();
 //Sentencias
 // IF
 
-IF::= prSi:iif CONDICIONIF:a prEntonces:en INSTRUCCIONES:in prFinSi:fnsi {: codigoTraducidoPython += "if " + "(" + a + "):" + "\n" + in; 
+IF::= prSi:iif CONDICIONIF:a prEntonces:en INSTRUCCIONES:in prFinSi:fnsi {: RESULT += "if" +  a  + "\n" + in;
+codigoTraducidoPython += RESULT; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -1407,7 +1406,7 @@ parser.cont++;
 RESULT= nd;
 
 :}
-    | prSi:iif CONDICIONIF:a prEntonces:en INSTRUCCIONES:in prDeloContrario:contr INSTRUCCIONES:in2 prFinSi:fnsi {: codigoTraducidoPython += "if " + "(" + a + "):" + "\n" + in + " else: " + "\n" + in2 +  "\n"; 
+    | prSi:iif CONDICIONIF:a prEntonces:en INSTRUCCIONES:in prDeloContrario:contr INSTRUCCIONES:in2 prFinSi:fnsi {: codigoTraducidoPython += "if " + a + "\n" + in + " else: " + "\n" + in2 +  "\n"; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -1691,8 +1690,8 @@ RESULT= nd;
 
 // PARA
 
-CICLO_FOR::= prPara:par tvariable:a tflecha:flech EXPRESIONARITMETICA:b prHasta:hast  EXPRESIONARITMETICA:c prHacer:hac INSTRUCCIONES:d prFinPara:fnpara {: a = a.replace("_","");
-codigoTraducidoPython += "for " + a + " in " + b + ":" + "\n" + c + "\n" ; 
+CICLO_FOR::= prPara:par tvariable:a tflecha:flech EXPRESIONARITMETICA:b prHasta:hast  EXPRESIONARITMETICA:c prHacer:hac INSTRUCCIONES:d prFinPara:fnpara {: a = a.replace("_",""); RESULT=d;
+codigoTraducidoPython += "for " + a + " in " + b + ":" + "\n" + RESULT + "\n" ; 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -1852,8 +1851,7 @@ RESULT= nd;
 ;
 // MIENTRAS
 
-CICLO_WHILE::= prMientras:mien CONDICIONMIENTRAS:con prHacer:hac INSTRUCCIONES:in prFinMientras:fnmientras {:
-codigoTraducidoPython += "while" + con + "\n"; 
+CICLO_WHILE::= prMientras:mien CONDICIONMIENTRAS:con prHacer:hac INSTRUCCIONES:in prFinMientras:fnmientras {: RESULT += "while" + con + "\n"; 
 
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -1988,7 +1986,8 @@ RESULT= nd;
 
 //RETORNO
 
-RETORNO::= prRetornar:retrn EXPRESIONARITMETICA:b tpuntoycoma:comaa {: codigoTraducidoPython += "return " + b.toString() + "\n";
+RETORNO::= prRetornar:retrn EXPRESIONARITMETICA:b tpuntoycoma:comaa {: RESULT += "\treturn " + b.toString() + "\n";
+codigoTraducidoPython += RESULT;
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -2014,7 +2013,9 @@ RESULT= nd;
 
 //METODO
 
-METODO::= prMetodo:met tvariable:b INSTRUCCIONES:in prFinMetodo:fnmetodo {: b = b.replace("_","");
+METODO::= prMetodo:met tvariable:b INSTRUCCIONES:in prFinMetodo:fnmetodo {: b = b.replace("_",""); RESULT= "\tdef " + b + "():" + "\n" + in + "\n";
+pruebas= "\tdef " + b + "():" + "\n" + in + "\n";
+codigoTraducidoPython += pruebas;
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -2187,7 +2188,8 @@ TIPODATO::= prNumero:b {: RESULT= b; :}
 
 //LLAMADA DE FUNCIONES Y METODOS
 
-EJECUTAR::= prEjecutar:ejec tvariable:a tparA:parA tparC:parC tpuntoycoma:comaa {: a = a.replace("_","");  RESULT= a + parA + parC;
+EJECUTAR::= prEjecutar:ejec tvariable:a tparA:parA tparC:parC tpuntoycoma:comaa {: a = a.replace("_","");  RESULT= "\t" + a + parA + parC;
+codigoTraducidoPython += RESULT;
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -2220,7 +2222,8 @@ parser.cont++;
 RESULT= nd;
 
  :}
-            | prEjecutar:ejec tvariable:a tparA:parA LISTAPARAMETROS:c tparC:parC tpuntoycoma:comaa {: a = a.replace("_",""); RESULT= a + parA + c + parC;  
+            | prEjecutar:ejec tvariable:a tparA:parA LISTAPARAMETROS:c tparC:parC tpuntoycoma:comaa {: a = a.replace("_",""); RESULT= "\t" + a + parA + c + parC;
+codigoTraducidoPython += RESULT;
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -2262,8 +2265,9 @@ RESULT= nd;
 
 // impresiones
 
-IMPRIMIR::= prImprimir:pri tcadena:n tpuntoycoma:comaa {:  RESULT= "print" + "(" +  n + ")" + "\n";
-codigoTraducidoPython= "print" + "(" +  n + ")" + "\n";
+IMPRIMIR::= prImprimir:pri tcadena:n tpuntoycoma:comaa {:  RESULT= "\tprint" + "(" +  n + ")" + "\n";
+//codigoTraducidoPython += "print" + "(" +  n + ")" + "\n";
+//codigoTraducidoPython += RESULT;
 n = n.replace("\"","");
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -2286,8 +2290,9 @@ nd3.setIdNod(parser.cont);
 parser.cont++;
 RESULT= nd;
 :}
-        | prImprimir:pri tvariable:b tpuntoycoma:comaa {:  b = b.replace("_", ""); RESULT= "print" + "(" +  b + ")" + "\n";  
-codigoTraducidoPython += "print" + "(" + b + ")" + "\n";
+        | prImprimir:pri tvariable:b tpuntoycoma:comaa {:  b = b.replace("_", ""); RESULT= "\tprint" + "(" +  b + ")" + "\n";  
+//codigoTraducidoPython += "print" + "(" + b + ")" + "\n";
+codigoTraducidoPython += RESULT;
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -2309,8 +2314,9 @@ nd3.setIdNod(parser.cont);
 parser.cont++;
 RESULT= nd;
 :}
-        | prImprimir:pri tparA:parA tvariable:c tparC:parC tpuntoycoma:comaa {:  c = c.replace("_", ""); RESULT= "print" + "(" +  c + ")" + "\n"; 
-codigoTraducidoPython += "print" + parA.toString() + c + parC.toString() + "\n";
+        | prImprimir:pri tparA:parA tvariable:c tparC:parC tpuntoycoma:comaa {:  c = c.replace("_", ""); RESULT= "\tprint" + "(" +  c + ")" + "\n"; 
+//codigoTraducidoPython += "print" + parA.toString() + c + parC.toString() + "\n";
+codigoTraducidoPython += RESULT;
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -2343,8 +2349,9 @@ parser.cont++;
 RESULT= nd;
 
 :}
-        | prImprimir:pri tparA:parA tcadena:d tparC:parC tpuntoycoma:comaa {: RESULT= "print" + "(" +  d + ")" + "\n";
-codigoTraducidoPython += "print" + parA.toString() + d + parC.toString() + "\n"; 
+        | prImprimir:pri tparA:parA tcadena:d tparC:parC tpuntoycoma:comaa {: RESULT= "\tprint" + "(" +  d + ")" + "\n";
+//codigoTraducidoPython += "print" + parA.toString() + d + parC.toString() + "\n"; 
+codigoTraducidoPython += RESULT;
 d = d.replace("\"","");
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -2380,8 +2387,9 @@ RESULT= nd;
 ;
 
 
-IMPRIMIRNL::= prImprimirNl:pri tcadena:n tpuntoycoma:comaa {: RESULT= "print" + "(" + n + ")" + "\n";
-codigoTraducidoPython += "print" + "(" + n + ")" + "\n";
+IMPRIMIRNL::= prImprimirNl:pri tcadena:n tpuntoycoma:comaa {: RESULT= "\tprint" + "(" + n + ")" + "\n";
+//codigoTraducidoPython += "print" + "(" + n + ")" + "\n";
+//codigoTraducidoPython += RESULT;
 n = n.replace("\"","");
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -2405,8 +2413,9 @@ parser.cont++;
 RESULT= nd;
 :}
 
-            | prImprimirNl:pri tvariable:a tpuntoycoma:comaa {:  a = a.replace("_", ""); RESULT= "print" + "(" + a + ")" + "\n";
-codigoTraducidoPython += "print" + "(" + a + ")" + "\n";
+            | prImprimirNl:pri tvariable:a tpuntoycoma:comaa {:  a = a.replace("_", ""); RESULT= "\tprint" + "(" + a + ")" + "\n";
+//codigoTraducidoPython += "print" + "(" + a + ")" + "\n";
+codigoTraducidoPython += RESULT;
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -2428,8 +2437,9 @@ nd3.setIdNod(parser.cont);
 parser.cont++;
 RESULT= nd;
 :}
-            | prImprimirNl:pri tparA:parA tvariable:a tparC:parC tpuntoycoma:comaa {:  a = a.replace("_", ""); RESULT= "print" + "(" + a + ")" + "\n";
-codigoTraducidoPython += "print" + parA.toString() + a + parC.toString() + "\n";
+            | prImprimirNl:pri tparA:parA tvariable:a tparC:parC tpuntoycoma:comaa {:  a = a.replace("_", ""); RESULT= "\tprint" + "(" + a + ")" + "\n";
+//codigoTraducidoPython += "print" + parA.toString() + a + parC.toString() + "\n";
+codigoTraducidoPython += RESULT;
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
 Nodo1 nd2 = new Nodo1();
@@ -2462,8 +2472,9 @@ parser.cont++;
 RESULT= nd;
 
 :}
-            | prImprimirNl:pri tparA:parA tcadena:a tparC:parC tpuntoycoma:comaa {: RESULT= "print" + "(" + a + ")" + "\n";
-codigoTraducidoPython += "print" + parA.toString() + a + parC.toString() + "\n";
+            | prImprimirNl:pri tparA:parA tcadena:a tparC:parC tpuntoycoma:comaa {: RESULT= "\tprint" + "(" + a + ")" + "\n";
+//codigoTraducidoPython += "print" + parA.toString() + a + parC.toString() + "\n";
+codigoTraducidoPython += RESULT;
 a = a.replace("\"","");
 Nodo1 nd = new Nodo1();
 Nodo1 nd1 = new Nodo1();
@@ -2495,7 +2506,5 @@ nd4.setIdNod(parser.cont);
 nd5.setIdNod(parser.cont);
 parser.cont++;
 RESULT= nd;
-
  :}
 ;
-

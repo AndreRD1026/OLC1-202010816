@@ -7,7 +7,6 @@ import java.util.LinkedList;
 
 %%
 
-
 %{
     public static LinkedList<TError> errores = new LinkedList<TError>(); 
 %}
@@ -29,8 +28,7 @@ import java.util.LinkedList;
 
 letra  = [a-zA-Z]
 variable = ([\_][^\n\_]* [\_])
-cadena = ([\"][^\n\"]* [\"])
-//cadena = (["][^"]*["])
+cadena = [\"][^\"]*[\"]
 caracter = ([\'][^\n\']* [\'])
 numero = [0-9]+([.][0-9]+)?
 comentario = ("//" [^"\n"]+)

@@ -75,11 +75,12 @@ String path="";//creamos una variable global para guardar el path
         lbl_errors = new javax.swing.JLabel();
         golang_code = new javax.swing.JToggleButton();
         python_code = new javax.swing.JToggleButton();
-        btn_clean = new javax.swing.JToggleButton();
+        btn_ast = new javax.swing.JToggleButton();
         btn_run = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         cajatexto = new javax.swing.JTextArea();
         cont_errors = new javax.swing.JLabel();
+        btn_ast1 = new javax.swing.JToggleButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         openfile = new javax.swing.JMenuItem();
@@ -119,11 +120,11 @@ String path="";//creamos una variable global para guardar el path
             }
         });
 
-        btn_clean.setForeground(new java.awt.Color(0, 0, 0));
-        btn_clean.setText("Clean");
-        btn_clean.addActionListener(new java.awt.event.ActionListener() {
+        btn_ast.setForeground(new java.awt.Color(0, 0, 0));
+        btn_ast.setText("AST");
+        btn_ast.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cleanActionPerformed(evt);
+                btn_astActionPerformed(evt);
             }
         });
 
@@ -141,6 +142,14 @@ String path="";//creamos una variable global para guardar el path
         jScrollPane1.setViewportView(cajatexto);
 
         cont_errors.setText("0");
+
+        btn_ast1.setForeground(new java.awt.Color(0, 0, 0));
+        btn_ast1.setText("CLEAN");
+        btn_ast1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ast1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -162,13 +171,15 @@ String path="";//creamos una variable global para guardar el path
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 803, Short.MAX_VALUE)
+                                .addGap(0, 1442, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lbl_name)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(btn_clean)
+                                        .addComponent(btn_ast1)
                                         .addGap(18, 18, 18)
-                                        .addComponent(btn_run))
-                                    .addComponent(lbl_name))))))
+                                        .addComponent(btn_ast)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btn_run)))))))
                 .addGap(27, 27, 27))
         );
         jPanel1Layout.setVerticalGroup(
@@ -178,8 +189,9 @@ String path="";//creamos una variable global para guardar el path
                 .addComponent(lbl_name)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_clean)
-                    .addComponent(btn_run))
+                    .addComponent(btn_ast)
+                    .addComponent(btn_run)
+                    .addComponent(btn_ast1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -237,6 +249,11 @@ String path="";//creamos una variable global para guardar el path
         jMenu5.add(user_manual);
 
         technical_manual.setText("Technical manual");
+        technical_manual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                technical_manualActionPerformed(evt);
+            }
+        });
         jMenu5.add(technical_manual);
 
         jMenuBar1.add(jMenu5);
@@ -257,28 +274,22 @@ String path="";//creamos una variable global para guardar el path
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_cleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cleanActionPerformed
+    private void btn_astActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_astActionPerformed
     
     try {
-        //cajatexto.setText("");
-        //contenido = "";
         new Analizador_sintactico(new Analizador_Lexico(new BufferedReader(new StringReader(cajatexto.getText())))).parse();
-         Nodo1 raiz = Analizador_sintactico.padre;
-         Graficar(recorrido(raiz), "AST_PROYECTO");
-            
-         JOptionPane.showMessageDialog(null, "COMPILADO CON EXITO");
+        //Nodo1 raiz = Analizador_sintactico.padre;
+            if (Analizador_Lexico.errores.size()>0){
+                   Nodo1 raiz = Analizador_sintactico.padre;
+                   Graficar(recorrido(raiz), "AST_PROYECTO");
+            }else{
+                Nodo1 raiz = Analizador_sintactico.padre;
+                Graficar(recorrido(raiz), "AST_PROYECTO");
+            } 
     } catch (Exception ex) {
         JOptionPane.showMessageDialog(null, "EXISTE UN ERROR");
     }
-            //lexico = new Analizador_Lexico(new BufferedReader(new StringReader(cajatexto.getText())));
-            //sintactico = new Analizador_sintactico(lexico);
-            //sintactico.parse();
-           
-           
-
-        
-        
-    }//GEN-LAST:event_btn_cleanActionPerformed
+    }//GEN-LAST:event_btn_astActionPerformed
 
     private void golang_codeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_golang_codeActionPerformed
         // TODO add your handling code here:
@@ -299,6 +310,7 @@ String path="";//creamos una variable global para guardar el path
 
     private void user_manualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_user_manualActionPerformed
         // TODO add your handling code here:
+        abrirarchivo("Documentacion/ManualUsuario_P1.pdf");
     }//GEN-LAST:event_user_manualActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
@@ -316,9 +328,10 @@ String path="";//creamos una variable global para guardar el path
             try {
             lexico = new Analizador_Lexico(new BufferedReader(new StringReader(texto)));
             sintactico = new Analizador_sintactico(lexico);
-            sintactico.parse();
-              
+            sintactico.parse();  
             if (sintactico.errores.size() > 0) {
+                //Nodo1 raiz = Analizador_sintactico.padre;
+                //Graficar(recorrido(raiz), "AST_PROYECTO");
                 JOptionPane.showMessageDialog(this, "GENERANDO REPORTE DE ERRORES", "ERROR ENCONTRADO", WARNING_MESSAGE);
                 ReporteErrores();
                 abrirarchivo("REPORTE DE ERRORES.html");
@@ -327,6 +340,8 @@ String path="";//creamos una variable global para guardar el path
                 prueba = String.valueOf(conta_errors);
                 cont_errors.setText(prueba);
             } else {
+                //Nodo1 raiz = Analizador_sintactico.padre;
+                //Graficar(recorrido(raiz), "AST_PROYECTO");
                 ReporteErrores();
                 Errores = false;
                 ErroresLex = lexico.errores;
@@ -357,7 +372,9 @@ String path="";//creamos una variable global para guardar el path
         // TODO add your handling code here:
         if (contenido != "") {
             try {
+                
             System.out.println(sintactico.codigoTraducidoPython);
+            
             JOptionPane.showMessageDialog(null,"File Created!", "Generating File!", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
         }
@@ -366,6 +383,19 @@ String path="";//creamos una variable global para guardar el path
             } 
         
     }//GEN-LAST:event_python_codeActionPerformed
+
+    private void btn_ast1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ast1ActionPerformed
+        // TODO add your handling code here:
+        cajatexto.setText("");
+        contenido = "";
+    }//GEN-LAST:event_btn_ast1ActionPerformed
+
+    private void technical_manualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_technical_manualActionPerformed
+        // TODO add your handling code here:
+        abrirarchivo("Documentacion/ManualTecnico_P1.pdf");
+        
+        
+    }//GEN-LAST:event_technical_manualActionPerformed
 
     public void leerArchivos() {
         try {
@@ -427,20 +457,35 @@ public static void Graficar(String cadena, String cad) throws IOException {
         pw.println(cadena);
         pw.println("\n}");
         fichero.close();
+
+        
     } catch (Exception e){
         System.out.println(e);
     }
     try{
     //String cmd = "dot -Tpng" + nombre + ".dot -o " + cad + ".png";
-    String command = "dot -Tpng AST_PROYECTO.dot -o AST.png";
+    String command = "open dot -Tpng AST_PROYECTO.dot -o AST.png";
     //Process p = Runtime.getRuntime().exec(command);
+    //Runtime.getRuntime().exec(command);
     Runtime.getRuntime().exec(command);
     } catch(IOException ioe){
         System.out.println(ioe);
-    } 
-    JOptionPane.showMessageDialog(null, "HOLA");
-}
+    }  
     
+    
+    JOptionPane.showMessageDialog(null, "Analisis Completado");
+}
+            
+        /*ProcessBuilder proceso0;
+            proceso0 = new ProcessBuilder("open","dot", "-Tpng", "./REPORTES/AST_PROYECTO.dot", "-o", "./REPORTES/AST.png");
+            //dot -Tpng AST_PROYECTO.dot -o AST.png 
+            //proceso0 = new ProcessBuilder("dot", "-Tpng", "-o","./REPORTES/AST_PROYECTO.png","./REPORTES/AST_PROYECTO.dot");
+            proceso0.redirectErrorStream(true);
+            try {
+                proceso0.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } */
     
    
 public void guardar(){
@@ -596,7 +641,8 @@ public void ReporteErrores() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton btn_clean;
+    private javax.swing.JToggleButton btn_ast;
+    private javax.swing.JToggleButton btn_ast1;
     private javax.swing.JToggleButton btn_run;
     private javax.swing.JTextArea cajatexto;
     private javax.swing.JLabel cont_errors;

@@ -22,6 +22,7 @@ public class Nodo1 {
         hijos.add(hijo);
     }
     
+    
     public void setEtiqueta(String Etiqueta){
         this.Etiqueta = Etiqueta;
     }

@@ -54,7 +54,7 @@ ingresar _operacionRela4_ como booleAn con_valor _operaciones1Basica_ es_iGual 8
 ingresar _operacionRela5_ como boolean con_valor _operaciones1Basica_ es_igual _operaciones1Basica_;
 ingresar _operacionRela6_ como Boolean con_valor _operaciones1Basica_ es_iguAl _operaciones1Basica_+1;
 ingresar _operacionRela7_ como boolEan con_valor _operaciones1Basica_ es_igual (_operaciones1Basica_)*(8+5);
-ingresar _operacionRela5_ como bOoleAn con_valor _operaciones1Basica_ es_difeErente _operaciones1Basica_;
+ingresar _operacionRela5_ como bOoleAn con_valor _operaciones1Basica_ es_diferente _operaciones1Basica_;
 
 ingresar_operLogica_ como boolean c
 
@@ -136,7 +136,7 @@ funcion _potenciaFuncion_ Numero con_parametros (_base_ Numero, _exponente_ Nume
 	retornar _potencia_;
 fin_funcion
 
-metodo _metodo_1_
+metodo _metodo1_
 	imprimir_nl "estamos entrando al metodo 1";	
 	ejecutar _potenciaManual_(3*1+4/2, 3+2);
 	imprimir ejecutar _potenciaFuncion_(3*1+4/2, 3+2);

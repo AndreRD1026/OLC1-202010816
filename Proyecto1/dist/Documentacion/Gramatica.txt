@@ -1,0 +1,274 @@
+//Inicio
+
+start with INICIO;
+
+INICIO::= prInicio INSTRUCCIONES prFin
+
+
+
+INSTRUCCIONES::= INSTRUCCION INSTRUCCIONES
+                | INSTRUCCION
+
+
+INSTRUCCION::= DECLARACIONES
+            | ASIGNACIONES
+            | IF
+            | SEGUN
+            | CICLO_FOR
+            | CICLO_WHILE
+            | CICLO_DOWHILE
+            | RETORNO
+            | METODO
+            | FUNCIONES
+            | EJECUTAR
+            | IMPRIMIR
+            | IMPRIMIRNL
+            | error  
+
+
+//declaraciones
+
+DECLARACIONES::= DECLARARCONOPERACION
+            | DECLARARNUML
+            | DECLARARCADENA
+            | DECLARARCADENAL
+            | DECLARARBOOLEANO
+            | DECLARARBOOLEANOL
+            | DECLARARCARACTER
+            | DECLARARCARACTERL
+            | DECLARARNUM
+
+
+//Lista de variables
+
+LISTAVARIABLES::= tvariable LISTAVARIABLES2
+            |
+
+
+LISTAVARIABLES2::= tcoma tvariable LISTAVARIABLES2 
+            | tcoma tvariable
+
+//declaracion de operaciones
+
+DECLARARCONOPERACION::= prIngresar tvariable prComo prNumero prConValor EXPRESIONARITMETICA tpuntoycoma 
+                    | prIngresar tvariable prComo prNumero prConValor RELACIONAL tpuntoycoma
+                    | prIngresar tvariable prComo prNumero prConValor LOGICO tpuntoycoma
+                    | prIngresar tvariable prComo prBoolean prConValor EXPRESIONARITMETICA tpuntoycoma
+                    | prIngresar tvariable prComo prBoolean prConValor RELACIONAL tpuntoycoma
+                    | prIngresar tvariable prComo prBoolean prConValor LOGICO tpuntoycoma
+
+
+EXPRESIONARITMETICA::= EXPRESIONARITMETICA EXPRESIONES
+            | EXPRESIONES
+
+
+EXPRESIONES::= EXPRESION
+	    | RELACIONAL
+	    | LOGICO
+
+
+EXPRESION::= numero
+        | EXPRESION tsuma EXPRESION
+        | EXPRESION tresta EXPRESION
+        | EXPRESION tmultiplicacion EXPRESION
+        | EXPRESION tdivision EXPRESION
+        | EXPRESION prMod EXPRESION
+        | EXPRESION prPotencia EXPRESION
+        | tparA EXPRESION tparC
+        | tcorA EXPRESION tcorC
+	| tparA RELACIONAL tparC
+        | tcorA RELACIONAL tcorC
+	| tparA LOGICO tparC
+        | tcorA LOGICO tcorC
+        | tvariable
+
+
+RELACIONAL::= EXPRESION prMayor EXPRESION
+        | EXPRESION prMenor EXPRESION
+        | EXPRESION prMayorIgual EXPRESION
+        | EXPRESION prMenorIgual EXPRESION
+        | EXPRESION prEsIGUAL EXPRESION
+        | EXPRESION prEsDiferente EXPRESION
+
+
+LOGICO::= EXPRESION prOR EXPRESION
+        | EXPRESION prAND EXPRESION
+        | EXPRESION prNOT EXPRESION
+
+
+//declaracion de numeros
+
+
+DECLARARNUML::= prIngresar LISTAVARIABLES prComo prNumero prConValor numero tpuntoycoma
+
+//declaracion de cadenas
+
+DECLARARCADENA::= prIngresar tvariable prComo prCadena prConValor tcadena tpuntoycoma 
+
+DECLARARCADENAL::= prIngresar LISTAVARIABLES prComo prCadena prConValor tcadena tpuntoycoma
+
+//declaracion de booleanos
+
+DECLARARBOOLEANO::= prIngresar tvariable prComo prBoolean prConValor prVerdadero tpuntoycoma  
+                |  prIngresar tvariable prComo prBoolean prConValor prFalso tpuntoycoma   
+
+
+DECLARARBOOLEANOL::= prIngresar LISTAVARIABLES prComo prBoolean prConValor prVerdadero tpuntoycoma
+                | prIngresar LISTAVARIABLES prComo prBoolean prConValor prFalso tpuntoycoma
+
+//declaracion de caracteres
+
+DECLARARCARACTER::= prIngresar tvariable prComo prCaracter prConValor tcaracter tpuntoycoma
+
+DECLARARCARACTERL::= prIngresar LISTAVARIABLES prComo prCaracter prConValor tcaracter tpuntoycoma
+
+// gramatica para las asignaciones
+
+
+ASIGNACIONES::= ASIGNARNUM
+            | ASIGNARNUML
+            | ASIGNARCADENA
+            | ASIGNARCADENAL
+            | ASIGNARBOOLEANO
+            | ASIGNARBOOLEANOL
+            | ASIGNARCARACTER
+            | ASIGNARCARACTERL
+;
+
+//asignando numeros
+
+ASIGNARNUM::= tvariable tflecha EXPRESIONARITMETICA tpuntoycoma     
+
+
+ASIGNARNUML::= LISTAVARIABLES tflecha EXPRESIONARITMETICA tpuntoycoma
+
+//asignando cadena
+
+ASIGNARCADENA::= tvariable tflecha tcadena tpuntoycoma
+
+ASIGNARCADENAL::= LISTAVARIABLES tflecha tcadena tpuntoycoma
+
+//asignando booleano
+
+ASIGNARBOOLEANO::= tvariable tflecha prVerdadero tpuntoycoma  
+                | tvariable tflecha prFalso tpuntoycoma
+
+ASIGNARBOOLEANOL::= LISTAVARIABLES tflecha prVerdadero tpuntoycoma
+                | LISTAVARIABLES tflecha prFalso tpuntoycoma
+
+//asignando caracter
+
+ASIGNARCARACTER::= tvariable tflecha tcaracter tpuntoycoma
+
+ASIGNARCARACTERL::= LISTAVARIABLES tflecha tcaracter tpuntoycoma
+
+//Sentencias
+
+// IF
+
+IF::= prSi CONDICIONIF prEntonces INSTRUCCIONES prFinSi
+    | prSi CONDICIONIF prEntonces INSTRUCCIONES prDeloContrario INSTRUCCIONES prFinSi
+    | prSi CONDICIONIF prEntonces INSTRUCCIONES LISTAOSI prDeloContrario INSTRUCCIONES prFinSi
+
+
+
+LISTAOSI::= prOSi CONDICIONIF prEntonces INSTRUCCIONES LISTAOSI
+            | prOSi CONDICIONIF prEntonces INSTRUCCIONES
+;
+
+CONDICIONIF::= tvariable prEsIGUAL EXPRESIONARITMETICA
+            | tvariable
+            | tvariable prMayorIgual EXPRESIONARITMETICA
+            | tvariable prMenorIgual EXPRESIONARITMETICA
+            | tvariable prMayor EXPRESIONARITMETICA
+            | tvariable prMenor EXPRESIONARITMETICA
+            | tvariable prOR EXPRESIONARITMETICA
+            | tvariable prAND EXPRESIONARITMETICA
+            | prNOT EXPRESIONARITMETICA
+
+// SEGUN
+
+SEGUN::= prSegun tvariable prHacer INSTRUCCIONSEGUN prDeloContrario prEntonces INSTRUCCIONES prFinSegun
+        | prSegun tvariable prHacer INSTRUCCIONSEGUN prFinSegun
+
+
+INSTRUCCIONSEGUN::= tinterrogaciona numero tinterrogacionc prEntonces INSTRUCCIONES 
+            | INSTRUCCIONSEGUN tinterrogaciona numero tinterrogacionc prEntonces INSTRUCCIONES
+
+// PARA
+
+CICLO_FOR::= prPara tvariable tflecha EXPRESIONARITMETICA prHasta  EXPRESIONARITMETICA prHacer INSTRUCCIONES prFinPara 
+            | prPara tvariable tflecha EXPRESIONARITMETICA prHasta EXPRESIONARITMETICA prIncremental EXPRESIONARITMETICA prHacer INSTRUCCIONES prFinPara
+            | prPara tvariable tflecha EXPRESIONARITMETICA prHasta EXPRESIONARITMETICA prHacer prFinPara
+
+// MIENTRAS
+
+CICLO_WHILE::= prMientras EXPRESIONARITMETICA prHacer INSTRUCCIONES prFinMientras
+            | prMientras EXPRESIONARITMETICA prHacer prFinMientras
+
+CONDICIONMIENTRAS::= tvariable prEsIGUAL EXPRESIONARITMETICA
+            | tvariable prMayorIgual EXPRESIONARITMETICA
+            | tvariable
+            | tvariable prMenorIgual EXPRESIONARITMETICA
+            | tvariable prMayor EXPRESIONARITMETICA
+            | tvariable prMenor EXPRESIONARITMETICA
+            | tvariable prOR numero
+            | tvariable prAND numero
+            | prNOT numero
+
+//REPETIR HASTA
+
+CICLO_DOWHILE::= prRepetir INSTRUCCION prHastaQue CONDICIONMIENTRAS
+                | prRepetir prHastaQue CONDICIONMIENTRAS
+
+
+//RETORNO
+
+RETORNO::= prRetornar EXPRESIONARITMETICA tpuntoycoma
+
+
+//METODO
+
+METODO::= prMetodo tvariable INSTRUCCIONES prFinMetodo
+        | prMetodo tvariable prConParametros tparA LISTAPARAMETROS tparC INSTRUCCIONES prFinMetodo
+;
+
+LISTAPARAMETROS::= tvariable prNumero
+                | tvariable prCadena
+                | tvariable prCaracter
+                | tvariable prBoolean
+                | LISTAPARAMETROS tcoma tvariable prNumero
+                | LISTAPARAMETROS tcoma tvariable prCadena
+                | LISTAPARAMETROS tcoma tvariable prCaracter
+                | LISTAPARAMETROS tcoma tvariable prBoolean
+
+//FUNCIONES
+
+FUNCIONES::= prFuncion tvariable TIPODATO INSTRUCCIONES prFinFuncion
+            | prFuncion tvariable TIPODATO prConParametros LISTAPARAMETROS INSTRUCCIONES prFinFuncion
+
+TIPODATO::= prNumero
+            | prCadena
+            | prCaracter
+            | prBoolean
+
+
+
+//LLAMADA DE FUNCIONES Y METODOS
+
+EJECUTAR::= prEjecutar tvariable tparA tparC tpuntoycoma
+            | prEjecutar tvariable tparA LISTAPARAMETROS tparC tpuntoycoma
+
+
+// impresiones
+
+IMPRIMIR::= prImprimir tcadena tpuntoycoma
+            | prImprimir tvariable tpuntoycoma
+            | prImprimir tparA tvariable tparC tpuntoycoma
+            | prImprimir tparA tcadena tparC tpuntoycoma
+
+
+IMPRIMIRNL::= prImprimirNl tcadena tpuntoycoma
+            | prImprimirNl tvariable tpuntoycoma
+            | prImprimirNl tparA tvariable tparC tpuntoycoma
+            | prImprimirNl tparA tcadena tparC tpuntoycoma

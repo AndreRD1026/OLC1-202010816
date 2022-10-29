@@ -169,7 +169,7 @@ CASTEO: 'pr_int' 'expreID' '=' '(' 'pr_int' ')' 'numero' ';' {$$= new Casteo($7)
 INCREMENTO: 'expreID' '+' '+' ';' {$$= new Incremento($1);}
 ;
 
-INCREMENTO: 'expreID' '-' '-' ';' {$$= new Decremento($1);}
+DECREMENTO: 'expreID' '-' '-' ';' {$$= new Decremento($1);}
 ;
 
 

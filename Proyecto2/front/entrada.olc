@@ -1,0 +1,31 @@
+// Este es un comentario de una línea
+/*
+Este es un comentario Multilínea Para este lenguaje
+*/
+
+//int = 10;
+
+int a = 2;
+
+int prueba, prueba2, otro2;
+
+string salida1, salidaaaa;
+
+//InT = 12;
+
+int A = 1;
+
+Prueba = (101) - 10;
+
+string prueba_112 = "hOLA MUNDO";
+
+string aver = "Hola\nmundo";
+
+int c = 12 + 10 ;
+int c = 13 - 10 ;
+
+int d = 100 / 10 ;
+
+int otro = [(100) + (10/2) * 3];
+
+print ("Hola");

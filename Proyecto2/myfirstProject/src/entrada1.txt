@@ -2,30 +2,12 @@
 /*
 Este es un comentario Multilínea Para este lenguaje
 */
-
-//int = 10;
-
-int a = 2;
-
-int prueba, prueba2, otro2;
-
-string salida1, salidaaaa;
-
-//InT = 12;
-
-int A = 1;
-
-Prueba = (101) - 10;
-
-string prueba_112 = "hOLA MUNDO";
-
-string aver = "Hola\nmundo";
-
-int c = 12 + 10 ;
-int c = 13 - 10 ;
-
-int d = 100 / 10 ;
-
-int otro = [(100) + (10/2) * 3];
-
-print ("Hola");
+string curso_ = "organización de compiladores 1 2022";
+char var_111 = 'a'; 
+celular = true;
+int var1, var2, var3;
+boolean flag_1, flag2_, flag33 = false;
+char ch_1, ch_2, ch3, qwert123 = 'M';
+universidad= "usac";
+boolean flag_personalizada;
+Int edad = (Int) 18.6; //toma el valor entero de 18

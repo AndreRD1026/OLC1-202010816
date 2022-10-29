@@ -1,7 +1,7 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
 
-export class Asignacion extends Instruccion {
+export class Casteo extends Instruccion {
 
 
     constructor(
@@ -12,7 +12,7 @@ export class Asignacion extends Instruccion {
 
     public ejecutar():any {
         //console.log("Encontre una asignacion, nombre:"+this.nombre+" lo encontre en la linea "+this.line);
-        console.log("Encontré una asignacion")
+        console.log("Encontré un casteo")
         //metodo para guardar la variable, tabla de simbolos
 
 

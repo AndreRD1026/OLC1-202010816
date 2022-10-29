@@ -17,6 +17,10 @@ export class Env{
         this.tablaSimbolos.set(nombre,new Symbol(nombre,type));
     }
 
+    public guardar_prueba(nombre: string, type: string){
+        this.tablaSimbolos.set(nombre,new Symbol(nombre,type));
+    }
+
     public guardar_funcion(nombre: string, type: Instruccion){
         this.tablaSimbolos_funcion.set(nombre,new Symbol2(nombre,type));
     }

@@ -5,6 +5,8 @@
   const {Bloque} = require('../instrucciones/bloque.ts');
   const {Asignacion} = require('../instrucciones/Asignacion.ts');
   const {Casteo} = require('../instrucciones/Casteo.ts');
+  const {Incremento} = require('../instrucciones/Incremento.ts')
+  const {Decremento} = require('../instrucciones/Decremento.ts')
 
 
 %}
@@ -87,6 +89,8 @@ INSTRUCCION :
     DECLARACIONES {$$=$1;}
     | ASIGNACIONES {$$=$1;}
     | CASTEO {$$=$1;}
+    | INCREMENTO {$$=$1;}
+    | DECREMENTO {$$=$1;}
     | ENCAPSULAMIENTO {$$=$1;}
     | IMPRIMIR {$$=$1;}
 ;
@@ -145,6 +149,27 @@ EXPRESION: EXPRESION '+' EXPRESION {$$=$1 + '+' + $3;}
 ;
 
 CASTEO: 'pr_int' 'expreID' '=' '(' 'pr_int' ')' 'numero' ';' {$$= new Casteo($7);}
+        | 'pr_int' 'expreID' '=' '(' 'pr_int' ')' 'cadena' ';' {$$= new Casteo($7);}
+        | 'pr_int' 'expreID' '=' '(' 'pr_int' ')' 'char' ';' {$$= new Casteo($7);}
+        | 'pr_int' 'expreID' '=' '(' 'pr_int' ')' 'bool' ';' {$$= new Casteo($7);}
+        | 'pr_double' 'expreID' '=' '(' 'pr_double' ')' 'numero' ';' {$$= new Casteo($7);}
+        | 'pr_double' 'expreID' '=' '(' 'pr_double' ')' 'cadena' ';' {$$= new Casteo($7);}
+        | 'pr_double' 'expreID' '=' '(' 'pr_double' ')' 'char' ';' {$$= new Casteo($7);}
+        | 'pr_double' 'expreID' '=' '(' 'pr_double' ')' 'bool' ';' {$$= new Casteo($7);}
+        | 'pr_bool' 'expreID' '=' '(' 'pr_bool' ')' 'numero' ';' {$$= new Casteo($7);}
+        | 'pr_bool' 'expreID' '=' '(' 'pr_bool' ')' 'cadena' ';' {$$= new Casteo($7);}
+        | 'pr_bool' 'expreID' '=' '(' 'pr_bool' ')' 'char' ';' {$$= new Casteo($7);}
+        | 'pr_bool' 'expreID' '=' '(' 'pr_bool' ')' 'bool' ';' {$$= new Casteo($7);}
+        | 'pr_char' 'expreID' '=' '(' 'pr_char' ')' 'numero' ';' {$$= new Casteo($7);}
+        | 'pr_char' 'expreID' '=' '(' 'pr_char' ')' 'cadena' ';' {$$= new Casteo($7);}
+        | 'pr_char' 'expreID' '=' '(' 'pr_char' ')' 'char' ';' {$$= new Casteo($7);}
+        | 'pr_char' 'expreID' '=' '(' 'pr_char' ')' 'bool' ';' {$$= new Casteo($7);}
+;
+
+INCREMENTO: 'expreID' '+' '+' ';' {$$= new Incremento($1);}
+;
+
+INCREMENTO: 'expreID' '-' '-' ';' {$$= new Decremento($1);}
 ;
 
 

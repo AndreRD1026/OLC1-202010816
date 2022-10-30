@@ -7,7 +7,7 @@
   const {Casteo} = require('../instrucciones/Casteo.ts');
   const {Incremento} = require('../instrucciones/Incremento.ts')
   const {Decremento} = require('../instrucciones/Decremento.ts')
-
+  const {Vector} = require('../instrucciones/Vector.ts')
 
 %}
 
@@ -39,6 +39,7 @@ bool    "true"|"false"
 "Char" return 'pr_char'
 "Double" return 'pr_double'
 "Print" return 'pr_print'
+"New" return 'pr_new'
 
 
 ";"  return ';'
@@ -92,27 +93,21 @@ INSTRUCCION :
     | INCREMENTO {$$=$1;}
     | DECREMENTO {$$=$1;}
     | ENCAPSULAMIENTO {$$=$1;}
+    | VECTORES {$$=$1;}
     | IMPRIMIR {$$=$1;}
 ;
 
 
-DECLARACIONES:  'pr_int' 'expreID' '=' OPERACIONA ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | 'pr_string' 'expreID' '=' 'cadena' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | 'pr_double' 'expreID' '=' 'numero' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | 'pr_char' 'expreID' '=' 'char' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | 'pr_bool' 'expreID' '=' 'bool' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | 'pr_int' LISTAVARIABLES  '=' OPERACIONA ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | 'pr_string' LISTAVARIABLES  '=' 'cadena' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | 'pr_char' LISTAVARIABLES  '=' 'char' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | 'pr_bool' LISTAVARIABLES  '=' 'bool' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | 'pr_int' LISTAVARIABLES ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
-    | 'pr_string' LISTAVARIABLES ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
-    | 'pr_char' LISTAVARIABLES ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
-    | 'pr_bool' LISTAVARIABLES ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
-    | 'pr_int' 'expreID' ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
-    | 'pr_string' 'expreID' ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
-    | 'pr_char' 'expreID' ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
-    | 'pr_bool' 'expreID' ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
+DECLARACIONES:  TIPOS 'expreID' '=' OPERACIONA ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
+    | TIPOS 'expreID' '=' 'cadena' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
+    | TIPOS 'expreID' '=' 'char' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
+    | TIPOS 'expreID' '=' 'bool' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
+    | TIPOS LISTAVARIABLES  '=' OPERACIONA ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
+    | TIPOS LISTAVARIABLES  '=' 'cadena' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
+    | TIPOS LISTAVARIABLES  '=' 'char' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
+    | TIPOS LISTAVARIABLES  '=' 'bool' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
+    | TIPOS LISTAVARIABLES ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
+    | TIPOS 'expreID' ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
 ;
 
 LISTAVARIABLES: 'expreID' LISTAVARIABLES2 {$$=$2;}
@@ -148,28 +143,32 @@ EXPRESION: EXPRESION '+' EXPRESION {$$=$1 + '+' + $3;}
             | 'numero' {$$=$1;}
 ;
 
-CASTEO: 'pr_int' 'expreID' '=' '(' 'pr_int' ')' 'numero' ';' {$$= new Casteo($7);}
-        | 'pr_int' 'expreID' '=' '(' 'pr_int' ')' 'cadena' ';' {$$= new Casteo($7);}
-        | 'pr_int' 'expreID' '=' '(' 'pr_int' ')' 'char' ';' {$$= new Casteo($7);}
-        | 'pr_int' 'expreID' '=' '(' 'pr_int' ')' 'bool' ';' {$$= new Casteo($7);}
-        | 'pr_double' 'expreID' '=' '(' 'pr_double' ')' 'numero' ';' {$$= new Casteo($7);}
-        | 'pr_double' 'expreID' '=' '(' 'pr_double' ')' 'cadena' ';' {$$= new Casteo($7);}
-        | 'pr_double' 'expreID' '=' '(' 'pr_double' ')' 'char' ';' {$$= new Casteo($7);}
-        | 'pr_double' 'expreID' '=' '(' 'pr_double' ')' 'bool' ';' {$$= new Casteo($7);}
-        | 'pr_bool' 'expreID' '=' '(' 'pr_bool' ')' 'numero' ';' {$$= new Casteo($7);}
-        | 'pr_bool' 'expreID' '=' '(' 'pr_bool' ')' 'cadena' ';' {$$= new Casteo($7);}
-        | 'pr_bool' 'expreID' '=' '(' 'pr_bool' ')' 'char' ';' {$$= new Casteo($7);}
-        | 'pr_bool' 'expreID' '=' '(' 'pr_bool' ')' 'bool' ';' {$$= new Casteo($7);}
-        | 'pr_char' 'expreID' '=' '(' 'pr_char' ')' 'numero' ';' {$$= new Casteo($7);}
-        | 'pr_char' 'expreID' '=' '(' 'pr_char' ')' 'cadena' ';' {$$= new Casteo($7);}
-        | 'pr_char' 'expreID' '=' '(' 'pr_char' ')' 'char' ';' {$$= new Casteo($7);}
-        | 'pr_char' 'expreID' '=' '(' 'pr_char' ')' 'bool' ';' {$$= new Casteo($7);}
+CASTEO: TIPOS 'expreID' '=' '(' TIPOS ')' 'numero' ';' {$$= new Casteo($7);}
+        | TIPOS 'expreID' '=' '(' TIPOS ')' 'cadena' ';' {$$= new Casteo($7);}
+        | TIPOS 'expreID' '=' '(' TIPOS ')' 'char' ';' {$$= new Casteo($7);}
+        | TIPOS 'expreID' '=' '(' TIPOS ')' 'bool' ';' {$$= new Casteo($7);}
 ;
 
 INCREMENTO: 'expreID' '+' '+' ';' {$$= new Incremento($1);}
 ;
 
 DECREMENTO: 'expreID' '-' '-' ';' {$$= new Decremento($1);}
+;
+
+
+ENCAPSULAMIENTO: '{' LISTAINSTRUCCIONES '}' { $$= new Bloque($2,@1.first_line,@1.first_column);}
+                | '{' 'cadena' ',' 'cadena' '}' { $$= new Bloque($4,@1.first_line,@1.first_column);}
+;
+
+VECTORES: TIPOS '[' ']' 'expreID' '=' 'pr_new' TIPOS '[' 'numero' ']' ';' {$$= new Vector($4);}
+        | TIPOS '[' ']' '[' ']' 'expreID' '=' 'pr_new' TIPOS '[' '(' TIPOS ')' 'cadena' ']' '[' 'numero' ']' ';' {$$= new Vector($6);}
+;
+
+TIPOS: 'pr_int' {$$=$1;}
+    |'pr_char' {$$=$1;}
+    |'pr_string' {$$=$1;}
+    | 'pr_bool' {$$=$1;}
+    | 'pr_double' {$$=$1;}
 ;
 
 

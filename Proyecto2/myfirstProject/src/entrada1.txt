@@ -43,3 +43,143 @@ int anio=2020;
 Int [ ] vector1 = new Int[4];
 Char [ ][ ] vectorDosd = new Char [(Int) "4"] [4] ;
 Char [ ][ ] vectorDosd = new String [(Boolean) "4"] [4] ;
+String [ ] vector2 = {"hola", "Mundo"};
+String [ ] vector3 = {0, 10.5};
+Char [ ][ ] vectordosd2 = {{ 0 ,0},{0 , 0}};
+
+
+//acceso a vectores
+String [ ] vector2 = {"hola", "Mundo"}; //creamos un vector de 2 posiciones de tipo string
+String valorPosicion = vector2[1]; //posición 1, valorPosicion = "hola"
+Char [ ][ ] vectorDosd = new char [4] [4] ; // creamos vector de 4x4
+Char valor = vectorDosd[1][1]; // posición 1,1
+
+//modificacion de vectores
+String [ ] vector2 = {"hola", "Mundo"}; //vector de 2 posiciones, con "Hola" y "Mundo"
+//Int [ ] vectorNumero = {2020,2021,2022};
+vector2[1] = "OLC1 ";
+vector2[2] = "2do Semestre "+vectorNumero[2];
+
+//condicional if 
+if (x <50 && x >= 100)
+{
+Print("Menor que 50");
+//Más sentencias
+}
+
+if (x <50)
+{
+Print("Menor que 50");
+//Más sentencias
+}
+else
+{
+Print("Mayor que 100");
+//Más sentencias
+}
+
+//Ejemplo de cómo se implementar un ciclo else if
+if (x > 50)
+{
+ Print("Mayor que 50");
+ //Más sentencias
+}
+elif (x <= 50 && x > 0)
+{
+ Print ("Menor que 50");
+ if (x > 25)
+ {
+ Print("Número mayor que 25");
+ //Más sentencias
+ }else{
+ Print("Número menor que 25");
+ //Más sentencias
+ }
+ //Más sentencias
+}
+else
+{
+Print("Número negativo");
+//Más
+}
+
+//provicional
+
+		if (x <50)
+		{
+		tomas = nuevoAA;
+		tomas = nuevoA;
+		//Más sentencias
+		}
+		//Ejemplo de cómo se implementar una sentencia if else
+		if (x <50)
+		{
+		tomas = nuevoB;
+		//Más sentencias
+		}
+		else
+		{
+		tomas = nuevoC;
+		//Más sentencias
+		}
+		//Ejemplo de cómo se implementar un ciclo else if
+		if (x > 50)
+		{
+		 tomas = nuevo;
+		 //Más sentencias
+		}
+		elif (x <= 50 && x > 0)
+		{
+		 tomas = nuevo2;
+		 if (x > 25)
+		 {
+		 tomas = nuevo3;
+		 //Más sentencias
+		 }else{
+		 tomas = nuevo4;
+		 //Más sentencias
+		 }
+		 //Más sentencias
+		}
+		else
+		{
+		tomas = nuevo5;
+		//Más
+		}
+
+
+//switch
+
+// EJEMPLO DE SWITCH
+int edad = 18;
+switch( edad ) {
+Case 10:
+Print("Tengo 10 anios.");
+// mas sentencias Break;
+Case 18:
+Print("Tengo 18 anios.\n");
+// mas sentencias Case 25:
+Print("Tengo 25 anios.");
+// mas sentencias Break;
+Default:
+Print("No se que edad tengo. :(\n");
+// mas sentencias Break;
+}
+/* Salida esperada Tengo 18 anios.
+No se que edad tengo. :(
+*/
+
+//Ejemplo de cómo se implementar un ciclo while
+while (x<100){
+if (x > 50)
+{
+Print("Mayor que 50");
+//Más sentencias
+}
+else
+{
+Print("Menor que 100");
+//Más sentencias
+} X++;
+//Más sentencias
+}

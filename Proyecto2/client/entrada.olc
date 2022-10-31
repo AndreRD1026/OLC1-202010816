@@ -3,7 +3,7 @@
 Este es un comentario Multilínea Para este lenguaje
 */
 string curso_ = "organización de compiladores 1 2022";
-char var_111 = 'a'; 
+char var_111 = 'a';
 celular = true;
 int var1, var2, var3;
 boolean flag_1, flag2_, flag33 = false;
@@ -61,7 +61,7 @@ vector2[1] = "OLC1 ";
 vector2[2] = "2do Semestre "+vectorNumero[2];
 
 //condicional if 
-if (x <50 && x >= 100)
+if (x <= 50 && x >= 100)
 {
 Print("Menor que 50");
 //Más sentencias
@@ -183,3 +183,196 @@ Print("Menor que 100");
 } X++;
 //Más sentencias
 }
+
+//para FOR
+//Ejemplo 1: declaración dentro del for con incremento
+for ( int i=0; i<3;i++ ){
+Println("i=");
+//más sentencias
+}
+/*RESULTADO
+i=0 i=1 i=2
+*/
+
+//Ejemplo de un for
+for ( i=5; i>2;i=2-1 ){
+Print("i=");
+//más sentencias
+} /*RESULTADO i=5 i=4 i=3
+*/
+
+
+//Ejemplo de cómo se implementar un ciclo do-while 
+Int a=5;
+do{
+ if (a>=1 && a <3){
+ Println("true");
+ }
+ else{
+ Println("false");
+ }
+ a--;
+} while (a>0);
+/*RESULTADO
+false false false true true
+*/
+
+//para el break;
+ //Ejemplo en un ciclo for
+for(int i = 0; i < 9; i++){
+ if(i==5){
+ Println("Me salgo del ciclo en el numero " + i);
+ break;
+ }
+ Println(i);
+ }
+
+ //para el continue
+ //Ejemplo en un ciclo for
+for(int i = 0; i < 9; i++){
+ if(i==5){
+ Println("Me salte el numero "); 
+ continue;
+ }
+ Println(i);
+}
+
+return;
+
+
+//--> Dentro de una función
+sumar(int n1, int n2): int {
+int n3;
+n3 = n1+n2;
+return ; //retorno el valor
+}
+
+//Ejemplo de declaración de una función de enteros
+conversion (string tipo): double {
+    if (tipo == "metro")
+    {
+    return ;
+    }else{
+    return ;
+    }
+ }
+
+ //declaracion de metodos
+holamundo(): void {
+Print("Hola mundo");
+}
+//Ejemplo sin tipo definido de un método
+HolaCompi() {
+Print("Hola Compi 1");
+}
+
+
+//Ejemplo de llamada de un método
+Print("Ejemplo de llamada a método");
+holamundo();
+/* Salida esperada
+Ejemplo de llamada a método Hola Mundo
+*/
+//Ejemplo de llamada de una función
+Print("Ejemplo de llamada a función");
+//Int num = suma(6,5); // a = 11
+Println("El valor de a es: " + a);
+/* Salida esperada
+Ejemplo de llamada a función
+Aquí puede venir cualquier sentencia :D El valor de a es: 11
+*/
+suma(int num1, int num2):int {
+Println("Aquí puede venir cualquier sentencia :D");
+//return num1 + num2;
+Println("Aquí pueden venir más sentencias, pero no se ejecutarán por la sentencia RETURN D:"); //Print en una línea
+}
+
+//para imprimir
+Print("Hola mundo!!");
+//Print("Sale compi \n" + valor + "!!");
+//Print(suma(2,2));
+/*
+Salida Esperada:
+Hola Mundo!!Sale compi
+25!!4
+*/
+// 25 es el valor almacenado en la variable "valor"
+
+
+Println("Hola mundo!!");
+//Println("Sale compi \n" + valor + "!!");
+//Println(suma(2,2));
+/*
+Salida Esperada:
+Hola Mundo!!
+Sale compi
+25!!
+4
+*/
+// 25 es el valor almacenado en la variable "valor"
+
+//TO LOWER
+//Ejemplo
+string cad_1 = toLower("hOla MunDo"); // cad_1 = "hola mundo"
+string cad_2 = toLower("RESULTADO = " + 100); // cad_2 = "resultado = 100"
+
+//Ejemplo UPPER
+string cad_1 = toUpper("hOla MunDo"); // cad_1 = "HOLA MUNDO"
+string cad_2 = toUpper("resultado = " + 100); // cad_2 = "RESULTADO = 100"
+
+// Ejemplo ROUND
+Double valor = round(5.8); //valor = 6
+Double valor2 = round(5.4); //valor2 = 5
+
+//EJEMPLO LENGTH
+// En donde <VALOR> puede ser:
+// - lista
+// -vector
+// -cadena
+string[ ] vector2 = {"hola", "Mundo"};
+length(hola_vector);
+int tam_vector = length(vector2); // tam_vector = 2
+int tam_hola = length(tam_vector[0]); // tam_hola = 4
+
+//Ejemplo TYPEOF
+Int[] lista2 =new int [1];
+typeof(10);
+String tipo = typeof(15); // tipo = "int"
+String tipo2 = typeof(15.25); // tipo = "double"
+String tipo3 = typeof(lista2);// tipo3 = "vector"
+
+//Ejemplo TO STRING 
+String valor = toString(14); // valor = "14"
+String valor2 = toString(true); // valor = "true"
+
+//vector de ejemplo
+string[ ] vector2 = {"hola", "Mundo"};
+vector2.push("bonito");
+//contenido del vector
+//= ["hola", "Mundo","bonito"]
+
+
+//vector de ejemplo
+string[ ] vector2 = {"hola", "Mundo"};
+//string[ ] vector2 = {"hola", "Mundo","bonito"};
+vector2.pop();
+//contenido del vector
+//= ["hola", "Mundo"]
+
+//Ejemplo 1 
+funcion1():void{
+Print("hola");
+}
+run funcion1();
+/*RESULTADO
+hola
+*/
+
+//Ejemplo 2
+funcion2(string mensaje):void{
+Print(mensaje);
+}
+Run funcion2("hola soy un mensaje");
+/*RESULTADO
+Hola soy un mensaje
+*/

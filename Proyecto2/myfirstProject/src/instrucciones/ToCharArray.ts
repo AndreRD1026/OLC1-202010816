@@ -1,23 +1,23 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
 
-export class Declaracion extends Instruccion {
+export class ToCharArray extends Instruccion {
 
 
     constructor(
         public nombre: string,
-        public tipo: string,
         public contenido: string,
         linea: number, columna:number) {
         super(linea,columna);
     }
 
-    public ejecutar(Env: Env):any {
-        console.log("Encontre una declaracion, tipo:"+this.tipo+" nombre:"+this.nombre+ " contenido: " + this.contenido+ "  lo encontre en la linea "+this.line);
+    public ejecutar():any {
+        //console.log("Encontre un lower, nombre:"+this.nombre +" , contenido:  " + this.contenido + " lo encontre en la linea "+this.line);
+        console.log("Encontre un toCharArray");
         //metodo para guardar la variable, tabla de simbolos
 
 
-        Env.guardar_variable(this.nombre, this.tipo);
+        //Env.guardar_variable(this.nombre, this.tipo);
 
 
         //guardar un metodo asi        

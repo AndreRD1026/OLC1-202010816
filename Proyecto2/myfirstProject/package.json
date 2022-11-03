@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "jison": "jison ./src/grammar/grammar2.jison && mv grammar2.js ./src/grammar"
+    "jison": "jison ./src/grammar/grammar.jison && mv grammar.js ./src/grammar"
   },
   "keywords": [],
   "author": "",

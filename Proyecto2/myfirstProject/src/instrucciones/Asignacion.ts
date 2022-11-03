@@ -1,11 +1,12 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/Nodo";
 
 export class Asignacion extends Instruccion {
 
 
     constructor(
-        public nombre: string,
+        public nombre: string[],
         public contenido: string,
         linea: number, columna:number) {
         super(linea,columna);
@@ -26,5 +27,15 @@ export class Asignacion extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoAsig = new nodo("<ASIGNACION>");
+        //nodoDec.agregarHijo(this.tipo);
+        this.nombre.forEach(id => {
+            nodoAsig.agregarHijo(id);
+        });
+        nodoAsig.agregarHijo(this.contenido);
+        return nodoAsig;
     }
 }

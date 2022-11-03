@@ -1,11 +1,13 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/Nodo";
 
 export class Decremento extends Instruccion {
 
 
     constructor(
         public nombre: string,
+        public contenido: string,
         linea: number, columna:number) {
         super(linea,columna);
     }
@@ -26,5 +28,17 @@ export class Decremento extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+
+    public getNodo() {
+        var nodoDecr = new nodo("<DECREMENTO>");
+        //nodoDec.agregarHijo(this.tipo);
+        // this.nombre.forEach(id => {
+        //     nodoDec.agregarHijo(id);
+        // });
+        nodoDecr.agregarHijo(this.nombre);
+        nodoDecr.agregarHijo(this.contenido);
+        return nodoDecr;
     }
 }

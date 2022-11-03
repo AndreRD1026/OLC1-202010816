@@ -1,19 +1,20 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/Nodo";
 
 export class Pop extends Instruccion {
 
 
     constructor(
         public nombre: string,
-        public contenido: string,
+        //public contenido: string,
         linea: number, columna:number) {
         super(linea,columna);
     }
 
     public ejecutar():any {
         //console.log("Encontre un lower, nombre:"+this.nombre +" , contenido:  " + this.contenido + " lo encontre en la linea "+this.line);
-        console.log("Encontre un pop");
+        console.log("Encontre un pop, nombre:" +this.nombre);
         //metodo para guardar la variable, tabla de simbolos
 
 
@@ -27,5 +28,16 @@ export class Pop extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoPop = new nodo("<POP>");
+        //nodoDec.agregarHijo(this.tipo);
+        // this.nombre.forEach(id => {
+        //     nodoDec.agregarHijo(id);
+        // });
+        nodoPop.agregarHijo(this.nombre);
+        //nodoPop.agregarHijo(this.contenido);
+        return nodoPop;
     }
 }

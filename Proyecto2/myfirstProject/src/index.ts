@@ -4,7 +4,7 @@ import { Env } from "./symbols/env";
 
 const parser = require("./grammar/grammar");
 const fs = require("fs");
-var instrucciones = new nodo("INSTRUCCIONES");
+var instrucciones = new nodo("<LISTA_INSTRUCCIONES>");
 try {
     const entrada = fs.readFileSync("src/entrada1.txt");
     const ast = parser.parse(entrada.toString());

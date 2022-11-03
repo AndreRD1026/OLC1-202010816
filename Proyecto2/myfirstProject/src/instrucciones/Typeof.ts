@@ -1,11 +1,13 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/Nodo";
 
 export class Typeof extends Instruccion {
 
 
     constructor(
         public nombre: string,
+        public contenido: string,
         linea: number, columna:number) {
         super(linea,columna);
     }
@@ -26,5 +28,17 @@ export class Typeof extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoTypeof = new nodo("<TYPEOF>");
+        //nodoDec.agregarHijo(this.tipo);
+        // this.nombre.forEach(id => {
+        //     nodoDec.agregarHijo(id);
+        // });
+        nodoTypeof.agregarHijo(this.nombre);
+        nodoTypeof.agregarHijo("=");
+        nodoTypeof.agregarHijo(this.contenido);
+        return nodoTypeof;
     }
 }

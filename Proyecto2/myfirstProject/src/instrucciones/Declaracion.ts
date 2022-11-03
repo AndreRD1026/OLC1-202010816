@@ -25,7 +25,7 @@ export class Declaracion extends Instruccion {
     }
 
     public getNodo() {
-        var nodoDec = new nodo("DECLARACION");
+        var nodoDec = new nodo("<DECLARACION>");
         nodoDec.agregarHijo(this.tipo);
         this.nombre.forEach(id => {
             nodoDec.agregarHijo(id);

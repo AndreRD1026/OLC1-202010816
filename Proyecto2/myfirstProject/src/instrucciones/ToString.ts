@@ -1,5 +1,6 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/Nodo";
 
 export class ToString extends Instruccion {
 
@@ -27,5 +28,17 @@ export class ToString extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoToString = new nodo("<TOSTRING>");
+        //nodoDec.agregarHijo(this.tipo);
+        // this.nombre.forEach(id => {
+        //     nodoDec.agregarHijo(id);
+        // });
+        nodoToString.agregarHijo(this.nombre);
+        nodoToString.agregarHijo("=");
+        nodoToString.agregarHijo(this.contenido);
+        return nodoToString;
     }
 }

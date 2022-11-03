@@ -1,7 +1,8 @@
 %{
   //Declarciones y tambien las importaciones
 const {Declaracion} = require('../instrucciones/Declaracion.ts');
-const {Impresion} = require('../instrucciones/Imprimir.ts');
+const {Print} = require('../instrucciones/Print.ts');
+const {PrintLn} = require('../instrucciones/PrintLn.ts');
 const {Bloque} = require('../instrucciones/bloque.ts');
 const {Asignacion} = require('../instrucciones/Asignacion.ts');
 const {Casteo} = require('../instrucciones/Casteo.ts');
@@ -167,30 +168,30 @@ INSTRUCCION :
     | CASTEO {$$=$1;}
     | INCREMENTO {$$=$1;}
     | DECREMENTO {$$=$1;}
-    | ENCAPSULAMIENTO {$$=$1;}
-    | VECTORES {$$=$1;}
-    | OTERNARIO {$$=$1;}
-    | IF {$$=$1;}
-    | SWITCH {$$=$1;}
-    | WHILE {$$=$1;}
-    | FOR {$$=$1;}
-    | DOWHILE {$$=$1;}
-    | DOUNTIL {$$=$1;}
+    //| ENCAPSULAMIENTO {$$=$1;}
+    // | VECTORES {$$=$1;}
+    // | OTERNARIO {$$=$1;}
+    // | IF {$$=$1;}
+    // | SWITCH {$$=$1;}
+    // | WHILE {$$=$1;}
+    // | FOR {$$=$1;}
+    // | DOWHILE {$$=$1;}
+    // | DOUNTIL {$$=$1;}
     | BREAK {$$=$1;}
     | CONTINUE {$$=$1;}
     | RETURN {$$=$1;}
-    | FUNCIONES {$$=$1;}
-    | METODO  {$$=$1;}
+    // | FUNCIONES {$$=$1;}
+    // | METODO  {$$=$1;}
     | EJECUTAR {$$=$1;}
     | PRINT {$$=$1;}
     | PRINTLN {$$=$1;}
-    | TOLOWER {$$=$1;}
+    // | TOLOWER {$$=$1;}
     | TOUPPER {$$=$1;}
     | ROUND {$$=$1;}
-    | LENGTH {$$=$1;}
+    //| LENGTH {$$=$1;}
     | TYPEOF {$$=$1;}
     | TOSTRING {$$=$1;}
-    | TOCHARARRAY {$$=$1;}
+    // | TOCHARARRAY {$$=$1;}
     | PUSH {$$=$1;}
     | POP {$$=$1;}
     | RUN {$$=$1;}
@@ -198,28 +199,11 @@ INSTRUCCION :
 ;
 
 
-// DECLARACIONES:  TIPOS 'expreID' '=' OPERACIONA ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-//     | TIPOS 'expreID' '=' 'cadena' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-//     | TIPOS 'expreID' '=' 'char' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-//     | TIPOS 'expreID' '=' 'bool' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-//     | TIPOS LISTAVARIABLES  '=' OPERACIONA ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-//     | TIPOS LISTAVARIABLES  '=' 'cadena' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-//     | TIPOS LISTAVARIABLES  '=' 'char' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-//     | TIPOS LISTAVARIABLES  '=' 'bool' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-//     | TIPOS LISTAVARIABLES ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
-//     | TIPOS 'expreID' ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
-// ;
-
 DECLARACIONES:  TIPOS EXID '=' OPERACIONA ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
     | TIPOS EXID '=' 'cadena' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
     | TIPOS EXID '=' 'char' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
     | TIPOS EXID '=' 'bool' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | TIPOS LISTAVARIABLES  '=' OPERACIONA ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | TIPOS LISTAVARIABLES  '=' 'cadena' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | TIPOS LISTAVARIABLES  '=' 'char' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | TIPOS LISTAVARIABLES  '=' 'bool' ';' {$$= new Declaracion($2,$1,$4,@1.first_line,@1.first_column); }
-    | TIPOS LISTAVARIABLES ';' {$$= new Declaracion($2,$1,@1.first_line,@1.first_column); }
-    | TIPOS 'expreID' ';' {$$= new Declaracion($2,$1,[],@1.first_line,@1.first_column); }
+    | TIPOS EXID ';' {$$= new Declaracion($2,$1,[],@1.first_line,@1.first_column); }
 ;
 
 
@@ -227,20 +211,12 @@ EXID: EXID ',' 'expreID' {$1.push($3); $$ =$1;}
         | 'expreID' {$$ = [$1]}
 ;
 
-// LISTAVARIABLES: 'expreID' LISTAVARIABLES2 {$$=$2;}
-// ;
-
-// LISTAVARIABLES2: ',' 'expreID' LISTAVARIABLES2 {$$=$2;}
-//                 | ',' 'expreID' {$$=$2;}
-// ;
-
-
-// ASIGNACIONES: 'expreID' '=' OPERACIONA ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
-//             | 'expreID' '=' 'cadena' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
-//             | 'expreID' '=' 'bool' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
-//             | 'expreID' '=' 'char' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
-//             | 'expreID' '=' 'expreID' ';'  {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
-// ;
+ASIGNACIONES: EXID '=' OPERACIONA ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
+            | EXID '=' 'cadena' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
+            | EXID '=' 'bool' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
+            | EXID '=' 'char' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
+            | EXID '=' EXID ';'  {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
+;
 
 OPERACIONA: OPERACIONA EXPRESIONES {$$=$1;}
             | EXPRESIONES {$$=$1;}
@@ -283,13 +259,13 @@ LOGICO: EXPRESION '|' EXPRESION {$$=$1 + '|' + $3;}
 //         | TIPOS 'expreID' '=' '(' TIPOS ')' 'bool' ';' {$$= new Casteo($2, $1, $5, $7);}
 // ;
 
-// INCREMENTO: 'expreID' '++' ';' {$$= new Incremento($1);}
-//         | '++' 'expreID' ';' {$$= new Incremento($2);}
-// ;
+INCREMENTO: 'expreID' '++' ';' {$$= new Incremento($1,$2);}
+        | '++' 'expreID' ';' {$$= new Incremento($2,$1);}
+;
 
-// DECREMENTO: 'expreID' '--' ';' {$$= new Decremento($1);}
-//         | '--' 'expreID' ';' {$$= new Decremento($2);}
-// ;
+DECREMENTO: 'expreID' '--' ';' {$$= new Decremento($1,$2);}
+        | '--' 'expreID' ';' {$$= new Decremento($2,$1);}
+;
 
 
 // ENCAPSULAMIENTO: '{' LISTAINSTRUCCIONES '}' { $$= new Bloque($2,@1.first_line,@1.first_column);}
@@ -394,14 +370,16 @@ TIPOS: 'pr_int' {$$=$1;}
 //         | 'pr_do' '{' LISTAINSTRUCCIONES '}' 'pr_until' '(' OPERACIONA ')' ';' {$$ = new DoUntil($3);}
 // ;
 
-// BREAK: 'pr_break' ';' {$$=new Break($1);}
-// ;
+BREAK: 'pr_break' ';' {$$=new Break($1);}
+;
 
-// CONTINUE: 'pr_continue' ';' {$$=new Continue($1);}
-// ;
+CONTINUE: 'pr_continue' ';' {$$=new Continue($1);}
+;
 
-// RETURN: 'pr_return' ';' {$$=new Return($1);}
-// ;
+RETURN: 'pr_return' ';' {$$=new Return($1,$1);}
+    | 'pr_return' OPERACIONA ';' {$$=new Return($1,$2);}
+    | 'pr_return' EXID ';' {$$=new Return($1,$2);}
+;
 
 
 // FUNCIONES: 'expreID' '(' LISTAPARAMETROS ')' ':' TIPOS '{' LISTAINSTRUCCIONES '}' {$$=new Funcion($8);}
@@ -418,74 +396,82 @@ TIPOS: 'pr_int' {$$=$1;}
         
 // ;
 
-// EJECUTAR: 'expreID' '(' ')' ';' {$$= new Ejecutar($1);}
-// ;
+EJECUTAR: EXID '(' ')' ';' {$$= new Ejecutar($1);}
+;
 
 
-// PRINT: 'pr_print' '(' 'cadena' ')' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_print' '(' 'expreID' ')' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_print' '(' 'cadena' ')' '+' 'expreID' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_print' '(' 'expreID' ')' '+' 'expreID' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_print' '(' 'cadena' ')' '+' OPERACIONA ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_print' '(' 'expreID' ')' '+' OPERACIONA ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-// ;
+PRINT: 'pr_print' '(' 'cadena' ')' ';' {$$= new Print($3,@1.first_line,@1.first_column);}
+    | 'pr_print' '(' 'expreID' ')' ';' {$$= new Print($3,@1.first_line,@1.first_column);}
+    | 'pr_print' '(' 'cadena' ')' '+' 'expreID' ';' {$$= new Print($3,@1.first_line,@1.first_column);}
+    | 'pr_print' '(' 'expreID' ')' '+' 'expreID' ';' {$$= new Print($3,@1.first_line,@1.first_column);}
+    | 'pr_print' '(' 'cadena' ')' '+' OPERACIONA ';' {$$= new Print($3,@1.first_line,@1.first_column);}
+    | 'pr_print' '(' 'expreID' ')' '+' OPERACIONA ';' {$$= new Print($3,@1.first_line,@1.first_column);}
+;
 
-// PRINTLN: 'pr_println' '(' 'cadena' ')' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_println' '(' 'expreID' ')' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_println' '(' 'cadena' ')' '+' 'expreID' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_println' '(' 'expreID' ')' '+' 'expreID' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_println' '(' 'cadena' ')' '+' 'numero' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_println' '(' 'expreID' ')' '+' 'numero' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_println' '(' 'expreID' '+' OPERACIONA ')' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_println' '(' 'cadena' '+' OPERACIONA ')' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_println' '(' 'cadena' '+' 'expreID' '+' 'cadena' ')' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_println' '(' 'expreID' '+' 'expreID' '+' 'cadena' ')' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-//     | 'pr_println' '(' 'expreID' '+' 'cadena' '+' 'expreID' ')' ';' {$$= new Impresion($3,@1.first_line,@1.first_column);}
-// ;
+PRINTLN: 'pr_println' '(' 'cadena' ')' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
+    | 'pr_println' '(' 'expreID' ')' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
+    | 'pr_println' '(' 'cadena' ')' '+' 'expreID' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
+    | 'pr_println' '(' 'expreID' ')' '+' 'expreID' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
+    | 'pr_println' '(' 'cadena' ')' '+' 'numero' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
+    | 'pr_println' '(' 'expreID' ')' '+' 'numero' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
+    | 'pr_println' '(' 'expreID' '+' OPERACIONA ')' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
+    | 'pr_println' '(' 'cadena' '+' OPERACIONA ')' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
+    | 'pr_println' '(' 'cadena' '+' 'expreID' '+' 'cadena' ')' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
+    | 'pr_println' '(' 'expreID' '+' 'expreID' '+' 'cadena' ')' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
+    | 'pr_println' '(' 'expreID' '+' 'cadena' '+' 'expreID' ')' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
+;
 
 // TOLOWER: TIPOS 'expreID' '=' 'pr_tolower' '(' 'cadena' ')' ';' {$$ = new Lower($2);}
 //         | TIPOS 'expreID' '=' 'pr_tolower' '(' 'cadena' '+' 'numero' ')' ';' {$$= new Lower($2);}
 // ;
 
-// TOUPPER: TIPOS 'expreID' '=' 'pr_toupper' '(' 'cadena' ')' ';' {$$ = new Upper($2);}
-//         | TIPOS 'expreID' '=' 'pr_toupper' '(' 'cadena' '+' 'numero' ')' ';' {$$= new Upper($2);}
-// ;
+TOUPPER: TIPOS EXID '=' 'pr_toupper' '(' 'cadena' ')' ';' {$$ = new Upper($2,$6);}
+        | TIPOS EXID '=' 'pr_toupper' '(' 'cadena' '+' 'numero' ')' ';' {$$= new Upper($2,$6);}
+        | EXID '=' 'pr_toupper' '(' 'cadena' ')' ';' {$$ = new Upper($1,$5);}
+        | EXID '=' 'pr_toupper' '(' 'cadena' '+' OPERACIONA ')' ';' {$$= new Upper($1, $5);}
+;
 
-// ROUND: TIPOS 'expreID' '=' 'pr_round' '(' OPERACIONA ')' ';' {$$= new Round($2);}
-// ;
+ROUND: TIPOS EXID '=' 'pr_round' '(' OPERACIONA ')' ';' {$$= new Round($2,$6);}
+    | EXID '=' 'pr_round' '(' OPERACIONA ')' ';' {$$= new Round($1,$5);}
+;
 
 
-// LENGTH:  TIPOS 'expreID' '=' 'pr_length' '(' 'expreID' ')' ';' {$$= new Length($2);}
+// LENGTH:  TIPOS 'expreID' '=' 'pr_length' '(' 'expreID' ')' ';' {$$= new Length($2,$6);}
 //         | TIPOS 'expreID' '=' 'pr_length' '(' 'expreID' '[' 'numero' ']' ')' ';' {$$= new Length($2);}
 //         |'pr_length' '(' 'expreID' ')' ';' {$$= new Length($3);}
 // ;
 
-// TYPEOF: 'pr_typeof' '(' 'numero' ')' ';' {$$ = new Typeof($3);}
-//         |TIPOS 'expreID' '=' 'pr_typeof' '(' 'numero' ')' ';' {$$= new Typeof($2); }
-//         |TIPOS 'expreID' '=' 'pr_typeof' '(' 'expreID' ')' ';' {$$= new Typeof($2); }
-// ;
+TYPEOF: 'pr_typeof' '(' 'numero' ')' ';' {$$ = new Typeof($3,$3);}
+        |TIPOS EXID '=' 'pr_typeof' '(' 'numero' ')' ';' {$$= new Typeof($2,$6); }
+        |TIPOS EXID '=' 'pr_typeof' '(' 'cadena' ')' ';' {$$= new Typeof($2,$6); }
+        |TIPOS EXID '=' 'pr_typeof' '(' 'bool' ')' ';' {$$= new Typeof($2,$6); }
+        |TIPOS EXID '=' 'pr_typeof' '(' 'caracter' ')' ';' {$$= new Typeof($2,$6); }
+        |TIPOS EXID '=' 'pr_typeof' '(' EXID ')' ';' {$$= new Typeof($2,$6); }
+;
 
-// TOSTRING: 'pr_tostring' '(' 'numero' ')' ';' {$$ = new ToString($3);}
-//         |TIPOS 'expreID' '=' 'pr_tostring' '(' OPERACIONA ')' ';' {$$= new ToString($6); }
-//         |TIPOS 'expreID' '=' 'pr_tostring' '(' 'expreID' ')' ';' {$$= new ToString($6); }
-//         |TIPOS 'expreID' '=' 'pr_tostring' '(' 'bool' ')' ';' {$$= new ToString($6); }
-// ;
+TOSTRING: 'pr_tostring' '(' 'numero' ')' ';' {$$ = new ToString($3,$3);}
+        |TIPOS EXID '=' 'pr_tostring' '(' OPERACIONA ')' ';' {$$= new ToString($2,$6); }
+        |TIPOS EXID '=' 'pr_tostring' '(' EXID ')' ';' {$$= new ToString($2,$6); }
+        |TIPOS EXID '=' 'pr_tostring' '(' 'cadena' ')' ';' {$$= new ToString($2,$6); }
+        |TIPOS EXID '=' 'pr_tostring' '(' 'caracter' ')' ';' {$$= new ToString($2,$6); }
+        |TIPOS EXID '=' 'pr_tostring' '(' 'bool' ')' ';' {$$= new ToString($2,$6); }
+;
 
 
-// PUSH: 'expreID' '.' 'pr_push' '(' OPERACIONA ')' ';' {$$= new Push($5);}
-//     | 'expreID' '.' 'pr_push' '(' 'cadena' ')' ';' {$$= new Push($5);}
-//     | 'expreID' '.' 'pr_push' '(' 'caracter' ')' ';' {$$= new Push($5);}
-//     | 'expreID' '.' 'pr_push' '(' ')' ';' {$$= new Push($5);}
-// ;
+PUSH: EXID '.' 'pr_push' '(' OPERACIONA ')' ';' {$$= new Push($1,$5);}
+    | EXID '.' 'pr_push' '(' 'cadena' ')' ';' {$$= new Push($1,$5);}
+    | EXID '.' 'pr_push' '(' 'caracter' ')' ';' {$$= new Push($1,$5);}
+    | EXID '.' 'pr_push' '(' ')' ';' {$$= new Push($1,$1);}
+;
 
-// POP: 'expreID' '.' 'pr_pop' '(' OPERACIONA ')' ';' {$$= new Pop($5);}
-//     | 'expreID' '.' 'pr_pop' '(' 'cadena' ')' ';' {$$= new Pop($5);}
-//     | 'expreID' '.' 'pr_pop' '(' 'caracter' ')' ';' {$$= new Pop($5);}
-//     | 'expreID' '.' 'pr_pop' '(' ')' ';' {$$= new Pop($5);}
-// ;
+POP: EXID '.' 'pr_pop' '(' OPERACIONA ')' ';' {$$= new Pop($1);}
+    | EXID '.' 'pr_pop' '(' 'cadena' ')' ';' {$$= new Pop($1);}
+    | EXID '.' 'pr_pop' '(' 'caracter' ')' ';' {$$= new Pop($1);}
+    | EXID '.' 'pr_pop' '(' ')' ';' {$$= new Pop($1);}
+;
 
-// RUN: 'pr_run' 'expreID' '(' ')' ';' {$$= new Run($2);}
-//     | 'pr_run' 'expreID' '(' OPERACIONA ')' ';' {$$= new Run($2);}
-//     | 'pr_run' 'expreID' '(' 'cadena' ')' ';' {$$= new Run($2);}
-//     | 'pr_run' 'expreID' '(' 'caracter' ')' ';' {$$= new Run($2);}
-// ;
+RUN: 'pr_run' EXID '(' ')' ';' {$$= new Run($2,$2);}
+    | 'pr_run' EXID '(' OPERACIONA ')' ';' {$$= new Run($2,$4);}
+    | 'pr_run' EXID '(' 'cadena' ')' ';' {$$= new Run($2,$4);}
+    | 'pr_run' EXID '(' 'caracter' ')' ';' {$$= new Run($2,$4);}
+;

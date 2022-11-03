@@ -1,5 +1,6 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/Nodo";
 
 export class Ejecutar extends Instruccion {
 
@@ -26,5 +27,16 @@ export class Ejecutar extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoEjec = new nodo("<EJECUTAR>");
+        //nodoDec.agregarHijo(this.tipo);
+        // this.nombre.forEach(id => {
+        //     nodoDec.agregarHijo(id);
+        // });
+        nodoEjec.agregarHijo(this.nombre);
+        //nodoEjec.agregarHijo(this.contenido);
+        return nodoEjec;
     }
 }

@@ -1,5 +1,6 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/Nodo";
 
 export class Run extends Instruccion {
 
@@ -13,7 +14,7 @@ export class Run extends Instruccion {
 
     public ejecutar():any {
         //console.log("Encontre un lower, nombre:"+this.nombre +" , contenido:  " + this.contenido + " lo encontre en la linea "+this.line);
-        console.log("Encontre un run");
+        console.log("Encontre un run, nombre"+this.nombre+ " contenido:"+this.contenido);
         //metodo para guardar la variable, tabla de simbolos
 
 
@@ -27,5 +28,17 @@ export class Run extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+
+    public getNodo() {
+        var nodoRun = new nodo("<RUN>");
+        //nodoDec.agregarHijo(this.tipo);
+        // this.nombre.forEach(id => {
+        //     nodoDec.agregarHijo(id);
+        // });
+        nodoRun.agregarHijo(this.nombre);
+        nodoRun.agregarHijo(this.contenido);
+        return nodoRun;
     }
 }

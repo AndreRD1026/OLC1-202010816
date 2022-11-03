@@ -1,5 +1,6 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/Nodo";
 
 export class Break extends Instruccion {
 
@@ -26,5 +27,16 @@ export class Break extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoBreak = new nodo("<BREAK>");
+        //nodoDec.agregarHijo(this.tipo);
+        // this.nombre.forEach(id => {
+        //     nodoDec.agregarHijo(id);
+        // });
+        nodoBreak.agregarHijo("Break");
+        //nodoEjec.agregarHijo(this.contenido);
+        return nodoBreak;
     }
 }

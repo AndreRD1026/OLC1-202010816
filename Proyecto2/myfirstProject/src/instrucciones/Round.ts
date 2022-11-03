@@ -1,5 +1,6 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/Nodo";
 
 export class Round extends Instruccion {
 
@@ -27,5 +28,18 @@ export class Round extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoTypeof = new nodo("<ROUND>");
+        //nodoDec.agregarHijo(this.tipo);
+        // this.nombre.forEach(id => {
+        //     nodoDec.agregarHijo(id);
+        // });
+        
+        nodoTypeof.agregarHijo(this.nombre);
+        nodoTypeof.agregarHijo("=");
+        nodoTypeof.agregarHijo(this.contenido);
+        return nodoTypeof;
     }
 }

@@ -8,6 +8,7 @@
 
 //Seccion de declaraciones
 
+/*
 int nuevo = 24+34/12;
 int prueba = 22;
 string cadenas, cadena1, cadena2 = "olc";
@@ -15,3 +16,57 @@ string cadenas, cadena1, cadena2 = "olc";
 
 //string pruebasss;
 //int otros;
+
+print("arbol");
+print(exacto);
+
+int pruebas, pruebas2, pruebasjison;
+
+println("sale compi");
+
+universidad= (15+100/200)+234;
+
+prueba++;
+
+++salida;
+
+
+var_1--;
+
+
+--var_3; */
+
+/*
+break;
+
+continue;
+
+return;
+
+return n3;
+
+run funcion1();
+
+run prueba("hola");
+
+vector1.pop();
+
+
+edades.push(50-89*4);
+
+
+
+string a_1=typeof(15);
+    string a_2=typeof(15+6.5);
+    string a_3=typeof('a');
+    string a_4=typeof(true);
+    string a_5=typeof("dsafdsa");
+    string a_5=tostring("melmv");
+    string a_5=tostring(15);
+    string a_5=tostring(15.23+9.02);
+    string a_5=tostring(true);
+
+*/
+
+double  val1= round(5.800);
+        val1= round(5.800+1.2+0.5);

@@ -33,7 +33,8 @@ const {Push} = require('../instrucciones/Push.ts')
 const {Pop} = require('../instrucciones/Pop.ts')
 const {Run} = require('../instrucciones/Run.ts')
 const {Prueba} = require('../instrucciones/Prueba.ts')
-//const { error } =require("../tool/error")
+const { Singleton}=  require("../Singleton/Singleton")
+const { error } =require("../tool/error")
 
 %}
 
@@ -126,9 +127,15 @@ bool    "true"|"false"
 
 <<EOF>>		            return 'EOF'
 
-.   { 
-        console.log("error lexico: "+yytext +"En la linea: " + yylloc.first_line +", En la columna: "+ yylloc.first_column);
-        //let s = s.add_error(new error("Lexico","No se reconoce el caracter "+yytext,yylineno+1,yylloc.first_column+1));
+// .   { 
+//         console.log("error lexico: "+yytext +"En la linea: " + yylloc.first_line +", En la columna: "+ yylloc.first_column);
+//         errores.push(new MiError(yylloc.first_line, yylloc.first_column ,TypeError.LEXICO ,"ERROR LEXICO EN"+yytext));
+//         //let s = s.add_error(new error("Lexico","No se reconoce el caracter "+yytext,yylineno+1,yylloc.first_column+1));
+//     }
+
+.      { 
+        let s= Singleton.getInstance()
+        s.add_error(new error("Lexico","No se reconoce el caracter "+yytext,yylineno+1,yylloc.first_column+1));
     }
 
 
@@ -169,7 +176,7 @@ INSTRUCCION :
     | CASTEO {$$=$1;}
     | INCREMENTO {$$=$1;}
     | DECREMENTO {$$=$1;}
-    //| ENCAPSULAMIENTO {$$=$1;}
+    | ENCAPSULAMIENTO {$$=$1;}
     // | VECTORES {$$=$1;}
     // | OTERNARIO {$$=$1;}
     // | IF {$$=$1;}
@@ -196,7 +203,8 @@ INSTRUCCION :
     | PUSH {$$=$1;}
     | POP {$$=$1;}
     | RUN {$$=$1;}
-    | error {console.log($1);}
+    | error {let s= Singleton.getInstance()
+        s.add_error(new error("Sintactico","No se esperaba el caracter "+yytext,yylineno+1,@1.first_column+1));}
 ;
 
 
@@ -269,9 +277,9 @@ DECREMENTO: 'expreID' '--' ';' {$$= new Decremento($1,$2);}
 ;
 
 
-// ENCAPSULAMIENTO: '{' LISTAINSTRUCCIONES '}' { $$= new Bloque($2,@1.first_line,@1.first_column);}
-//                 | '{' 'cadena' ',' 'cadena' '}' { $$= new Bloque($4,@1.first_line,@1.first_column);}
-// ;
+ENCAPSULAMIENTO: '{' LISTAINSTRUCCIONES '}' { $$= new Bloque($2,@1.first_line,@1.first_column);}
+                | '{' 'cadena' ',' 'cadena' '}' { $$= new Bloque($4,@1.first_line,@1.first_column);}
+;
 
 // VECTORES: DECLARARVECTOR {$$=$1;}
 //         | ACCESOVECTOR {$$=$1;}
@@ -390,10 +398,10 @@ LISTAPARAMETROS: TIPOS 'expreID' {$$=$2;$$=$1;}
                 | LISTAPARAMETROS ',' TIPOS 'expreID' {$$=$1;}
 ;
 
-// METODO: 'expreID' '(' ')' ':' 'pr_void' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($7);}
-//         | 'expreID' '(' ')' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($5);}
-//         | 'expreID' '(' 'LISTAPARAMETROS' ')' ':' 'pr_void' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($7);}
-//         | 'expreID' '(' 'LISTAPARAMETROS' ')' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($5);}
+// METODO: EXID '(' ')' ':' 'pr_void' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($7);}
+//         | EXID '(' ')' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($5);}
+//         | EXID '(' 'LISTAPARAMETROS' ')' ':' 'pr_void' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($7);}
+//         | EXID '(' 'LISTAPARAMETROS' ')' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($5);}
         
 // ;
 
@@ -437,8 +445,8 @@ ROUND: TIPOS EXID '=' 'pr_round' '(' OPERACIONA ')' ';' {$$= new Round($2,$6);}
 ;
 
 
-// LENGTH:  TIPOS 'expreID' '=' 'pr_length' '(' 'expreID' ')' ';' {$$= new Length($2,$6);}
-//         | TIPOS 'expreID' '=' 'pr_length' '(' 'expreID' '[' 'numero' ']' ')' ';' {$$= new Length($2);}
+// LENGTH:  TIPOS EXID '=' 'pr_length' '(' EXID ')' ';' {$$= new Length($2,$6);}
+//         | TIPOS EXID '=' 'pr_length' '(' EXID '[' 'numero' ']' ')' ';' {$$= new Length($2);}
 //         |'pr_length' '(' 'expreID' ')' ';' {$$= new Length($3);}
 // ;
 

@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
 import nodo from "../Abstract/nodo";
 import { exec } from "child_process";
+import { Singleton } from "../Singleton/Singleton";
 
 
 class ApiController {
+
+  //public pruebaas:string ="";
+  
   public async funcion1(req: Request, res: Response) {
     
     try {
@@ -18,6 +22,7 @@ class ApiController {
               //instruccion.ejecutar(env);
               instruccion.ejecutar();
               instrucciones.agregarHijo_nodo(instruccion.getNodo());
+              
           } catch (error) {
               console.log(error);
               
@@ -67,6 +72,7 @@ class ApiController {
     //try {
         const parser = require("../grammar/grammar.js");
         const fs = require("fs");
+        const s= Singleton.getInstance();
         var instrucciones = new nodo("<LISTA_INSTRUCCIONES>");
         //const entrada = fs.readFileSync("src/entrada1.txt");
         const peticion = req.body.peticion;
@@ -79,9 +85,15 @@ class ApiController {
                 instrucciones.agregarHijo_nodo(instruccion.getNodo());
             } catch (error) {
                 console.log(error);
+                s.add_error(error)
                 
             }
     }
+      createFile("errores.html", s.get_error())
+      //createFile("/frontend/frontend/src/app/components/errores/ast.component.html", s.get_error())
+      createFile("/frontend/frontend/src/app/components/ast/ast.component.html", s.get_error())
+      createFile("/frontend/frontend/src/app/components/errores/errores.component.html", s.get_error())
+      //this.pruebaas = s.get_error()
         var grafo = "";
         grafo = getDot(instrucciones);
         console.log(grafo);
@@ -116,26 +128,10 @@ class ApiController {
         console.log('>> The file ' + nameFile + ' has been saved!');
     })
 }
-      res.json({ msg: "exito :D " + req.body.nombre });
+      res.json({ msg: "exito :D "});
     //} catch (error) {
     //  res.status(400).send({ msg: "error en funcion" });
     //}
-  }
-
-  public async funcion3(req: Request, res: Response) {
-    try {
-      res.json({ msg: "hola mundo " + req.params.nombre });
-    } catch (error) {
-      res.status(400).send({ msg: "error en funcion" });
-    }
-  }
-
-  public async funcion4(req: Request, res: Response) {
-    try {
-      res.json({ msg: "hola mundo " + req.headers.nombre });
-    } catch (error) {
-      res.status(400).send({ msg: "error en funcion" });
-    }
   }
 }
 

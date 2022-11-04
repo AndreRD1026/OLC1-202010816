@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AstComponent } from './components/ast/ast.component';
 import { FormsModule } from '@angular/forms';
+import { ErroresComponent } from './components/errores/errores.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    AstComponent
+    AstComponent,
+    ErroresComponent
   ],
   imports: [
     BrowserModule,

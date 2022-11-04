@@ -1,15 +1,6 @@
-//import { Instruccion } from "../abstractas/instruccion"
-
-import { Instruccion } from "../abstractas/instruccion"
-
 export class Singleton {
     private static instance: Singleton
     private error: string = ""
-    private ast: string = ""
-    private entorno: string = ""
-    private consola: string = ""
-    //private pila: Instruction[] = []
-    private pila: Instruccion[] = []
 
     private constructor() { }
 
@@ -53,28 +44,4 @@ export class Singleton {
         </table>`
     }
 
-    public add_ast(data: string) {
-        this.ast += data
-    }
-    public get_ast(): string {
-        return this.ast
-    }
-    public add_consola(data: string) {
-        this.consola += data
-    }
-    public get_consola(): string {
-        return this.consola
-    }
-    /**
-     * add_pila
-     */
-    public add_pila(data:Instruccion) {
-        this.pila.push(data)
-    }
-    public add_entorno(data:string){
-        this.entorno+=data
-    }
-    public get_entorno():string{
-        return this.entorno
-    }
 }

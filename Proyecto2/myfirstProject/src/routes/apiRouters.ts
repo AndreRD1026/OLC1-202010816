@@ -11,10 +11,9 @@ class ApiRoutes {
   }
 
   config(): void {
-    this.router.get("/usuario", apiController.funcion1);
-    this.router.post("/usuario1", apiController.funcion2);
-    //this.router.get("/:nombre", apiController.funcion3);
-    //this.router.get("/saludo/:nombre", apiController.funcion4);
+    this.router.get("/", apiController.funcion1);
+    this.router.post("/", apiController.funcion2);
+   //this.router.post("/", apiController.funcion3);
   }
 }
 

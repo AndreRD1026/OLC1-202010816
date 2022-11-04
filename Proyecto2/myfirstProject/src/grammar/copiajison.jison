@@ -189,7 +189,8 @@ INSTRUCCION :
     | PUSH {$$=$1;}
     | POP {$$=$1;}
     | RUN {$$=$1;}
-    | error {console.log("error sintactico")}
+    | error {let s=Singleton.getInstance();
+                s.add_error(new error("Sintactico", "No se esperaba el caracter" + yytext, yylineno+1, yylloc.first_column+1)}
 ;
 
 

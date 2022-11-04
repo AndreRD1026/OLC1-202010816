@@ -1,5 +1,6 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/nodo";
 
 export class ToCharArray extends Instruccion {
 
@@ -13,7 +14,7 @@ export class ToCharArray extends Instruccion {
 
     public ejecutar():any {
         //console.log("Encontre un lower, nombre:"+this.nombre +" , contenido:  " + this.contenido + " lo encontre en la linea "+this.line);
-        console.log("Encontre un toCharArray");
+        console.log("Encontre un toCharArray, ");
         //metodo para guardar la variable, tabla de simbolos
 
 
@@ -28,4 +29,18 @@ export class ToCharArray extends Instruccion {
         //validar
     
     }
+
+    public getNodo() {
+        var nodoToCharA = new nodo("<TOCHARARRAY>");
+        //nodoDec.agregarHijo(this.tipo);
+        // this.nombre.forEach(id => {
+        //     nodoDec.agregarHijo(id);
+        // });
+        nodoToCharA.agregarHijo(this.nombre);
+        nodoToCharA.agregarHijo("=");
+        nodoToCharA.agregarHijo(this.contenido);
+        return nodoToCharA;
+    }
+
+
 }

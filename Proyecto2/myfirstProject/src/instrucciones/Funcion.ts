@@ -1,11 +1,15 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/nodo";
 
 export class Funcion extends Instruccion {
 
 
     constructor(
         public nombre: string,
+        public instrucciones: string,
+        public tipo: string,
+        public instrucciones2: string,
         linea: number, columna:number) {
         super(linea,columna);
     }
@@ -26,5 +30,20 @@ export class Funcion extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoFuncion = new nodo("<FUNCION>");
+        //nodoDec.agregarHijo(this.tipo);
+        // this.nombre.forEach(id => {
+        //     nodoDec.agregarHijo(id);
+        // });
+        
+        nodoFuncion.agregarHijo(this.nombre);
+        nodoFuncion.agregarHijo(this.instrucciones);
+        nodoFuncion.agregarHijo(this.tipo);
+        //nodoFuncion.agregarHijo("=");
+        nodoFuncion.agregarHijo(this.instrucciones2);
+        return nodoFuncion;
     }
 }

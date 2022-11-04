@@ -1,0 +1,11 @@
+digraph grph {
+nodo0[label="<LISTA_INSTRUCCIONES>"];
+nodo1[label="<DECLARACION>"];
+nodo0->nodo1;
+nodo2[label="int"];
+nodo1->nodo2;
+nodo3[label="varible_1"];
+nodo1->nodo3;
+nodo4[label=""];
+nodo1->nodo4;
+}

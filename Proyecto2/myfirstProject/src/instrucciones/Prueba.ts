@@ -2,7 +2,7 @@ import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
 import nodo from "../Abstract/nodo";
 
-export class ToString extends Instruccion {
+export class Prueba extends Instruccion {
 
 
     constructor(
@@ -14,7 +14,7 @@ export class ToString extends Instruccion {
 
     public ejecutar():any {
         //console.log("Encontre un lower, nombre:"+this.nombre +" , contenido:  " + this.contenido + " lo encontre en la linea "+this.line);
-        console.log("Encontre un toString");
+        //console.log("Encontre un lower");
         //metodo para guardar la variable, tabla de simbolos
 
 
@@ -31,14 +31,15 @@ export class ToString extends Instruccion {
     }
 
     public getNodo() {
-        var nodoToString = new nodo("<TOSTRING>");
+        var nodoPrueba = new nodo("<Prueba>");
         //nodoDec.agregarHijo(this.tipo);
         // this.nombre.forEach(id => {
         //     nodoDec.agregarHijo(id);
         // });
-        nodoToString.agregarHijo(this.nombre);
-        nodoToString.agregarHijo("=");
-        nodoToString.agregarHijo(this.contenido);
-        return nodoToString;
+        
+        nodoPrueba.agregarHijo(this.nombre);
+        nodoPrueba.agregarHijo("+");
+        nodoPrueba.agregarHijo(this.contenido);
+        return nodoPrueba;
     }
 }

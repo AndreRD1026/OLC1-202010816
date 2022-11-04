@@ -1,5 +1,6 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/nodo";
 
 export class Lower extends Instruccion {
 
@@ -27,5 +28,18 @@ export class Lower extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoToLower = new nodo("<TOLOWER>");
+        //nodoDec.agregarHijo(this.tipo);
+        // this.nombre.forEach(id => {
+        //     nodoDec.agregarHijo(id);
+        // });
+        
+        nodoToLower.agregarHijo(this.nombre);
+        nodoToLower.agregarHijo("=");
+        nodoToLower.agregarHijo(this.contenido);
+        return nodoToLower;
     }
 }

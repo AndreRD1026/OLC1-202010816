@@ -32,6 +32,7 @@ const {ToCharArray} = require('../instrucciones/ToCharArray.ts')
 const {Push} = require('../instrucciones/Push.ts')
 const {Pop} = require('../instrucciones/Pop.ts')
 const {Run} = require('../instrucciones/Run.ts')
+const {Prueba} = require('../instrucciones/Prueba.ts')
 //const { error } =require("../tool/error")
 
 %}
@@ -180,18 +181,18 @@ INSTRUCCION :
     | BREAK {$$=$1;}
     | CONTINUE {$$=$1;}
     | RETURN {$$=$1;}
-    // | FUNCIONES {$$=$1;}
+    | FUNCIONES {$$=$1;}
     // | METODO  {$$=$1;}
     | EJECUTAR {$$=$1;}
     | PRINT {$$=$1;}
     | PRINTLN {$$=$1;}
-    // | TOLOWER {$$=$1;}
+    | TOLOWER {$$=$1;}
     | TOUPPER {$$=$1;}
     | ROUND {$$=$1;}
     //| LENGTH {$$=$1;}
     | TYPEOF {$$=$1;}
     | TOSTRING {$$=$1;}
-    // | TOCHARARRAY {$$=$1;}
+    | TOCHARARRAY {$$=$1;}
     | PUSH {$$=$1;}
     | POP {$$=$1;}
     | RUN {$$=$1;}
@@ -253,11 +254,11 @@ LOGICO: EXPRESION '|' EXPRESION {$$=$1 + '|' + $3;}
         | '!' EXPRESION {$$=$2;}
 ;
 
-// CASTEO: TIPOS 'expreID' '=' '(' TIPOS ')' 'numero' ';' {$$= new Casteo($2, $1, $5, $7);}
-//         | TIPOS 'expreID' '=' '(' TIPOS ')' 'cadena' ';' {$$= new Casteo($2, $1, $5, $7);}
-//         | TIPOS 'expreID' '=' '(' TIPOS ')' 'char' ';' {$$= new Casteo($2, $1, $5, $7);}
-//         | TIPOS 'expreID' '=' '(' TIPOS ')' 'bool' ';' {$$= new Casteo($2, $1, $5, $7);}
-// ;
+CASTEO: TIPOS EXID '=' '(' TIPOS ')' OPERACIONA ';' {$$= new Casteo($1, $2, $5, $7);}
+        | TIPOS EXID '=' '(' TIPOS ')' 'cadena' ';' {$$= new Casteo($2, $1, $5, $7);}
+        | TIPOS EXID '=' '(' TIPOS ')' 'char' ';' {$$= new Casteo($2, $1, $5, $7);}
+        | TIPOS EXID '=' '(' TIPOS ')' 'bool' ';' {$$= new Casteo($2, $1, $5, $7);}
+;
 
 INCREMENTO: 'expreID' '++' ';' {$$= new Incremento($1,$2);}
         | '++' 'expreID' ';' {$$= new Incremento($2,$1);}
@@ -382,12 +383,12 @@ RETURN: 'pr_return' ';' {$$=new Return($1,$1);}
 ;
 
 
-// FUNCIONES: 'expreID' '(' LISTAPARAMETROS ')' ':' TIPOS '{' LISTAINSTRUCCIONES '}' {$$=new Funcion($8);}
-// ;
+FUNCIONES: EXID '(' LISTAPARAMETROS ')' ':' TIPOS '{' LISTAINSTRUCCIONES '}' {$$=new Funcion($1,$3,$6,$8);}
+;
 
-// LISTAPARAMETROS: TIPOS 'expreID' {$$=$1;}
-//                 | LISTAPARAMETROS ',' TIPOS 'expreID' {$$=$1;}
-// ;
+LISTAPARAMETROS: TIPOS 'expreID' {$$=$2;$$=$1;}
+                | LISTAPARAMETROS ',' TIPOS 'expreID' {$$=$1;}
+;
 
 // METODO: 'expreID' '(' ')' ':' 'pr_void' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($7);}
 //         | 'expreID' '(' ')' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($5);}
@@ -421,9 +422,9 @@ PRINTLN: 'pr_println' '(' 'cadena' ')' ';' {$$= new PrintLn($3,@1.first_line,@1.
     | 'pr_println' '(' 'expreID' '+' 'cadena' '+' 'expreID' ')' ';' {$$= new PrintLn($3,@1.first_line,@1.first_column);}
 ;
 
-// TOLOWER: TIPOS 'expreID' '=' 'pr_tolower' '(' 'cadena' ')' ';' {$$ = new Lower($2);}
-//         | TIPOS 'expreID' '=' 'pr_tolower' '(' 'cadena' '+' 'numero' ')' ';' {$$= new Lower($2);}
-// ;
+TOLOWER: TIPOS EXID '=' 'pr_tolower' '(' 'cadena' ')' ';' {$$ = new Lower($2,$6);}
+        | TIPOS EXID '=' 'pr_tolower' '(' PRUEBA ')' ';' {$$= new Lower($2,$6);}
+;
 
 TOUPPER: TIPOS EXID '=' 'pr_toupper' '(' 'cadena' ')' ';' {$$ = new Upper($2,$6);}
         | TIPOS EXID '=' 'pr_toupper' '(' 'cadena' '+' 'numero' ')' ';' {$$= new Upper($2,$6);}
@@ -441,7 +442,7 @@ ROUND: TIPOS EXID '=' 'pr_round' '(' OPERACIONA ')' ';' {$$= new Round($2,$6);}
 //         |'pr_length' '(' 'expreID' ')' ';' {$$= new Length($3);}
 // ;
 
-TYPEOF: 'pr_typeof' '(' 'numero' ')' ';' {$$ = new Typeof($3,$3);}
+TYPEOF: 'pr_typeof' '(' OPERACIONA ')' ';' {$$ = new Typeof($3,$3);}
         |TIPOS EXID '=' 'pr_typeof' '(' 'numero' ')' ';' {$$= new Typeof($2,$6); }
         |TIPOS EXID '=' 'pr_typeof' '(' 'cadena' ')' ';' {$$= new Typeof($2,$6); }
         |TIPOS EXID '=' 'pr_typeof' '(' 'bool' ')' ';' {$$= new Typeof($2,$6); }
@@ -455,6 +456,14 @@ TOSTRING: 'pr_tostring' '(' 'numero' ')' ';' {$$ = new ToString($3,$3);}
         |TIPOS EXID '=' 'pr_tostring' '(' 'cadena' ')' ';' {$$= new ToString($2,$6); }
         |TIPOS EXID '=' 'pr_tostring' '(' 'caracter' ')' ';' {$$= new ToString($2,$6); }
         |TIPOS EXID '=' 'pr_tostring' '(' 'bool' ')' ';' {$$= new ToString($2,$6); }
+;
+
+TOCHARARRAY: 'pr_tochararray' '(' OPERACIONA ')' ';' {$$ = new ToCharArray($3,$3);}
+        |TIPOS '[' ']' EXID '=' 'pr_tochararray' '(' OPERACIONA ')' ';' {$$= new ToCharArray($4,$8); }
+        |TIPOS '[' ']' EXID '=' 'pr_tochararray' '(' EXID ')' ';' {$$= new ToCharArray($4,$8); }
+        |TIPOS '[' ']' EXID '=' 'pr_tochararray' '(' 'cadena' ')' ';' {$$= new ToCharArray($4,$8); }
+        |TIPOS '[' ']' EXID '=' 'pr_tochararray' '(' 'caracter' ')' ';' {$$= new ToCharArray($4,$8); }
+        |TIPOS '[' ']' EXID '=' 'pr_tochararray' '(' 'bool' ')' ';' {$$= new ToCharArray($4,$8); }
 ;
 
 
@@ -474,4 +483,8 @@ RUN: 'pr_run' EXID '(' ')' ';' {$$= new Run($2,$2);}
     | 'pr_run' EXID '(' OPERACIONA ')' ';' {$$= new Run($2,$4);}
     | 'pr_run' EXID '(' 'cadena' ')' ';' {$$= new Run($2,$4);}
     | 'pr_run' EXID '(' 'caracter' ')' ';' {$$= new Run($2,$4);}
+;
+
+
+PRUEBA: 'cadena' '+' OPERACIONA {$$= new Prueba($1,$2);}
 ;

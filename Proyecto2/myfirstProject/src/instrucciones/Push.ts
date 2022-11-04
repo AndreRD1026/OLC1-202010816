@@ -1,6 +1,6 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
-import nodo from "../Abstract/Nodo";
+import nodo from "../Abstract/nodo";
 
 export class Push extends Instruccion {
 

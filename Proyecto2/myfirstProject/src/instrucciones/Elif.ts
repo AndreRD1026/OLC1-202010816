@@ -14,7 +14,7 @@ export class Elif extends Instruccion {
 
     public ejecutar():any {
         //console.log("Encontre una asignacion, nombre:"+this.nombre+" lo encontre en la linea "+this.line);
-        console.log("Encontré un if")
+        console.log("Encontré un elif")
         //metodo para guardar la variable, tabla de simbolos
 
 
@@ -33,8 +33,8 @@ export class Elif extends Instruccion {
     public getNodo() {
         var nodoELIF = new nodo("<ELIF>");
         nodoELIF.agregarHijo("<CONDICION>\n" + this.condicion);
-        this.ListaInst.forEach(dount => {
-            nodoELIF.agregarHijo_nodo(dount.getNodo());
+        this.ListaInst.forEach(elff => {
+            nodoELIF.agregarHijo_nodo(elff.getNodo());
         });
         return nodoELIF;
     }

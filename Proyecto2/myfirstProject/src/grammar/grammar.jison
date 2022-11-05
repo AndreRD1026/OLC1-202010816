@@ -224,19 +224,19 @@ EXID: EXID ',' 'expreID' {$1.push($3); $$ =$1;}
 ;
 
 ASIGNACIONES: EXID '=' OPERACIONA ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
-            | EXID '=' 'cadena' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
-            | EXID '=' 'bool' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
-            | EXID '=' 'char' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
-            | EXID '=' EXID ';'  {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
+        | EXID '=' 'cadena' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
+        | EXID '=' 'bool' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
+        | EXID '=' 'char' ';' {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
+        | EXID '=' EXID ';'  {$$= new Asignacion($1, $3,@1.first_line,@1.first_column);}
 ;
 
 OPERACIONA: OPERACIONA EXPRESIONES {$$=$1;}
-            | EXPRESIONES {$$=$1;}
+        | EXPRESIONES {$$=$1;}
 ;
 
 EXPRESIONES: EXPRESION {$$=$1;}
-            | RELACIONAL {$$=$1;}
-            | LOGICO {$$=$1;}
+        | RELACIONAL {$$=$1;}
+        | LOGICO {$$=$1;}
 ;
 
 EXPRESION: EXPRESION '+' EXPRESION {$$=$1 + '+' + $3;}
@@ -330,8 +330,8 @@ OTERNARIO: EXID '=' EXID '>' 'numero' '?' 'bool' ':' 'bool' ';' {$$= new OTernar
 ;
 
 
-IF: 'pr_if' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' { $$= new If($6,@1.first_line,@1.first_column);}
-    | 'pr_if' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' 'pr_else' '{' LISTAINSTRUCCIONES '}' { $$= new If($6,@1.first_line,@1.first_column);}
+IF: 'pr_if' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' { $$= new If($3,$6,null,null,@1.first_line,@1.first_column);}
+    | 'pr_if' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' 'pr_else' '{' LISTAINSTRUCCIONES '}' { $$= new If($3,$6,null,$10,@1.first_line,@1.first_column);}
     | 'pr_if' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' LISTAELIF 'pr_else' '{' LISTAINSTRUCCIONES '}'  { $$= new If($3,$6,$8,$11,@1.first_line,@1.first_column);}
 ;
 
@@ -414,7 +414,6 @@ METODO: EXID '(' ')' ':' 'pr_void' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($1
         | EXID '(' ')' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($1,null,$5);}
         | EXID '(' LISTAPARAMETROS ')' ':' 'pr_void' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($1,$3,$8);}
         | EXID '(' LISTAPARAMETROS ')' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($1,$3,$6);}
-        
 ;
 
 EJECUTAR: EXID '(' ')' ';' {$$= new Ejecutar($1, null);}
@@ -454,7 +453,7 @@ TOUPPER: TIPOS EXID '=' 'pr_toupper' '(' 'cadena' ')' ';' {$$ = new Upper($2,$6)
 ;
 
 ROUND: TIPOS EXID '=' 'pr_round' '(' OPERACIONA ')' ';' {$$= new Round($2,$6);}
-    | EXID '=' 'pr_round' '(' OPERACIONA ')' ';' {$$= new Round($1,$5);}
+        | EXID '=' 'pr_round' '(' OPERACIONA ')' ';' {$$= new Round($1,$5);}
 ;
 
 

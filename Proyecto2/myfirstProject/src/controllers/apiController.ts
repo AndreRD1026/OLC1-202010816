@@ -107,8 +107,8 @@ class ApiController {
             recorrerAST("nodo0", raiz);
             dot += "}";
             createFile("prueba.dot", dot)
-            //exec('dot -Tpng prueba.dot -o servidor.png ')
-            exec('dot -Tsvg prueba.dot -o servidor.svg')
+            exec('dot -Tpng prueba.dot -o servidor.png ')
+            //exec('dot -Tsvg prueba.dot -o servidor.svg')
             return dot;
         }
     

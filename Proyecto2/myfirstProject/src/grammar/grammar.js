@@ -235,10 +235,10 @@ case 106: case 107: case 108: case 109:
 this.$= new OTernario($$[$0-9],$$[$0-7],$$[$0-5],$$[$0-3],$$[$0-1]);
 break;
 case 110:
- this.$= new If($$[$0-1],_$[$0-6].first_line,_$[$0-6].first_column);
+ this.$= new If($$[$0-4],$$[$0-1],null,null,_$[$0-6].first_line,_$[$0-6].first_column);
 break;
 case 111:
- this.$= new If($$[$0-5],_$[$0-10].first_line,_$[$0-10].first_column);
+ this.$= new If($$[$0-8],$$[$0-5],null,$$[$0-1],_$[$0-10].first_line,_$[$0-10].first_column);
 break;
 case 112:
  this.$= new If($$[$0-9],$$[$0-6],$$[$0-4],$$[$0-1],_$[$0-11].first_line,_$[$0-11].first_column);

@@ -10,7 +10,6 @@ export interface Errores{
   message:string
 }
 
-
 interface Ventana{
   nombre:string;
   code:string;
@@ -23,11 +22,9 @@ interface Ventana{
 })
 export class DashboardComponent implements OnInit {
   public archivos: any = []
-  //ImagePath: string;
   entrada: string;
   salidaeeee: string = "";
   ImagePath: string = "";
-  //tablaError:Array<Errores> = new Array();
   ASTstring:string = "";
 
   constructor(private service: UserService, private _router:Router) { this.entrada = "de unaaaa" }
@@ -47,22 +44,7 @@ export class DashboardComponent implements OnInit {
           text=String(resultado)
           console.log(text.toString());
           this.entrada = text.toString();
-          //index.textarea.code = text.toString();
-          // document.getElementById('textarea');
-          // let saludo = "texto"
-          // //console.log("hola")
-          // //index.textarea.value = saludo;
-          // index.textarea.send = saludo;
-          // let area = document.getElementById('area')
-          // let saludo = "texto"
-          console.log("hola")
           index.textarea.value = text.toString();
-          //area.value = saludo;
-          //index.document.getElementById('textarea')
-          //area.value = saludo;
-          //document.getElementById(index.textarea).value = text.toString
-          //index.textarea.send = text.toString();
-          //index.textarea.
         }
         reader.readAsText(a)
       }

@@ -1,11 +1,14 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/nodo";
 
 export class DoUntil extends Instruccion {
 
 
     constructor(
-        public nombre: string,
+        
+        public ListaInst: Array<Instruccion>,
+        public condicion: string,
         linea: number, columna:number) {
         super(linea,columna);
     }
@@ -27,4 +30,20 @@ export class DoUntil extends Instruccion {
         //validar
     
     }
+
+    public getNodo() {
+        var nodoDoUntil = new nodo("<DOUNTIL>");
+        //var nodoPrueba = new nodo("LISTA");
+        nodoDoUntil.agregarHijo("do");
+        nodoDoUntil.agregarHijo("{");
+        //nodoDoUntil.agregarHijo("<CONDICION>\n" + this.condicion);
+        this.ListaInst.forEach(dount => {
+            nodoDoUntil.agregarHijo_nodo(dount.getNodo());
+        });
+        nodoDoUntil.agregarHijo("}");
+        nodoDoUntil.agregarHijo("until");
+        nodoDoUntil.agregarHijo("<CONDICION>\n" + this.condicion);
+        return nodoDoUntil;
+    }
+    
 }

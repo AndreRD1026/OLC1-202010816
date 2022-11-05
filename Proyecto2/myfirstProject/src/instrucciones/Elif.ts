@@ -2,13 +2,11 @@ import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
 import nodo from "../Abstract/nodo";
 
-export class For extends Instruccion {
+export class Elif extends Instruccion {
 
 
     constructor(
-        public primeracondicion: string,
-        public segundacondicion: string,
-        public terceracondicion: string,
+        public condicion: string,
         public ListaInst: Array<Instruccion>,
         linea: number, columna:number) {
         super(linea,columna);
@@ -16,7 +14,7 @@ export class For extends Instruccion {
 
     public ejecutar():any {
         //console.log("Encontre una asignacion, nombre:"+this.nombre+" lo encontre en la linea "+this.line);
-        console.log("Encontré un for")
+        console.log("Encontré un if")
         //metodo para guardar la variable, tabla de simbolos
 
 
@@ -33,14 +31,11 @@ export class For extends Instruccion {
     }
 
     public getNodo() {
-        var nodoFor = new nodo("<FOR>");
-        nodoFor.agregarHijo("<PRIMERA>\n" + this.primeracondicion);
-        nodoFor.agregarHijo("<SEGUNDA>\n" + this.segundacondicion);
-        nodoFor.agregarHijo("<TERCERA>\n" + this.terceracondicion);
-        //nodoDoUntil.agregarHijo("<CONDICION>\n" + this.condicion);
+        var nodoELIF = new nodo("<ELIF>");
+        nodoELIF.agregarHijo("<CONDICION>\n" + this.condicion);
         this.ListaInst.forEach(dount => {
-            nodoFor.agregarHijo_nodo(dount.getNodo());
+            nodoELIF.agregarHijo_nodo(dount.getNodo());
         });
-        return nodoFor;
+        return nodoELIF;
     }
 }

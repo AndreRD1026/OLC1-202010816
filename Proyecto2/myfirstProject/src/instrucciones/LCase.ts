@@ -2,19 +2,19 @@ import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
 import nodo from "../Abstract/nodo";
 
-export class Length extends Instruccion {
+export class LCase extends Instruccion {
 
 
     constructor(
         public nombre: string,
-        public contenido: string,
+        public instrucciones: string[],
         linea: number, columna:number) {
         super(linea,columna);
     }
 
     public ejecutar():any {
         //console.log("Encontre un lower, nombre:"+this.nombre +" , contenido:  " + this.contenido + " lo encontre en la linea "+this.line);
-        console.log("Encontre un length");
+        console.log("Encontre un Case");
         //metodo para guardar la variable, tabla de simbolos
 
 
@@ -31,19 +31,12 @@ export class Length extends Instruccion {
     }
 
     public getNodo() {
-        var nodoLength = new nodo("<LENGTH>");
-        //nodoDec.agregarHijo(this.tipo);
-        // this.nombre.forEach(id => {
-        //     nodoDec.agregarHijo(id);
-        // });
-        if (this.nombre == null){
-            nodoLength.agregarHijo(this.contenido);
-        }else{
-            nodoLength.agregarHijo(this.nombre);
-            nodoLength.agregarHijo("=");
-            nodoLength.agregarHijo(this.contenido);
-        }
-        
-        return nodoLength;
+        var nodoLCase = new nodo("<CASE>");
+        nodoLCase.agregarHijo(this.nombre);
+        //nodoPrint.agregarHijo(this.tipo);
+        this.instrucciones.forEach(id => {
+            nodoLCase.agregarHijo(id);
+        });
+        return nodoLCase;
     }
 }

@@ -1,11 +1,14 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/nodo";
 
 export class Metodo extends Instruccion {
 
 
     constructor(
         public nombre: string,
+        public parametros: string,
+        public ListaInstruc: Array<Instruccion>,
         linea: number, columna:number) {
         super(linea,columna);
     }
@@ -26,5 +29,24 @@ export class Metodo extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoMetodo = new nodo("<METOODO>");
+        if (this.parametros == null){
+            nodoMetodo.agregarHijo(this.nombre);
+            this.ListaInstruc.forEach(lis => {
+                nodoMetodo.agregarHijo_nodo(lis.getNodo());
+            });
+
+        }else{
+            nodoMetodo.agregarHijo(this.nombre);
+            nodoMetodo.agregarHijo(this.parametros)
+            this.ListaInstruc.forEach(lis1 => {
+                nodoMetodo.agregarHijo_nodo(lis1.getNodo());
+            });
+        }
+        
+        return nodoMetodo;
     }
 }

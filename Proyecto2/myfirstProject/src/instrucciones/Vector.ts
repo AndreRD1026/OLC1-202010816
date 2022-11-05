@@ -1,11 +1,15 @@
 import { Instruccion } from "../abstractas/instruccion";
-import { Env } from "../symbols/env";
+//import { Env } from "../symbols/env";
+import nodo from "../Abstract/nodo";
 
 export class Vector extends Instruccion {
 
 
     constructor(
-        public nombre: string,
+        public tipo: string,
+        public nombre:string,
+        public tipo2: string,
+        public contenido:string,
         linea: number, columna:number) {
         super(linea,columna);
     }
@@ -26,5 +30,16 @@ export class Vector extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoVector = new nodo("<VECTOR>");
+        nodoVector.agregarHijo(this.tipo);
+        nodoVector.agregarHijo(this.nombre);
+        nodoVector.agregarHijo(this.tipo2);
+        nodoVector.agregarHijo("[");
+        nodoVector.agregarHijo(this.contenido);
+        nodoVector.agregarHijo("]");
+        return nodoVector;
     }
 }

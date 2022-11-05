@@ -44,4 +44,8 @@ export class Singleton {
         </table>`
     }
 
+    public clean(){
+        this.error = '';
+    }
+
 }

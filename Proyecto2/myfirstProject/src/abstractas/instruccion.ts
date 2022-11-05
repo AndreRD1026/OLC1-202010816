@@ -1,3 +1,4 @@
+import nodo from "../Abstract/nodo";
 import { Env } from "../symbols/env";
 
 export abstract class Instruccion{
@@ -7,5 +8,6 @@ export abstract class Instruccion{
         this.column = column;
     }
     
-    public abstract ejecutar(Env: Env):any;
+    public abstract ejecutar():any;
+    public abstract getNodo():nodo;
 }

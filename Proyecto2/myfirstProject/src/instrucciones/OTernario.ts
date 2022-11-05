@@ -1,11 +1,15 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
-
+import nodo from "../Abstract/nodo";
 export class OTernario extends Instruccion {
 
 
     constructor(
         public nombre: string,
+        public nombre2: string,
+        public siguiente: string,
+        public izquierda: string,
+        public derecha: string,
         linea: number, columna:number) {
         super(linea,columna);
     }
@@ -27,4 +31,17 @@ export class OTernario extends Instruccion {
         //validar
     
     }
+
+    public getNodo() {
+        var nodoOperT = new nodo("<OPERADORTERNARIO>");
+        nodoOperT.agregarHijo(this.nombre);
+        nodoOperT.agregarHijo(this.nombre2);
+        nodoOperT.agregarHijo(this.siguiente);
+        nodoOperT.agregarHijo("?");
+        nodoOperT.agregarHijo(this.izquierda);
+        nodoOperT.agregarHijo(":");
+        nodoOperT.agregarHijo(this.derecha);
+        return nodoOperT;
+    }
+
 }

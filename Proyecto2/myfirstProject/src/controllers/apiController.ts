@@ -70,6 +70,7 @@ class ApiController {
 
   public async funcion2(req: Request, res: Response) {
     //try {
+        var concatenar = "";
         const parser = require("../grammar/grammar.js");
         const fs = require("fs");
         const s= Singleton.getInstance();
@@ -86,17 +87,15 @@ class ApiController {
             } catch (error) {
                 console.log(error);
                 s.add_error(error)
+                //concatenar += s.add_error(error);
                 
             }
     }
-      createFile("errores.html", s.get_error())
-      //createFile("/frontend/frontend/src/app/components/errores/ast.component.html", s.get_error())
-      createFile("/frontend/frontend/src/app/components/ast/ast.component.html", s.get_error())
-      createFile("/frontend/frontend/src/app/components/errores/errores.component.html", s.get_error())
-      //this.pruebaas = s.get_error()
+        //concatenar += s.get_error()
+        //console.log(concatenar);  
         var grafo = "";
         grafo = getDot(instrucciones);
-        console.log(grafo);
+        //console.log(grafo);
         var dot = "";
         var c = 0;
     
@@ -108,7 +107,8 @@ class ApiController {
             recorrerAST("nodo0", raiz);
             dot += "}";
             createFile("prueba.dot", dot)
-            exec('dot -Tpng prueba.dot -o servidor.png ')
+            //exec('dot -Tpng prueba.dot -o servidor.png ')
+            exec('dot -Tsvg prueba.dot -o servidor.svg')
             return dot;
         }
     
@@ -124,7 +124,7 @@ class ApiController {
         }
 
         function createFile(nameFile: string, data: string) {
-    fs.writeFile(nameFile, data, () => {
+        fs.writeFile(nameFile, data, () => {
         console.log('>> The file ' + nameFile + ' has been saved!');
     })
 }
@@ -133,6 +133,69 @@ class ApiController {
     //  res.status(400).send({ msg: "error en funcion" });
     //}
   }
+
+
+  public async funcion3(req: Request, res: Response) {
+      var concatenar1 = "";
+      const parser = require("../grammar/grammar.js");
+      const fs = require("fs");
+      const s= Singleton.getInstance();
+      const peticion = req.body.peticion;
+      const ast1 = parser.parse(peticion.toString());
+
+      for (const instruccion1 of ast1) {
+          try {
+              instruccion1.ejecutar();
+          } catch (error) {
+              console.log(error);
+              s.add_error(error)
+          }
+  }
+    createFile("errores.html", s.get_error())
+    
+    let html = ` <div class="body-app">
+    ${s.get_error()}
+    </div>
+    `;
+      concatenar1 += s.get_error()
+      console.log(concatenar1);
+      function createFile(nameFile: string, data: string) {
+        fs.writeFile(nameFile, data, () => {
+        console.log('>> The file ' + nameFile + ' has been saved!');
+    })
+    }
+
+    //const sa = Singleton.getInstance();
+    //sa.clean();
+      
+    //res.json({ msg: "exito error :D "});
+    //res.json({msg: concatenar1});
+    res.send({html:html});
+    //s.clean();
+  } 
+
+
+  public async funcion4(req: Request, res: Response) {
+    const s= Singleton.getInstance();
+    const fs = require("fs");
+    //console.log(s.get_error());
+    //let ruta = "/myfirstProject/src";
+    createFile("errores.html", s.get_error())
+    let html = ` <div>
+    ${s.get_error()}
+    </div>
+    `;
+
+    function createFile(nameFile: string, data: string) {
+      fs.writeFile(nameFile, data, () => {
+      console.log('>> The file ' + nameFile + ' has been saved!');
+  })
+  }
+    //res.send(html);
+    res.send({html:html});
+    s.clean();
+} 
+  
 }
 
 export const apiController = new ApiController();

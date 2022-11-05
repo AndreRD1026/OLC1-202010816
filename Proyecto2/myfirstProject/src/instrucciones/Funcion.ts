@@ -7,9 +7,9 @@ export class Funcion extends Instruccion {
 
     constructor(
         public nombre: string,
-        public instrucciones: string,
+        public parametros: string,
         public tipo: string,
-        public instrucciones2: string,
+        public ListaINst : Array<Instruccion>,
         linea: number, columna:number) {
         super(linea,columna);
     }
@@ -34,16 +34,21 @@ export class Funcion extends Instruccion {
 
     public getNodo() {
         var nodoFuncion = new nodo("<FUNCION>");
-        //nodoDec.agregarHijo(this.tipo);
-        // this.nombre.forEach(id => {
-        //     nodoDec.agregarHijo(id);
-        // });
+        if (this.parametros == null){
+            nodoFuncion.agregarHijo(this.nombre);
+            nodoFuncion.agregarHijo(this.tipo);
+            this.ListaINst.forEach(lis => {
+                nodoFuncion.agregarHijo_nodo(lis.getNodo());
+            });
+        }else{
+            nodoFuncion.agregarHijo(this.nombre);
+            nodoFuncion.agregarHijo(this.parametros);
+            nodoFuncion.agregarHijo(this.tipo);
+            this.ListaINst.forEach(list2 => {
+                nodoFuncion.agregarHijo_nodo(list2.getNodo());
+            });
+        }
         
-        nodoFuncion.agregarHijo(this.nombre);
-        nodoFuncion.agregarHijo(this.instrucciones);
-        nodoFuncion.agregarHijo(this.tipo);
-        //nodoFuncion.agregarHijo("=");
-        nodoFuncion.agregarHijo(this.instrucciones2);
         return nodoFuncion;
     }
 }

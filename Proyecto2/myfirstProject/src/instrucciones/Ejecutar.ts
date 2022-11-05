@@ -7,13 +7,14 @@ export class Ejecutar extends Instruccion {
 
     constructor(
         public nombre: string,
+        public contenido: string,
         linea: number, columna:number) {
         super(linea,columna);
     }
 
     public ejecutar():any {
         //console.log("Encontre una asignacion, nombre:"+this.nombre+" lo encontre en la linea "+this.line);
-        console.log("Encontré un ejecutar")
+        //console.log("Encontré un ejecutar")
         //metodo para guardar la variable, tabla de simbolos
 
 
@@ -30,13 +31,16 @@ export class Ejecutar extends Instruccion {
     }
 
     public getNodo() {
-        var nodoEjec = new nodo("<EJECUTAR>");
-        //nodoDec.agregarHijo(this.tipo);
-        // this.nombre.forEach(id => {
-        //     nodoDec.agregarHijo(id);
-        // });
-        nodoEjec.agregarHijo(this.nombre);
-        //nodoEjec.agregarHijo(this.contenido);
-        return nodoEjec;
+        var nodoEject = new nodo("<EJECUTAR>");
+        nodoEject.agregarHijo(this.nombre);
+        if (this.contenido == null){
+            nodoEject.agregarHijo("(");
+            nodoEject.agregarHijo(")");
+        }else{
+            nodoEject.agregarHijo("(");
+        nodoEject.agregarHijo(this.contenido);
+        nodoEject.agregarHijo(")");
+        }
+        return nodoEject;
     }
 }

@@ -5,7 +5,6 @@ import nodo from "../Abstract/nodo";
 export class Bloque extends Instruccion {
     constructor(
         public listaInstrucciones:Array<Instruccion>,
-        //public instrucciones: string[],
 
         linea: number, columna:number) {
         super(linea,columna);
@@ -13,7 +12,6 @@ export class Bloque extends Instruccion {
     public ejecutar():any {
        
         //const newEnv = new Env(myEnv);
-
     
         // for (const instruccion of this.listaInstrucciones) {
         //     try {
@@ -26,21 +24,11 @@ export class Bloque extends Instruccion {
     
     }
 
-    // public getNodo() {
-    //     var nodoBloque = new nodo("<ENCAPSULAMIENTO>");
-    //     for (const instruccion of this.listaInstrucciones){
-    //         try {
-    //             nodoBloque.agregarHijo(instruccion);
-    //         } catch(error){
-    //             console.log(error);
-                
-    //         }
-    //     }
-        //nodoDec.agregarHijo(this.tipo);
-        //this.instrucciones.forEach(id => {
-        //    nodoBloque.agregarHijo(id);
-        //});
-        //nodoBloque.agregarHijo(this.contenido);
-        //return nodoBloque;
-    //}
+    public getNodo() {
+        var nodoWhile = new nodo("<ENCAPSULAMIENTO>");
+        this.listaInstrucciones.forEach(idd => {
+            nodoWhile.agregarHijo_nodo(idd.getNodo());
+        });
+        return nodoWhile;
+    }
 }

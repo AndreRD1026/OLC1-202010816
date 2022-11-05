@@ -1,11 +1,15 @@
 import { Instruccion } from "../abstractas/instruccion";
 import { Env } from "../symbols/env";
+import nodo from "../Abstract/nodo";
 
 export class If extends Instruccion {
 
 
     constructor(
-        public nombre: string,
+        public condicion: string,
+        public ListaIns: Array<Instruccion>,
+        public ListaElif: Array<Instruccion>,
+        public Ultimas: Array<Instruccion>,
         linea: number, columna:number) {
         super(linea,columna);
     }
@@ -26,5 +30,24 @@ export class If extends Instruccion {
         //implementacion semantica
         //validar
     
+    }
+
+    public getNodo() {
+        var nodoIf = new nodo("<IF>");
+        nodoIf.agregarHijo(this.condicion);
+        //nodoDoUntil.agregarHijo("<CONDICION>\n" + this.condicion);
+        this.ListaIns.forEach(inst => {
+            nodoIf.agregarHijo_nodo(inst.getNodo());
+        });
+        this.ListaElif.forEach(elf => {
+            nodoIf.agregarHijo_nodo(elf.getNodo());
+        });
+        this.Ultimas.forEach(ult => {
+            nodoIf.agregarHijo_nodo(ult.getNodo());
+        });
+        // nodoIf.agregarHijo("}");
+        // nodoIf.agregarHijo("while");
+        // nodoIf.agregarHijo("<CONDICION>\n" + this.condicion);
+        return nodoIf;
     }
 }

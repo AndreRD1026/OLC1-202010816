@@ -9,8 +9,12 @@ const {Casteo} = require('../instrucciones/Casteo.ts');
 const {Incremento} = require('../instrucciones/Incremento.ts')
 const {Decremento} = require('../instrucciones/Decremento.ts')
 const {Vector} = require('../instrucciones/Vector.ts')
+const {Vector2} = require('../instrucciones/Vector2.ts')
+const {AccesoVector} = require('../instrucciones/AccesoVector.ts')
+const {ModificarVector} = require('../instrucciones/ModificarVector.ts')
 const {OTernario} = require('../instrucciones/OTernario.ts')
 const {If} = require('../instrucciones/If.ts')
+const {Elif} = require('../instrucciones/Elif.ts')
 const {SwitchG} = require('../instrucciones/Switch.ts')
 const {WhileG} = require('../instrucciones/While.ts')
 const {For} = require('../instrucciones/For.ts')
@@ -32,9 +36,13 @@ const {ToCharArray} = require('../instrucciones/ToCharArray.ts')
 const {Push} = require('../instrucciones/Push.ts')
 const {Pop} = require('../instrucciones/Pop.ts')
 const {Run} = require('../instrucciones/Run.ts')
+const {LCase} = require('../instrucciones/LCase.ts')
 const {Prueba} = require('../instrucciones/Prueba.ts')
 const { Singleton}=  require("../Singleton/Singleton")
 const { error } =require("../tool/error")
+
+
+
 
 %}
 
@@ -127,11 +135,6 @@ bool    "true"|"false"
 
 <<EOF>>		            return 'EOF'
 
-// .   { 
-//         console.log("error lexico: "+yytext +"En la linea: " + yylloc.first_line +", En la columna: "+ yylloc.first_column);
-//         errores.push(new MiError(yylloc.first_line, yylloc.first_column ,TypeError.LEXICO ,"ERROR LEXICO EN"+yytext));
-//         //let s = s.add_error(new error("Lexico","No se reconoce el caracter "+yytext,yylineno+1,yylloc.first_column+1));
-//     }
 
 .      { 
         let s= Singleton.getInstance()
@@ -177,26 +180,26 @@ INSTRUCCION :
     | INCREMENTO {$$=$1;}
     | DECREMENTO {$$=$1;}
     | ENCAPSULAMIENTO {$$=$1;}
-    // | VECTORES {$$=$1;}
-    // | OTERNARIO {$$=$1;}
-    // | IF {$$=$1;}
-    // | SWITCH {$$=$1;}
-    // | WHILE {$$=$1;}
-    // | FOR {$$=$1;}
-    // | DOWHILE {$$=$1;}
-    // | DOUNTIL {$$=$1;}
+    | VECTORES {$$=$1;}
+    | OTERNARIO {$$=$1;}
+    | IF {$$=$1;}
+    | SWITCH {$$=$1;}
+    | WHILE {$$=$1;}
+    | FOR {$$=$1;}
+    | DOWHILE {$$=$1;}
+    | DOUNTIL {$$=$1;}
     | BREAK {$$=$1;}
     | CONTINUE {$$=$1;}
     | RETURN {$$=$1;}
     | FUNCIONES {$$=$1;}
-    // | METODO  {$$=$1;}
+    | METODO  {$$=$1;}
     | EJECUTAR {$$=$1;}
     | PRINT {$$=$1;}
     | PRINTLN {$$=$1;}
     | TOLOWER {$$=$1;}
     | TOUPPER {$$=$1;}
     | ROUND {$$=$1;}
-    //| LENGTH {$$=$1;}
+    | LENGTH {$$=$1;}
     | TYPEOF {$$=$1;}
     | TOSTRING {$$=$1;}
     | TOCHARARRAY {$$=$1;}
@@ -281,26 +284,30 @@ ENCAPSULAMIENTO: '{' LISTAINSTRUCCIONES '}' { $$= new Bloque($2,@1.first_line,@1
                 | '{' 'cadena' ',' 'cadena' '}' { $$= new Bloque($4,@1.first_line,@1.first_column);}
 ;
 
-// VECTORES: DECLARARVECTOR {$$=$1;}
-//         | ACCESOVECTOR {$$=$1;}
-//         | MODIFICARVECTOR {$$=$1;}
-// ;
+VECTORES: DECLARARVECTOR {$$=$1;}
+        | DECLARARVECTOR2 {$$=$1;}
+        | ACCESOVECTOR {$$=$1;}
+        | MODIFICARVECTOR {$$=$1;}
+;
 
-// DECLARARVECTOR: TIPOS '[' ']' 'expreID' '=' 'pr_new' TIPOS '[' 'numero' ']' ';' {$$= new Vector($4);}
-//         | TIPOS '[' ']' '[' ']' 'expreID' '=' 'pr_new' TIPOS '[' '(' TIPOS ')' 'cadena' ']' '[' 'numero' ']' ';' {$$= new Vector($6);}
-//         | TIPOS '[' ']' '[' ']' 'expreID' '=' 'pr_new' TIPOS '[' 'numero' ']' '[' 'numero' ']' ';' {$$= new Vector($6);}
-//         | TIPOS '[' ']' 'expreID' '='  '{' LISTAVALORES '}' ';' {$$= new Vector($4);}
-//         | TIPOS '[' ']' '[' ']' 'expreID' '=' '{' '{' LISTAVALORES '}' ',' '{' LISTAVALORES '}' '}' ';' {$$= new Vector($6);}
-// ;
+DECLARARVECTOR: TIPOS '[' ']' EXID '=' 'pr_new' TIPOS '[' 'numero' ']' ';' {$$= new Vector($1,$4,$7,$9);}
+        | TIPOS '[' ']' '[' ']' EXID '=' 'pr_new' TIPOS '[' '(' TIPOS ')' 'cadena' ']' '[' 'numero' ']' ';' {$$= new Vector($1,$6,$9, '[' + '(' + $12 + ')'+ $14 + ']' + '[' + $17 + ']');}
+        | TIPOS '[' ']' '[' ']' EXID '=' 'pr_new' TIPOS '[' 'numero' ']' '[' 'numero' ']' ';' {$$= new Vector($1,$6,$9,'[' + $11+ ']' + '[' + $14 + ']');}
+;
 
-// ACCESOVECTOR: TIPOS 'expreID' '=' 'expreID' '[' 'numero' ']' ';' {$$= new Vector($2);}
-//         | TIPOS 'expreID' '=' 'expreID' '[' 'numero' ']' '[' 'numero' ']' ';' {$$= new Vector($2);}
+DECLARARVECTOR2: TIPOS '[' ']' EXID '='  '{' LISTAVALORES '}' ';' {$$= new Vector2($1,$4,$7,null);}
+        | TIPOS '[' ']' '[' ']' EXID '=' '{' '{' LISTAVALORES '}' ',' '{' LISTAVALORES '}' '}' ';' {$$= new Vector2($1,$6,$10,$14);}
+;
+
+
+ACCESOVECTOR: TIPOS EXID '=' 'expreID' '[' 'numero' ']' ';' {$$= new AccesoVector($1,$2,$4,$6,null);}
+        | TIPOS EXID '=' 'expreID' '[' 'numero' ']' '[' 'numero' ']' ';' {$$= new Vector($1,$2,$4,$6,$9);}
         
-// ;
+;
 
-// MODIFICARVECTOR: 'expreID' '[' 'numero' ']' '=' 'cadena' ';' {$$= new Vector($1);}
-//         | 'expreID' '[' 'numero' ']'  '=' 'cadena' '+' 'expreID' '[' 'numero' ']' ';' {$$= new Vector($2);}
-// ;
+MODIFICARVECTOR: EXID '[' 'numero' ']' '=' 'cadena' ';' {$$= new ModificarVector($1, $3, $6, null);}
+        | EXID '[' 'numero' ']'  '=' 'cadena' '+' 'expreID' '[' 'numero' ']' ';' {$$= new ModificarVector($1,$3,$6 + $8, $10);}
+;
 
 TIPOS: 'pr_int' {$$=$1;}
     |'pr_char' {$$=$1;}
@@ -309,75 +316,78 @@ TIPOS: 'pr_int' {$$=$1;}
     | 'pr_double' {$$=$1;}
 ;
 
-// LISTAVALORES: 'cadena' ',' 'cadena' LISTAVALORES  {$$=$1;}
-//             | 'numero' ',' 'numero LISTAVALORES' {$$=$1;}
-//             | 'numero' ',' 'numero' {$$=$1;}
-//             | 'cadena' , 'cadena' {$$=$1;}
-// ;
+LISTAVALORES: 'cadena' ',' 'cadena' LISTAVALORES  {$$=$1 + ',' + $3;}
+            | 'numero' ',' 'numero' LISTAVALORES {$$=$1 + ',' + $3;}
+            | 'numero' ',' 'numero' {$$=$1 + ',' + $3;}
+            | 'cadena' , 'cadena' {$$=$1 + ',' + $3;}
+;
 
 
-// OTERNARIO: 'expreID' '=' 'expreID' '>' 'numero' '?' 'bool' ':' 'bool' ';' {$$= new OTernario($7);}
-//         | 'expreID' '=' 'expreID' '>' 'char' '?' 'bool' ':' 'bool' ';' {$$= new OTernario($7);}
-// ;
+OTERNARIO: EXID '=' EXID '>' 'numero' '?' 'bool' ':' 'bool' ';' {$$= new OTernario($1,$3,$5,$7,$9);}
+        | EXID '=' EXID '>' 'char' '?' 'bool' ':' 'bool' ';' {$$= new OTernario($1,$3,$5,$7,$9);}
+        | EXID '=' EXID '>' 'char' '?' 'numero' ':' 'numero' ';' {$$= new OTernario($1,$3,$5,$7,$9);}
+        | EXID '=' EXID '>' 'char' '?' 'cadena' ':' 'cadena' ';' {$$= new OTernario($1,$3,$5,$7,$9);}
+;
 
 
-// IF: 'pr_if' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' { $$= new If($6,@1.first_line,@1.first_column);}
-//     | 'pr_if' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' 'pr_else' '{' LISTAINSTRUCCIONES '}' { $$= new If($6,@1.first_line,@1.first_column);}
-//     | 'pr_if' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' LISTAELIF 'pr_else' '{' LISTAINSTRUCCIONES '}'  { $$= new If($6,@1.first_line,@1.first_column);}
-// ;
+IF: 'pr_if' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' { $$= new If($6,@1.first_line,@1.first_column);}
+    | 'pr_if' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' 'pr_else' '{' LISTAINSTRUCCIONES '}' { $$= new If($6,@1.first_line,@1.first_column);}
+    | 'pr_if' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' LISTAELIF 'pr_else' '{' LISTAINSTRUCCIONES '}'  { $$= new If($3,$6,$8,$11,@1.first_line,@1.first_column);}
+;
 
 
-// LISTAELIF: 'pr_elif' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' LISTAELIF {$$=$6;}
-//         | 'pr_elif' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' {$$=$6;}
-// ;
+LISTAELIF: 'pr_elif' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' LISTAELIF {$$=new Elif($3,$6);}
+        | 'pr_elif' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' {$$=new Elif($3,$6);}
+;
 
 
-// CONDICIONIF: 'expreID' OPERAD 'numero' {$$=$1;}
-//         | 'expreID' OPERAD 'cadena' {$$=$1;}
-//         | 'expreID' OPERAD 'caracter' {$$=$1;}
-//         | 'expreID' OPERAD 'bool' {$$=$1;}
-//         | 'cadena' OPERAD 'cadena' {$$=$1;}
-//         | 'cadena' OPERAD 'numero' {$$=$1;}
-//         | 'cadena' OPERAD 'caracter' {$$=$1;}
-//         | 'cadena' OPERAD 'bool' {$$=$1;}
-//         | 'expreID' OPERAD 'numero' '&&' 'expreID' OPERAD 'numero'  {$$=$1;}
-//         | 'expreID' OPERAD 'cadena' '+' 'cadena' {$$=$1;}
-//         | 'expreID' OPERAD 'cadena' + OPERACIONA {$$=$1;}
-// ;
+CONDICIONIF: 'expreID' OPERAD 'numero' {$$=$1 + $2 + $3;}
+        | 'expreID' OPERAD 'cadena' {$$=$1 + $2 + $3;}
+        | 'expreID' OPERAD 'caracter' {$$=$1 + $2 + $3;}
+        | 'expreID' OPERAD 'bool' {$$=$1 + $2 + $3;}
+        | 'cadena' OPERAD 'cadena' {$$=$1 + $2 + $3;}
+        | 'cadena' OPERAD 'numero' {$$=$1 + $2 + $3;}
+        | 'cadena' OPERAD 'caracter' {$$=$1 + $2 + $3;}
+        | 'cadena' OPERAD 'bool' {$$=$1 + $2 + $3;}
+        | 'expreID' OPERAD 'numero' '&&' 'expreID' OPERAD 'numero'  {$$=$1 + $2 + $3 + '&&' + $5 + $6 + $7;}
+        | 'expreID' OPERAD 'cadena' '+' 'cadena' {$$=$1 + $2 + $3 + '+' + $4;}
+        | 'expreID' OPERAD 'cadena' + OPERACIONA {$$=$1 + $2 + $3 + '+' + $4;}
+;
 
-// OPERAD: '<' {$$=$1;}
-//         | '>' {$$=$1;}
-//         | '<=' {$$=$1;}
-//         | '>=' {$$=$1;}
-//         | "==" {$$=$1;}
-//         | "!=" {$$=$1;}
-// ;
-
-
-// SWITCH: 'pr_switch' '(' 'expreID' ')' '{' LISTACASE 'pr_default' ':' LISTAINSTRUCCIONES  '}' {$$= new SwitchG($3);}
-// ;
+OPERAD: '<' {$$=$1;}
+        | '>' {$$=$1;}
+        | '<=' {$$=$1;}
+        | '>=' {$$=$1;}
+        | "==" {$$=$1;}
+        | "!=" {$$=$1;}
+;
 
 
-
-// LISTACASE: 'pr_case' 'numero' ':' LISTAINSTRUCCIONES LISTACASE {$$=$4;}
-//         | 'pr_case' 'numero' ':' LISTAINSTRUCCIONES {$$=$4;}
-// ;
+SWITCH: 'pr_switch' '(' EXID ')' '{' LISTACASE '}' {$$= new SwitchG($3, $6);}
+;
 
 
-// WHILE: 'pr_while' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' {$$= new WhileG($4);}
-// ;
 
-// FOR: 'pr_for' '(' TIPOS 'expreID' '=' OPERACIONA ';' 'expreID' OPERAD OPERACIONA ';' 'expreID' '+' '+' ')' '{' LISTAINSTRUCCIONES '}' {$$= new For($17);}
-//     | 'pr_for' '(' 'expreID' '=' OPERACIONA ';' 'expreID' OPERAD OPERACIONA 'numero' ';' 'expreID' '=' EXPRESIONES ')' '{' LISTAINSTRUCCIONES '}' {$$= new For($17);}
-// ;
+LISTACASE: 'pr_case' 'numero' ':' LISTAINSTRUCCIONES LISTACASE {$$=new LCase($2,$4);}
+        | 'pr_case' 'numero' ':' LISTAINSTRUCCIONES {$$=new LCase($2,$4);}
+        | 'pr_default' ':' LISTAINSTRUCCIONES {$$= new LCase($1,$3);}
+;
 
-// DOWHILE: 'pr_do' '{' LISTAINSTRUCCIONES '}' 'pr_while' '(' CONDICIONIF ')' ';' {$$ = new DoWhile($3);}
-//         | 'pr_do' '{' LISTAINSTRUCCIONES '}' 'pr_while' '(' OPERACIONA ')' ';' {$$ = new DoWhile($3);}
-// ;
 
-// DOUNTIL: 'pr_do' '{' LISTAINSTRUCCIONES '}' 'pr_until' '(' CONDICIONIF ')' ';' {$$ = new DoUntil($3);}
-//         | 'pr_do' '{' LISTAINSTRUCCIONES '}' 'pr_until' '(' OPERACIONA ')' ';' {$$ = new DoUntil($3);}
-// ;
+WHILE: 'pr_while' '(' CONDICIONIF ')' '{' LISTAINSTRUCCIONES '}' {$$= new WhileG($3,$6);}
+;
+
+FOR: 'pr_for' '(' TIPOS 'expreID' '=' OPERACIONA ';' 'expreID' OPERAD OPERACIONA ';' 'expreID' '+' '+' ')' '{' LISTAINSTRUCCIONES '}' {$$= new For($3 + $4 + $6,$8 + $9 + $10,$12 + '+' + '+', $17);}
+        | 'pr_for' '(' 'expreID' '=' OPERACIONA ';' 'expreID' OPERAD OPERACIONA ';' 'expreID' '=' EXPRESIONES ')' '{' LISTAINSTRUCCIONES '}' {$$= new For($3 + $5 ,$7 + $8 + $9 + $10,$12 + $14,$16);}
+;
+
+DOWHILE: 'pr_do' '{' LISTAINSTRUCCIONES '}' 'pr_while' '(' CONDICIONIF ')' ';' {$$ = new DoWhile($3,$7);}
+        | 'pr_do' '{' LISTAINSTRUCCIONES '}' 'pr_while' '(' OPERACIONA ')' ';' {$$ = new DoWhile($3,$7);}
+;
+
+DOUNTIL: 'pr_do' '{' LISTAINSTRUCCIONES '}' 'pr_until' '(' CONDICIONIF ')' ';' {$$ = new DoUntil($3,$7);}
+        | 'pr_do' '{' LISTAINSTRUCCIONES '}' 'pr_until' '(' OPERACIONA ')' ';' {$$ = new DoUntil($3,$7);}
+;
 
 BREAK: 'pr_break' ';' {$$=new Break($1);}
 ;
@@ -388,24 +398,27 @@ CONTINUE: 'pr_continue' ';' {$$=new Continue($1);}
 RETURN: 'pr_return' ';' {$$=new Return($1,$1);}
     | 'pr_return' OPERACIONA ';' {$$=new Return($1,$2);}
     | 'pr_return' EXID ';' {$$=new Return($1,$2);}
+    | 'pr_return' 'cadena' {$$=new Return($1,$2);}
 ;
 
 
 FUNCIONES: EXID '(' LISTAPARAMETROS ')' ':' TIPOS '{' LISTAINSTRUCCIONES '}' {$$=new Funcion($1,$3,$6,$8);}
+        | EXID '(' ')' ':' TIPOS '{' LISTAINSTRUCCIONES '}' {$$=new Funcion($1,null,$5,$7);}
 ;
 
-LISTAPARAMETROS: TIPOS 'expreID' {$$=$2;$$=$1;}
-                | LISTAPARAMETROS ',' TIPOS 'expreID' {$$=$1;}
+LISTAPARAMETROS: TIPOS 'expreID' {$$=$1 + $2;}
+                | LISTAPARAMETROS ',' TIPOS 'expreID' {$$=$3 + $4;}
 ;
 
-// METODO: EXID '(' ')' ':' 'pr_void' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($7);}
-//         | EXID '(' ')' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($5);}
-//         | EXID '(' 'LISTAPARAMETROS' ')' ':' 'pr_void' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($7);}
-//         | EXID '(' 'LISTAPARAMETROS' ')' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($5);}
+METODO: EXID '(' ')' ':' 'pr_void' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($1,null,$7);}
+        | EXID '(' ')' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($1,null,$5);}
+        | EXID '(' LISTAPARAMETROS ')' ':' 'pr_void' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($1,$3,$8);}
+        | EXID '(' LISTAPARAMETROS ')' '{' LISTAINSTRUCCIONES '}' {$$= new Metodo($1,$3,$6);}
         
-// ;
+;
 
-EJECUTAR: EXID '(' ')' ';' {$$= new Ejecutar($1);}
+EJECUTAR: EXID '(' ')' ';' {$$= new Ejecutar($1, null);}
+        | EXID '(' OPERACIONA ')' ';' {$$= new Ejecutar($1, $3);}
 ;
 
 
@@ -445,10 +458,10 @@ ROUND: TIPOS EXID '=' 'pr_round' '(' OPERACIONA ')' ';' {$$= new Round($2,$6);}
 ;
 
 
-// LENGTH:  TIPOS EXID '=' 'pr_length' '(' EXID ')' ';' {$$= new Length($2,$6);}
-//         | TIPOS EXID '=' 'pr_length' '(' EXID '[' 'numero' ']' ')' ';' {$$= new Length($2);}
-//         |'pr_length' '(' 'expreID' ')' ';' {$$= new Length($3);}
-// ;
+LENGTH:  TIPOS EXID '=' 'pr_length' '(' EXID ')' ';' {$$= new Length($2,$6);}
+        | TIPOS EXID '=' 'pr_length' '(' EXID '[' 'numero' ']' ')' ';' {$$= new Length($2,$6 + '[' + $8 + ']');}
+        |'pr_length' '(' 'expreID' ')' ';' {$$= new Length(null,$3);}
+;
 
 TYPEOF: 'pr_typeof' '(' OPERACIONA ')' ';' {$$ = new Typeof($3,$3);}
         |TIPOS EXID '=' 'pr_typeof' '(' 'numero' ')' ';' {$$= new Typeof($2,$6); }

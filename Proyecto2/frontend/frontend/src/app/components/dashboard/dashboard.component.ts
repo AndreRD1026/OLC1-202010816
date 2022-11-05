@@ -3,6 +3,14 @@ import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
+export interface Errores{
+  line:number,
+  column:number,
+  type:number,
+  message:string
+}
+
+
 interface Ventana{
   nombre:string;
   code:string;
@@ -15,20 +23,15 @@ interface Ventana{
 })
 export class DashboardComponent implements OnInit {
   public archivos: any = []
-  tabs:Ventana[]=[];
-  contador:number=0;
   //ImagePath: string;
+  entrada: string;
+  salidaeeee: string = "";
   ImagePath: string = "";
   //tablaError:Array<Errores> = new Array();
-  //tablaSimbolos:Array<Simbolos> = new Array();
   ASTstring:string = "";
-  ventana:Ventana = {
-    nombre: "",
-    code: ""
-  }
 
-  constructor(private service: UserService, private _router:Router) { }
-
+  constructor(private service: UserService, private _router:Router) { this.entrada = "de unaaaa" }
+      
   ngOnInit(): void {
   }
 
@@ -43,8 +46,22 @@ export class DashboardComponent implements OnInit {
           const resultado=ev.target?.result
           text=String(resultado)
           console.log(text.toString());
+          this.entrada = text.toString();
           //index.textarea.code = text.toString();
-          index.textarea.send = text.toString();
+          // document.getElementById('textarea');
+          // let saludo = "texto"
+          // //console.log("hola")
+          // //index.textarea.value = saludo;
+          // index.textarea.send = saludo;
+          // let area = document.getElementById('area')
+          // let saludo = "texto"
+          console.log("hola")
+          index.textarea.value = text.toString();
+          //area.value = saludo;
+          //index.document.getElementById('textarea')
+          //area.value = saludo;
+          //document.getElementById(index.textarea).value = text.toString
+          //index.textarea.send = text.toString();
           //index.textarea.
         }
         reader.readAsText(a)
@@ -60,37 +77,10 @@ export class DashboardComponent implements OnInit {
     
   }
 
-  AgregarVentana(){
-    console.log("Ventana agregar");
-    
-    this.contador++;
-    this.ventana.nombre = "VENTANA" + this.contador;
-    //this.console = this.console + 'SE HA CREADO UNA NUEVA VENTANA\n';
-    this.tabs.push(this.ventana);
-    this.ventana = {
-      nombre: "",
-      code: ""
-    }
-  }
-
   AbrirAST(){
     console.log("Aqui saldra el arbol");
     this.ImagePath = '/myfirstProject/servidor.png'
   }
-
-  // Pruebacontenido(){
-  //   this.service.errores().subscribe(
-  //     (res)=>{
-  //       console.log(res);
-        
-  //     },
-  //     (err)=>{
-  //       console.log(err);
-        
-  //     }
-  //   )
-    
-  // }
 
   GuardarArchivo(index:any){
     try {
@@ -149,11 +139,49 @@ export class DashboardComponent implements OnInit {
     
   }
 
+  VerErrores(index:any):void{
+    //private _errores:Array<Errores> = new Array();
+    var json={
+      "peticion": index.textarea
+    }
+    this.service.seterrores(json).subscribe(
+      (res)=>{
+        this.service.seterrores(res);
+        console.log(res);
+
+        alert(res.toString())
+      }, (err)=>{
+        console.log(err);
+      }
+    )
+  }
+
+  VerErrores1(){
+    this.service.probandoerrores().subscribe(
+      (res)=>{
+        console.log(res);
+        var prueba = res;
+        
+        var errors = document.getElementById('errors');
+        this.salidaeeee += res;
+        alert("Reporte Generado");
+        //this._router.navigate(['errores']);
+      },
+
+      (err)=>{
+        console.log(err);
+      }
+    )
+    }
 
 
-  GenerarErrores(){
+    GenerarErrores(){
     //this.servicio.setErrores(this.tablaError);
     this._router.navigate(['errores']);
+  }
+
+  Ultimo(){
+    console.log(this.salidaeeee);
   }
 
 

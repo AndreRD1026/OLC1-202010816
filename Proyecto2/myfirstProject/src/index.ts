@@ -24,7 +24,6 @@ class Server {
   routes(): void {
     this.app.use("/usuario", apiRoutes);
     this.app.use("/prueba", apiRoutes);
-    //this.app.use("/errores", apiRoutes);
   }
 
   

@@ -13,6 +13,8 @@ class ApiRoutes {
   config(): void {
     this.router.get("/", apiController.funcion1);
     this.router.post("/", apiController.funcion2);
+    this.router.post("/errores", apiController.funcion3);
+    this.router.get("/errores", apiController.funcion4);
    //this.router.post("/", apiController.funcion3);
   }
 }
